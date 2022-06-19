@@ -77,24 +77,21 @@ public class MapRenderSystem extends EntitySystem {
 
     public void update(float deltaTime) {
         world.step(1 / 60f, 6, 2);
-        camera.update();
-        renderer.setView(camera);
-        renderer.render();
-//        debugRenderer.render(world, camera.combined);
 
         cloudOffset += deltaTime * 80f;
         if (cloudOffset > Gdx.graphics.getWidth()) {
             cloudOffset = 0;
         }
 
-
         batch.begin();
         batch.draw(cloudTexture, -cloudOffset, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         batch.draw(cloudTexture, -cloudOffset + Gdx.graphics.getWidth(), 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         batch.end();
 
-
-
+        camera.update();
+        renderer.setView(camera);
+        renderer.render();
+//        debugRenderer.render(world, camera.combined);
     }
 
     // https://stackoverflow.com/questions/45805732/libgdx-tiled-map-box2d-collision-with-polygon-map-object

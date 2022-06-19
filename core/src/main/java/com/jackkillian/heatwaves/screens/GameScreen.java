@@ -7,26 +7,19 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.maps.MapObject;
-import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
-import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
-import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.*;
+import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
+import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.jackkillian.heatwaves.Constants;
 import com.jackkillian.heatwaves.GameData;
-import com.jackkillian.heatwaves.HeatWaves;
 import com.jackkillian.heatwaves.Player;
 import com.jackkillian.heatwaves.systems.HudRenderSystem;
 import com.jackkillian.heatwaves.systems.MapRenderSystem;
 
-import java.awt.*;
-
 public class GameScreen implements Screen, InputProcessor {
-    private final Engine engine;
+    private Engine engine;
     private GameData gameData;
     private SpriteBatch batch;
     private TiledMap map;
@@ -37,14 +30,17 @@ public class GameScreen implements Screen, InputProcessor {
     private World world;
     private Player player;
 
-    public GameScreen(HeatWaves game, GameData gameData) {
+    public GameScreen() {
+    }
+
+    @Override
+    public void show() {
         Gdx.input.setInputProcessor(this);
-        this.gameData = gameData;
+
+        gameData = GameData.getInstance();
         world = gameData.getWorld();
-
         batch = new SpriteBatch();
-
-
+        player = new Player(world, batch, 100, 100);
         camera = new OrthographicCamera();
         camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         camera.zoom = 0.5f;
@@ -58,19 +54,10 @@ public class GameScreen implements Screen, InputProcessor {
     }
 
     @Override
-    public void show() {
-
-
-        player = new Player(world, batch, 100, 100);
-
-    }
-
-    @Override
     public void render(float delta) {
         batch.setProjectionMatrix(camera.combined);
-        Gdx.gl.glClearColor(48f/255f, 86f/255f, 99f/255f, 0.8f);
+        Gdx.gl.glClearColor(48f / 255f, 86f / 255f, 99f / 255f, 0.8f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-
 
 
         engine.update(delta);
