@@ -10,6 +10,7 @@ public class Assets {
         manager = new AssetManager();
         manager.load("hud/health.png", Texture.class);
         manager.load("hud/shield.png", Texture.class);
+        manager.load("player/player1.png", Texture.class);
     }
 
     public AssetManager getManager() {

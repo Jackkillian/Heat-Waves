@@ -15,10 +15,15 @@ import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
+import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.jackkillian.heatwaves.Constants;
 import com.jackkillian.heatwaves.GameData;
 import com.jackkillian.heatwaves.HeatWaves;
 import com.jackkillian.heatwaves.Player;
 import com.jackkillian.heatwaves.systems.HudRenderSystem;
+import com.jackkillian.heatwaves.systems.MapRenderSystem;
+
+import java.awt.*;
 
 public class GameScreen implements Screen, InputProcessor {
     private final Engine engine;
@@ -27,66 +32,56 @@ public class GameScreen implements Screen, InputProcessor {
     private TiledMap map;
     private OrthographicCamera camera;
     private OrthogonalTiledMapRenderer renderer;
+    private Box2DDebugRenderer debugRenderer;
+    private FitViewport viewport;
     private World world;
     private Player player;
 
     public GameScreen(HeatWaves game, GameData gameData) {
         Gdx.input.setInputProcessor(this);
         this.gameData = gameData;
+        world = gameData.getWorld();
+
+        batch = new SpriteBatch();
+
+
+        camera = new OrthographicCamera();
+        camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        camera.zoom = 0.5f;
+
+        viewport = new FitViewport(Gdx.graphics.getWidth() / Constants.PPM, Gdx.graphics.getHeight() / Constants.PPM, camera);
+        gameData.setViewport(viewport);
 
         engine = new Engine();
-        engine.addSystem(new HudRenderSystem(gameData.getAssets()));
+        engine.addSystem(new MapRenderSystem(gameData, camera));
+        engine.addSystem(new HudRenderSystem(gameData));
     }
 
     @Override
     public void show() {
-        Box2D.init();
-        map = new TmxMapLoader().load("gameMap.tmx");
-        camera = new OrthographicCamera();
-        camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-        camera.update();
-        batch = new SpriteBatch();
-        renderer = new OrthogonalTiledMapRenderer(map);
-        world = new World(new Vector2(0, -10), true);
+
+
         player = new Player(world, batch, 100, 100);
 
-        for (MapObject object : map.getLayers().get("building").getObjects()) {
-            if (object instanceof RectangleMapObject rectangleObject) {
-                Rectangle rectangle = rectangleObject.getRectangle();
-
-                // Create the body, shape, and fixture
-                BodyDef bodyDef = new BodyDef();
-                bodyDef.type = BodyDef.BodyType.StaticBody;
-                float x = rectangle.getX() + rectangle.getWidth() / 2;
-                float y = rectangle.getY() + rectangle.getHeight() / 2;
-                bodyDef.position.set(x, y);
-                Body body = world.createBody(bodyDef);
-                PolygonShape shape = new PolygonShape();
-                shape.setAsBox(rectangle.width / 2, rectangle.height / 2);
-                FixtureDef fixtureDef = new FixtureDef();
-                fixtureDef.shape = shape;
-                body.createFixture(fixtureDef);
-            }
-        }
     }
 
     @Override
     public void render(float delta) {
-        Gdx.gl.glClearColor(0.15f, 0.15f, 0.2f, 1f);
+        batch.setProjectionMatrix(camera.combined);
+        Gdx.gl.glClearColor(48f/255f, 86f/255f, 99f/255f, 0.8f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        world.step(1 / 60f, 6, 2);
+
+
         engine.update(delta);
+        camera.position.set(player.getPosition(), 0);
         player.update();
 
-        camera.update();
-        renderer.setView(camera);
-        renderer.render();
     }
 
     @Override
     public void resize(int width, int height) {
-
+        viewport.update(width, height);
     }
 
     @Override

@@ -1,6 +1,8 @@
 package com.jackkillian.heatwaves;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 
 public class GameData {
@@ -13,27 +15,30 @@ public class GameData {
         return instance;
     }
 
-    private FitViewport viewport;
+
     private SpriteBatch batch;
     private Assets assets;
+    private World world;
+    private Skin skin;
+    private FitViewport viewport;
 
     public void setAssets(Assets assets) {
         this.assets = assets;
     }
-
-    public void setViewport(FitViewport viewport) {
-        this.viewport = viewport;
-    }
     public void setBatch(SpriteBatch batch) {
         this.batch = batch;
     }
+    public void setWorld(World world) {this.world = world;}
+    public void setSkin(Skin skin) {this.skin = skin;}
+    public void setViewport(FitViewport viewport) {this.viewport = viewport;}
+
+    public World getWorld() {return world;}
     public SpriteBatch getBatch() {
         return batch;
-    }
-    public FitViewport getViewport() {
-        return viewport;
     }
     public Assets getAssets() {
         return assets;
     }
+    public Skin getSkin() {return skin;}
+    public FitViewport getViewport() {return viewport;}
 }

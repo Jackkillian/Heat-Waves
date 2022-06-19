@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.jackkillian.heatwaves.Assets;
 import com.jackkillian.heatwaves.GameData;
@@ -20,9 +21,12 @@ public class HudRenderSystem extends EntitySystem {
     private Image health;
     private Image shield;
 
-    public HudRenderSystem(Assets assets) {
+    private Label healthLabel;
+    private Label shieldLabel;
+
+    public HudRenderSystem(GameData gameData) {
         camera = new OrthographicCamera();
-        this.assets = assets;
+        this.assets = gameData.getAssets();
         stage = new Stage();
         table = new Table();
         table.setFillParent(true);
@@ -31,12 +35,25 @@ public class HudRenderSystem extends EntitySystem {
         table.top().left();
 
         health = new Image(assets.getManager().get("hud/health.png", Texture.class));
-        health.setScale(4f);
-        table.add(health).pad(50f);
+        health.setScale(2.5f);
+
 
         shield = new Image(assets.getManager().get("hud/shield.png", Texture.class));
-        shield.setScale(4f);
-        table.add(shield).pad(10f);
+        shield.setScale(2.5f);
+
+        healthLabel = new Label("100", gameData.getSkin());
+        shieldLabel = new Label("100", gameData.getSkin());
+
+
+        healthLabel.setFontScale(2f);
+        shieldLabel.setFontScale(2f);
+
+
+        table.add(health).pad(30f);
+        table.add(healthLabel).pad(10f);
+        table.add(shield).pad(30f);
+        table.add(shieldLabel).pad(10f);
+
     }
 
     public void update(float deltaTime) {
