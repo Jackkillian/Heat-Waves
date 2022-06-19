@@ -21,33 +21,26 @@ public class HudRenderSystem extends EntitySystem {
     private Image shield;
 
     public HudRenderSystem(Assets assets) {
+        camera = new OrthographicCamera();
         this.assets = assets;
         stage = new Stage();
         table = new Table();
-        camera = new OrthographicCamera();
-
         table.setFillParent(true);
-
-
-        health = new Image(assets.getManager().get("hud/health.png", Texture.class));
-        shield = new Image(assets.getManager().get("hud/shield.png", Texture.class));
-        shield.setScale(4f);
-        health.setScale(4f);
-
-
+        stage.addActor(table);
 
         table.top().left();
+
+        health = new Image(assets.getManager().get("hud/health.png", Texture.class));
+        health.setScale(4f);
         table.add(health).pad(50f);
+
+        shield = new Image(assets.getManager().get("hud/shield.png", Texture.class));
+        shield.setScale(4f);
         table.add(shield).pad(10f);
-
-
-        stage.addActor(table);
     }
 
     public void update(float deltaTime) {
         stage.act(deltaTime);
         stage.draw();
-
-
     }
 }

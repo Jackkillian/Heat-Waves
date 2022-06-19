@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- created with https://www.codeandweb.com/physicseditor -->
+<bodydef>
+
+	<body name="player">
+		<is_dynamic/>
+		<linear_damping>0</linear_damping>
+		<angular_damping>0</angular_damping>
+		<allow_sleep/>
+		<fixture>
+			<density>2</density>
+			<friction>0</friction>
+			<restitution>0</restitution>
+			<filter_category_bits>1</filter_category_bits>
+			<filter_mask_bits>65535</filter_mask_bits>
+			<filter_group_index>0</filter_group_index>
+			<polygon>13.0000, 5.0000, 11.0000, 5.0000, 10.0000, 3.0000, 13.0000, 3.0000</polygon>
+			<polygon>8.0000, 0.0000, 10.0000, 0.0000, 10.0000, 7.0000, 8.0000, 2.0000</polygon>
+			<polygon>7.0000, 0.0000, 7.0000, 2.0000, 5.0000, 2.0000, 5.0000, 0.0000</polygon>
+			<polygon>4.0000, 2.0000, 7.0000, 2.0000, 10.0000, 9.0000, 11.0000, 14.0000, 5.0000, 7.0000, 4.0000, 5.0000</polygon>
+			<polygon>2.0000, 3.0000, 4.0000, 3.0000, 4.0000, 5.0000, 2.0000, 5.0000</polygon>
+			<polygon>13.0000, 14.0000, 11.0000, 14.0000, 11.0000, 13.0000, 13.0000, 13.0000</polygon>
+			<polygon>11.0000, 7.0000, 10.0000, 7.0000, 10.0000, 3.0000, 11.0000, 5.0000</polygon>
+			<polygon>4.0000, 7.0000, 4.0000, 5.0000, 5.0000, 7.0000</polygon>
+			<polygon>2.0000, 13.0000, 4.0000, 13.0000, 5.0000, 14.0000, 2.0000, 14.0000</polygon>
+			<polygon>11.0000, 9.0000, 11.0000, 14.0000, 10.0000, 9.0000</polygon>
+			<polygon>4.0000, 9.0000, 5.0000, 9.0000, 11.0000, 14.0000, 5.0000, 14.0000, 4.0000, 13.0000</polygon>
+			<polygon>11.0000, 15.0000, 5.0000, 15.0000, 5.0000, 14.0000, 11.0000, 14.0000</polygon>
+			<polygon>5.0000, 9.0000, 5.0000, 7.0000, 11.0000, 14.0000</polygon>
+			<polygon>8.0000, 2.0000, 10.0000, 7.0000, 10.0000, 9.0000, 7.0000, 2.0000</polygon>
+		</fixture>
+	</body>
+
+	<metadata>
+		<format>1</format>
+		<ptm_ratio>32</ptm_ratio>
+	</metadata>
+
+</bodydef>
+
