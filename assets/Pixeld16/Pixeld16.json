@@ -1,0 +1,164 @@
+{
+com.badlogic.gdx.graphics.g2d.BitmapFont: {
+	font: {
+		file: VCR_OSD_MONO(2).fnt
+	}
+	profont: {
+		file: ProFont For Powerline.fnt
+	}
+	profont_bold: {
+		file: ProFont Bold For Powerline(1).fnt
+	}
+}
+com.badlogic.gdx.graphics.Color: {
+	black: {
+		r: 0
+		g: 0
+		b: 0
+		a: 1
+	}
+	white: {
+		r: 1
+		g: 1
+		b: 1
+		a: 1
+	}
+}
+com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable: {
+	background: {
+		patch: background
+		minWidth: 32
+		minHeight: 32
+		leftWidth: 2
+		rightWidth: 2
+		topHeight: 2
+		bottomHeight: 2
+	}
+	button_up: {
+		patch: button_up
+		minWidth: 32
+		minHeight: 32
+		leftWidth: 3
+		rightWidth: 3
+		topHeight: 3
+		bottomHeight: 3
+	}
+}
+com.badlogic.gdx.scenes.scene2d.ui.Skin$TintedDrawable: {
+	black: {
+		name: white-pixel
+		color: black
+	}
+}
+com.badlogic.gdx.scenes.scene2d.ui.Button$ButtonStyle: {
+	default: {
+		up: button_up
+		down: button_down
+		over: button_over
+		disabled: button_disabled
+	}
+}
+com.badlogic.gdx.scenes.scene2d.ui.ImageTextButton$ImageTextButtonStyle: {
+	default: {
+		font: font
+	}
+}
+com.badlogic.gdx.scenes.scene2d.ui.Label$LabelStyle: {
+	default: {
+		font: profont
+	}
+}
+com.badlogic.gdx.scenes.scene2d.ui.List$ListStyle: {
+	default: {
+		font: profont
+		fontColorSelected: black
+		fontColorUnselected: black
+		selection: selection
+		background: background
+	}
+}
+com.badlogic.gdx.scenes.scene2d.ui.ProgressBar$ProgressBarStyle: {
+	default-horizontal: {
+		background: background_round
+		disabledBackground: background_round_disabled
+		knobBefore: fill_round
+	}
+}
+com.badlogic.gdx.scenes.scene2d.ui.ScrollPane$ScrollPaneStyle: {
+	default: {
+		background: background
+		hScroll: background_round
+		hScrollKnob: radio_off_disabled
+		vScroll: background_round
+		vScrollKnob: radio_off_disabled
+	}
+}
+com.badlogic.gdx.scenes.scene2d.ui.SelectBox$SelectBoxStyle: {
+	default: {
+		font: profont
+		fontColor: black
+		scrollStyle: default
+		listStyle: default
+	}
+}
+com.badlogic.gdx.scenes.scene2d.ui.Slider$SliderStyle: {
+	default-horizontal: {
+		background: background_round
+		disabledBackground: background_round_disabled
+		knob: knob
+	}
+}
+com.badlogic.gdx.scenes.scene2d.ui.SplitPane$SplitPaneStyle: {
+	default-horizontal: {
+		handle: background_round_disabled
+	}
+}
+com.badlogic.gdx.scenes.scene2d.ui.TextButton$TextButtonStyle: {
+	default: {
+		font: profont
+		up: button_up
+		down: button_down
+		over: button_over
+		disabled: button_disabled
+	}
+}
+com.badlogic.gdx.scenes.scene2d.ui.TextField$TextFieldStyle: {
+	default: {
+		font: profont
+		fontColor: black
+		background: background
+		focusedBackground: background_focus
+		disabledBackground: button_disabled
+		cursor: black
+		selection: selection
+		messageFontColor: black
+	}
+}
+com.badlogic.gdx.scenes.scene2d.ui.TextTooltip$TextTooltipStyle: {
+	default: {
+		label: default
+		background: background
+	}
+}
+com.badlogic.gdx.scenes.scene2d.ui.Touchpad$TouchpadStyle: {
+	default: {
+		background: background_round
+		knob: radio_off_disabled
+	}
+}
+com.badlogic.gdx.scenes.scene2d.ui.Tree$TreeStyle: {
+	default: {
+		plus: plus
+		minus: minus
+		selection: selection
+		background: background
+	}
+}
+com.badlogic.gdx.scenes.scene2d.ui.Window$WindowStyle: {
+	default: {
+		titleFont: font
+		titleFontColor: black
+		stageBackground: background
+	}
+}
+}

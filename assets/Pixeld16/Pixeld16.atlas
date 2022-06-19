@@ -1,0 +1,261 @@
+
+Pixeld16.png
+size: 512, 512
+format: RGBA8888
+filter: Linear, Linear
+repeat: none
+alert_error
+  rotate: false
+  xy: 1, 325
+  size: 16, 16
+  split: 3, 3, 3, 3
+  orig: 16, 16
+  offset: 0, 0
+  index: -1
+alert_info
+  rotate: false
+  xy: 1, 307
+  size: 16, 16
+  split: 3, 3, 3, 3
+  orig: 16, 16
+  offset: 0, 0
+  index: -1
+alert_warn
+  rotate: false
+  xy: 19, 325
+  size: 16, 16
+  split: 3, 3, 3, 3
+  orig: 16, 16
+  offset: 0, 0
+  index: -1
+background_error
+  rotate: false
+  xy: 1, 289
+  size: 16, 16
+  split: 2, 2, 2, 2
+  orig: 16, 16
+  offset: 0, 0
+  index: -1
+background_focus
+  rotate: false
+  xy: 19, 307
+  size: 16, 16
+  split: 3, 3, 3, 3
+  orig: 16, 16
+  offset: 0, 0
+  index: -1
+background_round
+  rotate: false
+  xy: 37, 325
+  size: 16, 16
+  split: 6, 6, 6, 6
+  pad: 1, 1, 1, 1
+  orig: 16, 16
+  offset: 0, 0
+  index: -1
+background_round_disabled
+  rotate: false
+  xy: 1, 271
+  size: 16, 16
+  split: 6, 6, 6, 6
+  pad: 1, 1, 1, 1
+  orig: 16, 16
+  offset: 0, 0
+  index: -1
+button_disabled
+  rotate: false
+  xy: 19, 289
+  size: 16, 16
+  split: 2, 2, 2, 2
+  orig: 16, 16
+  offset: 0, 0
+  index: -1
+checkbox_off_disabled
+  rotate: false
+  xy: 19, 289
+  size: 16, 16
+  split: 2, 2, 2, 2
+  orig: 16, 16
+  offset: 0, 0
+  index: -1
+button_down
+  rotate: false
+  xy: 37, 307
+  size: 16, 16
+  split: 3, 3, 3, 3
+  orig: 16, 16
+  offset: 0, 0
+  index: -1
+button_over
+  rotate: false
+  xy: 55, 325
+  size: 16, 16
+  split: 3, 3, 3, 3
+  orig: 16, 16
+  offset: 0, 0
+  index: -1
+checkbox_off
+  rotate: false
+  xy: 1, 253
+  size: 16, 16
+  split: 2, 2, 2, 2
+  orig: 16, 16
+  offset: 0, 0
+  index: -1
+background
+  rotate: false
+  xy: 1, 253
+  size: 16, 16
+  split: 2, 2, 2, 2
+  orig: 16, 16
+  offset: 0, 0
+  index: -1
+checkbox_on
+  rotate: false
+  xy: 19, 271
+  size: 16, 16
+  split: 3, 3, 3, 3
+  orig: 16, 16
+  offset: 0, 0
+  index: -1
+button_up
+  rotate: false
+  xy: 19, 271
+  size: 16, 16
+  split: 3, 3, 3, 3
+  orig: 16, 16
+  offset: 0, 0
+  index: -1
+checkbox_on_disabled
+  rotate: false
+  xy: 37, 289
+  size: 16, 16
+  split: 3, 3, 3, 3
+  orig: 16, 16
+  offset: 0, 0
+  index: -1
+checkbox_over
+  rotate: false
+  xy: 55, 307
+  size: 16, 16
+  split: 2, 2, 2, 2
+  orig: 16, 16
+  offset: 0, 0
+  index: -1
+fill_round
+  rotate: false
+  xy: 73, 325
+  size: 16, 16
+  split: 5, 5, 6, 6
+  orig: 16, 16
+  offset: 0, 0
+  index: -1
+minus
+  rotate: false
+  xy: 1, 235
+  size: 16, 16
+  split: 6, 6, 7, 7
+  orig: 16, 16
+  offset: 0, 0
+  index: -1
+plus
+  rotate: false
+  xy: 19, 253
+  size: 16, 16
+  split: 7, 7, 7, 7
+  orig: 16, 16
+  offset: 0, 0
+  index: -1
+radio_off
+  rotate: false
+  xy: 37, 271
+  size: 16, 16
+  split: 5, 5, 5, 5
+  orig: 16, 16
+  offset: 0, 0
+  index: -1
+radio_off_disabled
+  rotate: false
+  xy: 55, 289
+  size: 16, 16
+  split: 5, 5, 5, 5
+  orig: 16, 16
+  offset: 0, 0
+  index: -1
+radio_on
+  rotate: false
+  xy: 73, 307
+  size: 16, 16
+  split: 6, 6, 6, 6
+  orig: 16, 16
+  offset: 0, 0
+  index: -1
+knob
+  rotate: false
+  xy: 73, 307
+  size: 16, 16
+  split: 6, 6, 6, 6
+  orig: 16, 16
+  offset: 0, 0
+  index: -1
+radio_on_disabled
+  rotate: false
+  xy: 91, 325
+  size: 16, 16
+  split: 6, 6, 6, 6
+  orig: 16, 16
+  offset: 0, 0
+  index: -1
+radio_over
+  rotate: false
+  xy: 1, 217
+  size: 16, 16
+  split: 5, 5, 5, 5
+  orig: 16, 16
+  offset: 0, 0
+  index: -1
+selection
+  rotate: false
+  xy: 19, 235
+  size: 16, 16
+  split: 2, 2, 2, 2
+  orig: 16, 16
+  offset: 0, 0
+  index: -1
+spinner
+  rotate: false
+  xy: 37, 253
+  size: 16, 16
+  split: 6, 6, 6, 6
+  pad: 8, 7, 8, 7
+  orig: 16, 16
+  offset: 0, 0
+  index: -1
+white-pixel
+  rotate: false
+  xy: 509, 507
+  size: 1, 1
+  orig: 1, 1
+  offset: 0, 0
+  index: -1
+ProFont Bold For Powerline(1)
+  rotate: false
+  xy: 1, 343
+  size: 506, 53
+  orig: 506, 53
+  offset: 0, 0
+  index: -1
+ProFont For Powerline
+  rotate: false
+  xy: 1, 398
+  size: 506, 54
+  orig: 506, 54
+  offset: 0, 0
+  index: -1
+VCR_OSD_MONO(2)
+  rotate: false
+  xy: 1, 454
+  size: 506, 54
+  orig: 506, 54
+  offset: 0, 0
+  index: -1

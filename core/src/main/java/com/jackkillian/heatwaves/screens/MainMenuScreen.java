@@ -7,6 +7,17 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.scenes.scene2d.Event;
+import com.badlogic.gdx.scenes.scene2d.EventListener;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Button;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.utils.Align;
+import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.jackkillian.heatwaves.GameData;
 import com.jackkillian.heatwaves.HeatWaves;
 
@@ -14,30 +25,67 @@ public class MainMenuScreen implements Screen {
     private final HeatWaves game;
     private final GameData gameData;
     private AssetManager assetManager;
-
     private SpriteBatch batch;
     private OrthographicCamera camera;
-
-
+    private Stage stage;
 
     public MainMenuScreen(HeatWaves game, GameData gameData) {
         this.game = game;
         this.gameData = gameData;
         batch = gameData.getBatch();
-
     }
 
     @Override
     public void show() {
-        game.setScreen(new GameScreen(game, gameData));
+        stage = new Stage();
+        Gdx.input.setInputProcessor(stage);
+
+        Table table = new Table();
+        table.setFillParent(true);
+        stage.addActor(table);
+
+        // add widgets
+        Image logo = new Image(new Texture(Gdx.files.internal("logo.png")));
+        logo.setOrigin(logo.getWidth() / 2, logo.getHeight() / 2);
+        logo.setScale(1.5f);
+        logo.setAlign(Align.center);
+        table.add(logo).padBottom(50).row();
+
+        TextButton playButton = new TextButton("Play", game.skin);
+        playButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                game.setScreen(new GameScreen(game, gameData));
+            }
+        });
+        table.add(playButton).width(200).pad(10).row();
+
+        TextButton creditsButton = new TextButton("Credits", game.skin);
+        creditsButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                game.setScreen(new CreditsScreen(game));
+            }
+        });
+        table.add(creditsButton).width(200).pad(10).row();
+
+        TextButton quitButton = new TextButton("Quit", game.skin);
+        quitButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                Gdx.app.exit();
+            }
+        });
+        table.add(quitButton).width(200).pad(10).row();
     }
 
     @Override
     public void render(float delta) {
-
         Gdx.gl.glClearColor(0.15f, 0.15f, 0.2f, 1f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
+        stage.act(delta);
+        stage.draw();
     }
 
     @Override

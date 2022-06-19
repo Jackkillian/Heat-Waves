@@ -12,7 +12,6 @@ public class Assets {
         manager.load("hud/shield.png", Texture.class);
     }
 
-
     public AssetManager getManager() {
         return manager;
     }

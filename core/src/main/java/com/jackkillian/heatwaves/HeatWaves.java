@@ -3,27 +3,32 @@ package com.jackkillian.heatwaves;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.jackkillian.heatwaves.screens.LoadingScreen;
+import com.ray3k.stripe.FreeTypeSkin;
 
-/** {@link com.badlogic.gdx.ApplicationListener} implementation shared by all platforms. */
+/**
+ * {@link com.badlogic.gdx.ApplicationListener} implementation shared by all platforms.
+ */
 public class HeatWaves extends Game {
+    public Skin skin;
 
-	@Override
-	public void create() {
-		setScreen(new LoadingScreen(this));
-	}
+    @Override
+    public void create() {
+        skin = new Skin(Gdx.files.internal("Pixeld16/Pixeld16.json"));
+//		skin.addRegions(new TextureAtlas(Gdx.files.internal("Pixeld16/Pixeld16.atlas")));
 
-	@Override
-	public void render() {
-		super.render();
+        setScreen(new LoadingScreen(this));
+    }
 
-	}
+    @Override
+    public void render() {
+        super.render();
 
-	@Override
-	public void dispose() {
+    }
 
-	}
+    @Override
+    public void dispose() {
+
+    }
 }
