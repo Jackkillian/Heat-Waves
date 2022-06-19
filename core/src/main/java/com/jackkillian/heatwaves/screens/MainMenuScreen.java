@@ -29,9 +29,9 @@ public class MainMenuScreen implements Screen {
     private OrthographicCamera camera;
     private Stage stage;
 
-    public MainMenuScreen(HeatWaves game, GameData gameData) {
+    public MainMenuScreen(HeatWaves game) {
         this.game = game;
-        this.gameData = gameData;
+        this.gameData = GameData.getInstance();
         batch = gameData.getBatch();
     }
 

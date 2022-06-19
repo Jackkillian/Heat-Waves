@@ -20,9 +20,7 @@ import com.jackkillian.heatwaves.HeatWaves;
 public class LoadingScreen implements Screen {
     private final HeatWaves game;
     private final Assets assets;
-    private final GameData gameData;
     private Stage stage;
-    private Table table;
     private ProgressBar bar;
     private Label countLeftLabel;
 
@@ -30,7 +28,7 @@ public class LoadingScreen implements Screen {
     public LoadingScreen(HeatWaves game) {
         this.game = game;
         assets = new Assets();
-        gameData = new GameData();
+        GameData gameData = GameData.getInstance();
 
         SpriteBatch batch = new SpriteBatch();
         FitViewport viewport = new FitViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
@@ -45,7 +43,7 @@ public class LoadingScreen implements Screen {
     public void show() {
         stage = new Stage();
         Gdx.input.setInputProcessor(stage);
-        table = new Table();
+        Table table = new Table();
         table.setFillParent(true);
         stage.addActor(table);
 
@@ -76,7 +74,7 @@ public class LoadingScreen implements Screen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         if (assets.getManager().update()) {
-            game.setScreen(new MainMenuScreen(game, gameData));
+            game.setScreen(new MainMenuScreen(game));
         }
 
         countLeftLabel.setText((int) (assets.getManager().getProgress() * 100) + "%");

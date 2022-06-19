@@ -4,6 +4,15 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 
 public class GameData {
+    private static GameData instance;
+    private GameData() {}
+    public static GameData getInstance() {
+        if (instance == null) {
+            instance = new GameData();
+        }
+        return instance;
+    }
+
     private FitViewport viewport;
     private SpriteBatch batch;
     private Assets assets;
