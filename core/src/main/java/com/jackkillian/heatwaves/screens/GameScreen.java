@@ -15,6 +15,7 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.jackkillian.heatwaves.Constants;
 import com.jackkillian.heatwaves.GameData;
+import com.jackkillian.heatwaves.systems.ItemSystem;
 import com.jackkillian.heatwaves.Player;
 import com.jackkillian.heatwaves.systems.HudRenderSystem;
 import com.jackkillian.heatwaves.systems.MapRenderSystem;
@@ -50,8 +51,12 @@ public class GameScreen implements Screen, InputProcessor {
         gameData.setViewport(viewport);
 
         engine = new Engine();
-        engine.addSystem(new MapRenderSystem(gameData, camera));
+        GameData.getInstance().setBatch(batch);
+        GameData.getInstance().setMapRenderSystem(new MapRenderSystem(gameData, camera));
+        GameData.getInstance().setItemSystem(new ItemSystem(gameData, batch));
+        engine.addSystem(GameData.getInstance().getMapRenderSystem());
         engine.addSystem(new HudRenderSystem(gameData));
+        engine.addSystem(GameData.getInstance().getItemSystem());
     }
 
     @Override
@@ -125,6 +130,8 @@ public class GameScreen implements Screen, InputProcessor {
 
     @Override
     public boolean mouseMoved(int screenX, int screenY) {
+        player.onMouseMoved(screenX, screenY, camera);
+
         return false;
     }
 

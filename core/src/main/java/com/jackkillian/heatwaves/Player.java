@@ -1,6 +1,8 @@
 package com.jackkillian.heatwaves;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -8,13 +10,15 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.*;
 
 import static com.jackkillian.heatwaves.Constants.SPAWN_X;
 import static com.jackkillian.heatwaves.Constants.SPAWN_Y;
 
-//TODO: Make the player's right hand move with the mouse.
-//TODO: also add shooting and item generation :D
+//TODO: Fix the bug where the player moves slower in fullscreen mode
+// Jack if you want to add inventory, activeHand is the slot for the item the player is currently holding.
+// Just lock the position and rotation of the active item to activeHand.
 
 public class Player {
     private final Body body;
@@ -22,7 +26,12 @@ public class Player {
     private final Sprite sprite;
     private final Sprite jumpSprite;
     private final Animation<TextureRegion> runningAnimation;
+    private final TextureRegion idle;
     private float stateTime = 0f;
+    private final Body activeHand;
+
+    //mouse angle
+    private float angle;
 
     // Keys
     private boolean keyLeftPressed = false;
@@ -53,11 +62,31 @@ public class Player {
 //        fdef.shape = circleShape;
 
         fdef.friction = 100f;
-        fdef.restitution = 0.09f;
+        fdef.restitution = 0.09f; // 0.09f
+        fdef.filter.categoryBits = Constants.PLAYER_BIT;
+        fdef.filter.maskBits = Constants.WALL_BIT;
         body.createFixture(fdef);
         body.setUserData(this);
 
-        //maybe we don't need asset manager for this game
+
+        //CREATE ACTIVE HAND FOR PLAYER TO USE ITEMS
+        shape.setAsBox(15f / Constants.PPM, 22.5f / Constants.PPM);
+        bodyDef.type = BodyDef.BodyType.StaticBody;
+        bodyDef.position.set(SPAWN_X / Constants.PPM , SPAWN_Y / Constants.PPM);
+        activeHand = world.createBody(bodyDef);
+
+        fdef.isSensor = true;
+        fdef.filter.categoryBits = Constants.PLAYER_BIT;
+        fdef.filter.maskBits = Constants.ITEM_BIT;
+        activeHand.createFixture(fdef);
+        activeHand.setUserData(this);
+
+        activeHand.getWorldCenter().set(body.getWorldCenter());
+
+
+
+
+        idle = new TextureRegion(new Texture("player/player1.png"));
         sprite = new Sprite(new Texture("player/player1.png"));
         jumpSprite = new Sprite(new Texture("player/jump.png"));
 
@@ -77,13 +106,15 @@ public class Player {
         canJump = GameData.getInstance().isTouchingPlatform() || (!isJumping && !isFalling);
 
         if (keyLeftPressed) {
-            body.setLinearVelocity(-70, body.getLinearVelocity().y);
+            if (canJump) {body.setLinearVelocity(-70, body.getLinearVelocity().y);}
+            else {body.setLinearVelocity(-50, body.getLinearVelocity().y);}
         }
         if (keyRightPressed) {
-            body.setLinearVelocity(70, body.getLinearVelocity().y);
+            if (canJump) {body.setLinearVelocity(70, body.getLinearVelocity().y);}
+            else {body.setLinearVelocity(50, body.getLinearVelocity().y);}
         }
         if (keyUpPressed && canJump) {
-            body.setLinearVelocity(body.getLinearVelocity().x, 70);
+            body.setLinearVelocity(body.getLinearVelocity().x, 50);
         }
 
 //        if (!keyLeftPressed && !keyRightPressed && keyUpPressed) {
@@ -91,14 +122,16 @@ public class Player {
 //        }
 
         batch.begin();
-        if (isRunning) {
+        if (isRunning && (keyLeftPressed || keyRightPressed)) {
             TextureRegion currentFrame = runningAnimation.getKeyFrame(stateTime, true);
             if (isFlipped && !currentFrame.isFlipX()) {
                 currentFrame.flip(true, false);
             } else {
                 currentFrame.flip(!isFlipped && currentFrame.isFlipX(), false);
             }
-            batch.draw(currentFrame, body.getPosition().x - sprite.getWidth() / 2, body.getPosition().y - sprite.getHeight() / 2 + 1);
+            sprite.setPosition(body.getPosition().x - sprite.getWidth() / 2, body.getPosition().y - sprite.getHeight() / 2);
+            sprite.setRegion(currentFrame);
+            sprite.draw(batch);
         } else if (isJumping || isFalling) {
             jumpSprite.setPosition(body.getPosition().x - sprite.getWidth() / 2, body.getPosition().y - sprite.getHeight() / 2 + 1);
             if (isFlipped && !jumpSprite.isFlipX()) {
@@ -108,6 +141,7 @@ public class Player {
             }
             jumpSprite.draw(batch);
         } else {
+            sprite.setRegion(idle);
             sprite.setPosition(body.getPosition().x - sprite.getWidth() / 2, body.getPosition().y - sprite.getHeight() / 2 + 1);
             if (isFlipped && !sprite.isFlipX()) {
                 sprite.flip(true, false);
@@ -118,42 +152,59 @@ public class Player {
         }
         batch.end();
 
-        if (body.getPosition().y < -100) {
-            body.setTransform(SPAWN_X / Constants.PPM , SPAWN_Y / Constants.PPM, 50 * MathUtils.degreesToRadians);
+
+        activeHand.setTransform(body.getPosition().x, body.getPosition().y, angle * MathUtils.degreesToRadians);
+
+        if (body.getPosition().y < -250) {
+            body.setTransform(SPAWN_X / Constants.PPM , SPAWN_Y / Constants.PPM, 0);
         }
+
     }
 
     public void onKeyDown(int key) {
-        if (key == Input.Keys.LEFT) {
+        if (key == Input.Keys.A) {
             keyLeftPressed = true;
         }
-        if (key == Input.Keys.RIGHT) {
+        if (key == Input.Keys.D) {
             keyRightPressed = true;
         }
-        if (key == Input.Keys.UP) {
+        if (key == Input.Keys.W) {
             keyUpPressed = true;
         }
-        if (key == Input.Keys.DOWN) {
+        if (key == Input.Keys.S) {
             keyDownPressed = true;
         }
     }
 
     public void onKeyUp(int key) {
-        if (key == Input.Keys.LEFT) {
+        if (key == Input.Keys.A) {
             keyLeftPressed = false;
         }
-        if (key == Input.Keys.RIGHT) {
+        if (key == Input.Keys.D) {
             keyRightPressed = false;
         }
-        if (key == Input.Keys.UP) {
+        if (key == Input.Keys.W) {
             keyUpPressed = false;
         }
-        if (key == Input.Keys.DOWN) {
+        if (key == Input.Keys.W) {
             keyDownPressed = false;
         }
     }
 
     public Vector2 getPosition() {
         return body.getPosition();
+    }
+
+    public void onMouseMoved(int screenX, int screenY, OrthographicCamera camera) {
+        Vector2 centerPosition = new Vector2(activeHand.getPosition().x, activeHand.getPosition().y);
+
+        Vector3 worldCoordinates = new Vector3(screenX, screenY, 0);
+        camera.unproject(worldCoordinates);
+        Vector2 mouseLoc = new Vector2(worldCoordinates.x, worldCoordinates.y);
+
+        Vector2 direction = mouseLoc.sub(centerPosition);
+        angle = direction.angleDeg();
+
+
     }
 }

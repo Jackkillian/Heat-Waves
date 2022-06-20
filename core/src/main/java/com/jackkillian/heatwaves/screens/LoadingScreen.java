@@ -5,10 +5,7 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.Contact;
-import com.badlogic.gdx.physics.box2d.ContactImpulse;
-import com.badlogic.gdx.physics.box2d.Manifold;
-import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
@@ -31,15 +28,46 @@ public class LoadingScreen implements Screen {
         GameData gameData = GameData.getInstance();
 
         World world = new World(new Vector2(0, -80), false);
+        world.setContactFilter(new ContactFilter() {
+            @Override
+            public boolean shouldCollide(Fixture fixtureA, Fixture fixtureB) {
+                return (fixtureA.getFilterData().categoryBits == fixtureB.getFilterData().maskBits) || (fixtureB.getFilterData().categoryBits == fixtureA.getFilterData().maskBits);
+            }
+        });
+
+        //I think our code is becoming a mess - Dave
+        // it's a game jam so whatever  :D :D :D
+        // GPT3 on top!!!
         world.setContactListener(new ContactListner() {
             @Override
             public void beginContact(Contact contact) {
                 super.beginContact(contact);
-
+                Body playerBody;
+                Body otherBody;
                 if (contact.getFixtureA().getBody().getUserData() instanceof Player) {
-                    // player hit a platform, can jump now! (once there are bullets, we'll need to check for bullet user data too)
+                    playerBody = contact.getFixtureA().getBody();
+                    otherBody = contact.getFixtureB().getBody();
+                } else if (contact.getFixtureB().getBody().getUserData() instanceof Player) {
+                    playerBody = contact.getFixtureB().getBody();
+                    otherBody = contact.getFixtureA().getBody();
+                } else {
+                    //returns for now. Unless we want to know about non-player bodies in the future
+                    return;
+                }
+
+                if (otherBody.getUserData() instanceof Item) {
+
+                    GameData.getInstance().getItemSystem().removeItem((Item) otherBody.getUserData(), otherBody);
+
+                }
+                System.out.println(otherBody.getUserData());
+
+                // Collision involves player, player can jump now! (once there are bullets, we'll need to check for bullet user data too)
+                if (!(otherBody.getUserData() instanceof Item)) {
                     gameData.setTouchingPlatform(true);
                 }
+
+
             }
 
             @Override
@@ -55,6 +83,7 @@ public class LoadingScreen implements Screen {
             @Override
             public void preSolve(Contact contact, Manifold oldManifold) {
                 super.preSolve(contact, oldManifold);
+
             }
 
             @Override

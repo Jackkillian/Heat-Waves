@@ -69,6 +69,8 @@ public class MapRenderSystem extends EntitySystem {
             bdef.type = BodyDef.BodyType.StaticBody;
             Body body = world.createBody(bdef);
             fdef.shape = shape;
+            fdef.filter.categoryBits = Constants.WALL_BIT;
+            fdef.filter.maskBits = Constants.PLAYER_BIT | Constants.ITEM_BIT;
             body.createFixture(fdef);
         }
 
@@ -92,7 +94,7 @@ public class MapRenderSystem extends EntitySystem {
         camera.update();
         renderer.setView(camera);
         renderer.render();
-//        debugRenderer.render(world, camera.combined);
+        debugRenderer.render(world, camera.combined);
     }
 
     // https://stackoverflow.com/questions/45805732/libgdx-tiled-map-box2d-collision-with-polygon-map-object

@@ -24,6 +24,8 @@ public class HudRenderSystem extends EntitySystem {
     private Label healthLabel;
     private Label shieldLabel;
 
+    private Label heatWavesTimer;
+
     public HudRenderSystem(GameData gameData) {
         camera = new OrthographicCamera();
         this.assets = gameData.getAssets();
@@ -43,6 +45,8 @@ public class HudRenderSystem extends EntitySystem {
 
         healthLabel = new Label("100", gameData.getSkin());
         shieldLabel = new Label("100", gameData.getSkin());
+        heatWavesTimer = new Label("Heat Waves in: 2:00", gameData.getSkin());
+        heatWavesTimer.setFontScale(2f);
 
 
         healthLabel.setFontScale(2f);
@@ -53,6 +57,14 @@ public class HudRenderSystem extends EntitySystem {
         table.add(healthLabel).pad(10f);
         table.add(shield).pad(30f);
         table.add(shieldLabel).pad(10f);
+        table.row();
+
+        Table tableRight = new Table();
+        tableRight.setFillParent(true);
+        tableRight.top().right();
+        tableRight.add(heatWavesTimer).pad(10f);
+        stage.addActor(tableRight);
+
 
     }
 
