@@ -1,8 +1,6 @@
 package com.jackkillian.heatwaves.systems;
 
 import com.badlogic.ashley.core.EntitySystem;
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -15,32 +13,34 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Circle;
-import com.badlogic.gdx.math.Polygon;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.jackkillian.heatwaves.Constants;
 import com.jackkillian.heatwaves.GameData;
 
+import java.util.HashSet;
+
 public class MapRenderSystem extends EntitySystem {
-    private GameData gameData;
-    private Box2DDebugRenderer debugRenderer;
     private OrthogonalTiledMapRenderer renderer;
     private TiledMap map;
     private World world;
     private OrthographicCamera camera;
     private SpriteBatch batch;
+    private Box2DDebugRenderer debugRenderer;
+
+    private HashSet<BodyDef> bodiesToAdd = new HashSet<>();
+    private HashSet<Body> bodiesToRemove = new HashSet<>();
 
     //moving clouds
     private float cloudOffset = 0;
     private Texture cloudTexture;
 
-    public MapRenderSystem(GameData gameData, OrthographicCamera camera ) {
-        batch = new SpriteBatch();
+    public MapRenderSystem() {
         Box2D.init();
-        this.gameData = gameData;
-        this.camera = camera;
-        world = gameData.getWorld();
+        batch = GameData.getInstance().getBatch();
+        camera = GameData.getInstance().getCamera();
+        world = GameData.getInstance().getWorld();
         debugRenderer = new Box2DDebugRenderer();
         map = new TmxMapLoader().load("gameMap.tmx");
         renderer = new OrthogonalTiledMapRenderer(map, 1 / Constants.PPM);
@@ -76,22 +76,36 @@ public class MapRenderSystem extends EntitySystem {
     }
 
     public void update(float deltaTime) {
+        //check queues before world update
+        for (BodyDef bodyDef : bodiesToAdd) {Body body = world.createBody(bodyDef);}
+        for (Body body : bodiesToRemove) {world.destroyBody(body);}
+
+        bodiesToRemove.clear();
+        bodiesToAdd.clear();
+
         world.step(1 / 60f, 6, 2);
 
-        cloudOffset += deltaTime * 80f;
-        if (cloudOffset > Gdx.graphics.getWidth()) {
-            cloudOffset = 0;
-        }
-
-        batch.begin();
-        batch.draw(cloudTexture, -cloudOffset, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-        batch.draw(cloudTexture, -cloudOffset + Gdx.graphics.getWidth(), 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-        batch.end();
+//        cloudOffset += deltaTime * 80f;
+//        if (cloudOffset > Gdx.graphics.getWidth()) {
+//            cloudOffset = 0;
+//        }
+//
+//        batch.begin();
+//        batch.draw(cloudTexture, -cloudOffset, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+//        batch.draw(cloudTexture, -cloudOffset + Gdx.graphics.getWidth(), 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+//        batch.end();
 
         camera.update();
         renderer.setView(camera);
         renderer.render();
 //        debugRenderer.render(world, camera.combined);
+    }
+
+    public void queueBodyForAdd(BodyDef bodyDef) {
+        bodiesToAdd.add(bodyDef);
+    }
+    public void queueBodyForDelete(Body body) {
+        bodiesToRemove.add(body);
     }
 
     // https://stackoverflow.com/questions/45805732/libgdx-tiled-map-box2d-collision-with-polygon-map-object

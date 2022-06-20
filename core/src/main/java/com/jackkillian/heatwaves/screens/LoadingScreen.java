@@ -1,9 +1,11 @@
 package com.jackkillian.heatwaves.screens;
 
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
@@ -15,14 +17,15 @@ import com.badlogic.gdx.scenes.scene2d.ui.ProgressBar;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.FitViewport;
-import com.jackkillian.heatwaves.Assets;
-import com.jackkillian.heatwaves.ContactListner;
-import com.jackkillian.heatwaves.GameData;
-import com.jackkillian.heatwaves.HeatWaves;
+import com.jackkillian.heatwaves.*;
+import com.jackkillian.heatwaves.systems.HudRenderSystem;
+import com.jackkillian.heatwaves.systems.ItemSystem;
+import com.jackkillian.heatwaves.systems.MapRenderSystem;
 
 public class LoadingScreen implements Screen {
     private final HeatWaves game;
     private final Assets assets;
+
     private Stage stage;
     private ProgressBar bar;
     private Label countLeftLabel;
@@ -31,16 +34,24 @@ public class LoadingScreen implements Screen {
     public LoadingScreen(HeatWaves game) {
         this.game = game;
         assets = new Assets();
-        GameData gameData = GameData.getInstance();
+
 
 
         World world = new World(new Vector2(0, -80), true);
         world.setContactListener(new ContactListner());
 
-        gameData.setWorld(world);
+        SpriteBatch batch = new SpriteBatch();
+        OrthographicCamera camera = new OrthographicCamera();
+        camera.zoom = 0.6f;
 
-        gameData.setAssets(assets);
-        gameData.setSkin(game.skin);
+        GameData.getInstance().setWorld(world);
+        GameData.getInstance().setBatch(batch);
+        GameData.getInstance().setCamera(camera);
+        GameData.getInstance().setAssets(assets);
+        GameData.getInstance().setSkin(game.skin);
+
+        GameData.getInstance().setViewport(new FitViewport(Constants.VIRTUAL_WIDTH / Constants.PPM, Constants.VIRTUAL_HEIGHT / Constants.PPM, camera));
+
     }
 
 

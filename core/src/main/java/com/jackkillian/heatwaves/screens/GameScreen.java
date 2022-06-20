@@ -14,55 +14,65 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.jackkillian.heatwaves.Constants;
 import com.jackkillian.heatwaves.GameData;
+import com.jackkillian.heatwaves.HeatWaves;
 import com.jackkillian.heatwaves.Player;
 import com.jackkillian.heatwaves.systems.HudRenderSystem;
+import com.jackkillian.heatwaves.systems.ItemSystem;
 import com.jackkillian.heatwaves.systems.MapRenderSystem;
 
 public class GameScreen implements Screen, InputProcessor {
     private Engine engine;
+    private HeatWaves game;
     private GameData gameData;
     private SpriteBatch batch;
-    private TiledMap map;
+
     private OrthographicCamera camera;
-    private OrthogonalTiledMapRenderer renderer;
-    private Box2DDebugRenderer debugRenderer;
+
     private FitViewport viewport;
     private World world;
     private Player player;
 
-    public GameScreen() {
+    public GameScreen(HeatWaves game) {
+        this.game = game;
+
     }
 
     @Override
     public void show() {
         Gdx.input.setInputProcessor(this);
 
-        gameData = GameData.getInstance();
-        world = gameData.getWorld();
-        batch = new SpriteBatch();
-        player = new Player(world, batch, 100, 100);
-        camera = new OrthographicCamera();
-        camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-        camera.zoom = 0.5f;
 
-        viewport = new FitViewport(Gdx.graphics.getWidth() / Constants.PPM, Gdx.graphics.getHeight() / Constants.PPM, camera);
-        gameData.setViewport(viewport);
+        world = GameData.getInstance().getWorld();
+        batch = GameData.getInstance().getBatch();
+        viewport = GameData.getInstance().getViewport();
+        camera = GameData.getInstance().getCamera();
+        player = new Player(world, batch, 100, 100);
+
 
         engine = new Engine();
-        engine.addSystem(new MapRenderSystem(gameData, camera));
-        engine.addSystem(new HudRenderSystem(gameData));
+        MapRenderSystem mapRenderSystem = new MapRenderSystem();
+        HudRenderSystem hudRenderSystem = new HudRenderSystem();
+        ItemSystem itemSystem = new ItemSystem();
+        engine.addSystem(mapRenderSystem);
+        engine.addSystem(hudRenderSystem);
+        engine.addSystem(itemSystem);
+        GameData.getInstance().setMapRenderSystem(mapRenderSystem);
+        GameData.getInstance().setHudRenderSystem(hudRenderSystem);
+        GameData.getInstance().setItemSystem(itemSystem);
     }
 
     @Override
     public void render(float delta) {
-        batch.setProjectionMatrix(camera.combined);
         Gdx.gl.glClearColor(48f / 255f, 86f / 255f, 99f / 255f, 0.8f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        camera.update();
+        batch.setProjectionMatrix(camera.combined);
 
 
         engine.update(delta);
-        camera.position.set(player.getPosition(), 0);
         player.update();
+
+
 
     }
 

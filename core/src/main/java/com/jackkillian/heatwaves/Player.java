@@ -73,6 +73,8 @@ public class Player {
         sprite.draw(batch);
         batch.end();
 
+        GameData.getInstance().getCamera().position.set(getPosition(), 0);
+
 
         if (body.getPosition().y < -100) {
             body.setTransform(100, 100, 0);

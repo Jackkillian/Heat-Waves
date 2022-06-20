@@ -24,9 +24,10 @@ public class HudRenderSystem extends EntitySystem {
     private Label healthLabel;
     private Label shieldLabel;
 
-    public HudRenderSystem(GameData gameData) {
-        camera = new OrthographicCamera();
-        this.assets = gameData.getAssets();
+    public HudRenderSystem() {
+        camera = GameData.getInstance().getCamera();
+        this.assets = GameData.getInstance().getAssets();
+
         stage = new Stage();
         table = new Table();
         table.setFillParent(true);
@@ -41,8 +42,8 @@ public class HudRenderSystem extends EntitySystem {
         shield = new Image(assets.getManager().get("hud/shield.png", Texture.class));
         shield.setScale(2.5f);
 
-        healthLabel = new Label("100", gameData.getSkin());
-        shieldLabel = new Label("100", gameData.getSkin());
+        healthLabel = new Label("100", GameData.getInstance().getSkin());
+        shieldLabel = new Label("100", GameData.getInstance().getSkin());
 
 
         healthLabel.setFontScale(2f);
