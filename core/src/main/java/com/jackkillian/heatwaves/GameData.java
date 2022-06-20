@@ -21,6 +21,7 @@ public class GameData {
     private World world;
     private Skin skin;
     private FitViewport viewport;
+    private boolean touchingPlatform = false;
 
     public void setAssets(Assets assets) {
         this.assets = assets;
@@ -41,4 +42,12 @@ public class GameData {
     }
     public Skin getSkin() {return skin;}
     public FitViewport getViewport() {return viewport;}
+
+    public void setTouchingPlatform(boolean b) {
+        touchingPlatform = b;
+    }
+
+    public boolean isTouchingPlatform() {
+        return touchingPlatform;
+    }
 }
