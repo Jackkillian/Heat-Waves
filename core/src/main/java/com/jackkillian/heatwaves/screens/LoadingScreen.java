@@ -34,7 +34,7 @@ public class LoadingScreen implements Screen {
         GameData gameData = GameData.getInstance();
 
 
-        World world = new World(new Vector2(0, -80), true);
+        World world = new World(new Vector2(0, -80), false);
         world.setContactListener(new ContactListner());
 
         gameData.setWorld(world);

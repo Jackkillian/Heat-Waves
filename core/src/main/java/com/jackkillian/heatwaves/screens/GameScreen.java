@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.viewport.FitViewport;
@@ -40,7 +41,7 @@ public class GameScreen implements Screen, InputProcessor {
         gameData = GameData.getInstance();
         world = gameData.getWorld();
         batch = new SpriteBatch();
-        player = new Player(world, batch, 100, 100);
+        player = new Player(world, batch, 200, 200);
         camera = new OrthographicCamera();
         camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         camera.zoom = 0.5f;
@@ -61,9 +62,8 @@ public class GameScreen implements Screen, InputProcessor {
 
 
         engine.update(delta);
-        camera.position.set(player.getPosition(), 0);
-        player.update();
-
+        camera.position.lerp(new Vector3(player.getPosition().x, player.getPosition().y, 0), 0.1f);
+        player.update(delta);
     }
 
     @Override
@@ -93,11 +93,13 @@ public class GameScreen implements Screen, InputProcessor {
 
     @Override
     public boolean keyDown(int keycode) {
+        player.onKeyDown(keycode);
         return false;
     }
 
     @Override
     public boolean keyUp(int keycode) {
+        player.onKeyUp(keycode);
         return false;
     }
 

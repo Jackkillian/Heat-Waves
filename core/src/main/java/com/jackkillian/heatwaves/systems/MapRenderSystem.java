@@ -44,6 +44,7 @@ public class MapRenderSystem extends EntitySystem {
         debugRenderer = new Box2DDebugRenderer();
         map = new TmxMapLoader().load("gameMap.tmx");
         renderer = new OrthogonalTiledMapRenderer(map, 1 / Constants.PPM);
+//        renderer.
 
 
         for (MapObject object : map.getLayers().get("building").getObjects()) {
@@ -84,8 +85,8 @@ public class MapRenderSystem extends EntitySystem {
         }
 
         batch.begin();
-        batch.draw(cloudTexture, -cloudOffset, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-        batch.draw(cloudTexture, -cloudOffset + Gdx.graphics.getWidth(), 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        batch.draw(cloudTexture, - cloudOffset, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        batch.draw(cloudTexture, - cloudOffset + Gdx.graphics.getWidth(), 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         batch.end();
 
         camera.update();
