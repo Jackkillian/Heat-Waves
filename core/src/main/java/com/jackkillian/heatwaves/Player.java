@@ -1,5 +1,6 @@
 package com.jackkillian.heatwaves;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -16,8 +17,6 @@ import static com.jackkillian.heatwaves.Constants.SPAWN_X;
 import static com.jackkillian.heatwaves.Constants.SPAWN_Y;
 
 //TODO: Fix the bug where the player moves slower in fullscreen mode
-// Jack if you want to add inventory, activeHand is the slot for the item the player is currently holding.
-// Just lock the position and rotation of the active item to activeHand.
 
 public class Player {
     private final Body body;
@@ -30,6 +29,9 @@ public class Player {
     private final Body itemBody;
     private Item.ItemType itemType;
     private final Sprite itemSprite;
+
+    private final Sprite gunSprite;
+    private final Sprite grapplerSprite;
 
     //mouse angle
     private float angle;
@@ -92,26 +94,36 @@ public class Player {
         TextureRegion[] runFrames = TextureRegion.split(runSheet, 16, 16)[0];
         runningAnimation = new Animation<>(0.1f, runFrames);
         runningAnimation.setPlayMode(Animation.PlayMode.LOOP);
+
+        //set gun sprites, so we don't create new ones in the update method
+        //big performance improvements
+        gunSprite = new Sprite(new Texture("items/handgunHeld.png"));
+        grapplerSprite = new Sprite(new Texture("items/grapplerGunHeld.png"));
     }
 
     public void update(float delta) {
         stateTime += delta;
 
+        System.out.println(angle);
         boolean isJumping = body.getLinearVelocity().y > 0.15; // When on ground, the velocity is still 0.11...
         boolean isFalling = body.getLinearVelocity().y < 0;
         boolean isRunning = !isFalling && !isJumping && (body.getLinearVelocity().x > 0.1 || body.getLinearVelocity().x < -0);
-        isFlipped = body.getLinearVelocity().x < 0;
+        isFlipped = angle > 100 && angle < 266;
         boolean canJump = GameData.getInstance().isTouchingPlatform() || (!isJumping && !isFalling);
 
         if (itemType != GameData.getInstance().getHeldItemType()) {
             itemType = GameData.getInstance().getHeldItemType();
 
+            if (itemType == null) {
+                itemSprite.setTexture(null);
+                return;
+            }
             switch (itemType) { // Can't use enhanced switch statement because of the HTML plugin...
                 case HANDGUN:
-                    itemSprite.set(new Sprite(new Texture("items/handgunHeld.png")));
+                    itemSprite.set(gunSprite);
                     break;
                 case GRAPPLER:
-                    itemSprite.set(new Sprite(new Texture("items/grapplerGunHeld.png")));
+                    itemSprite.set(grapplerSprite);
                     break;
             }
 
@@ -143,16 +155,15 @@ public class Player {
 
         batch.begin();
 
+
+
         // Items
-        if (angle > 100 && angle < 266) {
-            itemBody.setTransform(body.getPosition().x - 7, body.getPosition().y, angle * MathUtils.degreesToRadians);
-        } else {
-            itemBody.setTransform(body.getPosition().x + 7, body.getPosition().y, angle * MathUtils.degreesToRadians);
-        }
+        itemBody.setTransform(body.getPosition().x + (!isFlipped? 7: -7) , body.getPosition().y, angle * MathUtils.degreesToRadians);
+
         if (itemSprite.getTexture() != null) {
-            itemSprite.setPosition(itemBody.getPosition().x - itemSprite.getWidth() / 2, itemBody.getPosition().y - itemSprite.getHeight() / 2);
+            itemSprite.setPosition((itemBody.getPosition().x - itemSprite.getWidth() / 2), itemBody.getPosition().y - itemSprite.getHeight() / 2);
             itemSprite.setRotation(angle);
-            itemSprite.setFlip(false, angle > 100 && angle < 266);
+            itemSprite.setFlip(false, isFlipped);
 
             itemSprite.draw(batch);
         }
@@ -191,6 +202,7 @@ public class Player {
 
         if (body.getPosition().y < -250) {
             body.setTransform(SPAWN_X / Constants.PPM, SPAWN_Y / Constants.PPM, 0);
+            GameData.getInstance().setHeldItemType(null);
         }
     }
 

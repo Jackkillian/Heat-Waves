@@ -75,6 +75,7 @@ public class MapRenderSystem extends EntitySystem {
             fdef.filter.categoryBits = Constants.WALL_BIT;
             fdef.filter.maskBits = Constants.PLAYER_BIT | Constants.ITEM_BIT;
             body.createFixture(fdef);
+            body.setUserData("wall");
         }
 
         cloudTexture = new Texture("cloud.png");

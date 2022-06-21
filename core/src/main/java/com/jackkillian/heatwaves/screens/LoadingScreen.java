@@ -20,6 +20,7 @@ public class LoadingScreen implements Screen {
     private Stage stage;
     private ProgressBar bar;
     private Label countLeftLabel;
+    private int number = 0;
 
 
     public LoadingScreen(HeatWaves game) {
@@ -56,18 +57,26 @@ public class LoadingScreen implements Screen {
                     playerBody = contact.getFixtureB().getBody();
                     otherBody = contact.getFixtureA().getBody();
                 } else {
-                    //returns for now. Unless we want to know about non-player bodies in the future
+                    if (contact.getFixtureA().getBody().getUserData().equals("bullet") || contact.getFixtureB().getBody().getUserData().equals("bullet")) {
+                        System.out.println("bullet" + number++);
+                    }
                     return;
                 }
 
+
                 if (otherBody.getUserData() instanceof Item) {
                     Item item = (Item) otherBody.getUserData();
+                    GameData.getInstance().getHudRenderSystem().setActiveItem(item.getSprite().getTexture());
                     GameData.getInstance().setHeldItemType(item.getType());
                     GameData.getInstance().getItemSystem().removeItem(item, otherBody);
                 }
 
+
+
                 // Collision involves player, player can jump now! (once there are bullets, we'll need to check for bullet user data too)
+                //this is very hacky
                 if (!(otherBody.getUserData() instanceof Item)) {
+
                     gameData.setTouchingPlatform(true);
                 }
             }

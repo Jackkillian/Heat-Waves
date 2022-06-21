@@ -54,15 +54,16 @@ public class GameScreen implements Screen, InputProcessor {
         GameData.getInstance().setBatch(batch);
         GameData.getInstance().setMapRenderSystem(new MapRenderSystem(gameData, camera));
         GameData.getInstance().setItemSystem(new ItemSystem(gameData, batch));
+        GameData.getInstance().setHudRenderSystem(new HudRenderSystem(gameData));
         engine.addSystem(GameData.getInstance().getMapRenderSystem());
-        engine.addSystem(new HudRenderSystem(gameData));
+        engine.addSystem(GameData.getInstance().getHudRenderSystem());
         engine.addSystem(GameData.getInstance().getItemSystem());
     }
 
     @Override
     public void render(float delta) {
         batch.setProjectionMatrix(camera.combined);
-        Gdx.gl.glClearColor(48f / 255f, 86f / 255f, 99f / 255f, 0.8f);
+        Gdx.gl.glClearColor(135 / 255f, 206 / 255f, 235 / 255f, 0.3f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         engine.update(delta);
@@ -119,7 +120,7 @@ public class GameScreen implements Screen, InputProcessor {
             camera.unproject(worldCoordinates);
             Vector2 mousePos = new Vector2(worldCoordinates.x, worldCoordinates.y);
 
-            float speed = 100f;  // set the speed of the bullet
+            float speed = 250f;  // set the speed of the bullet
             float shooterX = player.getItemPosition().x; // get player location
             float shooterY = player.getItemPosition().y; // get player location
             float velx = mousePos.x - shooterX; // get distance from shooter to target on x plain

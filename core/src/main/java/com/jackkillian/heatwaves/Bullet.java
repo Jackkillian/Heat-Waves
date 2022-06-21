@@ -4,10 +4,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.Body;
-import com.badlogic.gdx.physics.box2d.BodyDef;
-import com.badlogic.gdx.physics.box2d.FixtureDef;
-import com.badlogic.gdx.physics.box2d.PolygonShape;
+import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.Pool;
 
 import static com.jackkillian.heatwaves.Constants.SPAWN_X;
@@ -20,6 +17,8 @@ public class Bullet implements Pool.Poolable {
     public Vector2 velocity;
     public boolean alive;
 
+    public float bulletLifetime;
+
     /**
      * Bullet constructor. Just initialize variables.
      */
@@ -28,6 +27,26 @@ public class Bullet implements Pool.Poolable {
         this.velocity = new Vector2();
         this.alive = false;
         this.sprite = new Sprite(new Texture("bullet.png"));
+
+        //create bullet body
+        BodyDef bodyDef = new BodyDef();
+//        bodyDef.bullet = true;
+        bodyDef.type = BodyDef.BodyType.DynamicBody;
+        bodyDef.position.set(position.x / Constants.PPM, position.y / Constants.PPM);
+        body = GameData.getInstance().getWorld().createBody(bodyDef);
+
+//        //create bullet fixture
+//        FixtureDef fdef = new FixtureDef();
+//        CircleShape shape = new CircleShape();
+//        shape.setRadius(5 / Constants.PPM);
+//        fdef.shape = shape;
+//        fdef.isSensor = true;
+//        fdef.filter.categoryBits = Constants.ITEM_BIT;
+//        fdef.filter.maskBits = Constants.WALL_BIT;
+//        body.createFixture(fdef);
+//        body.setGravityScale(0f);
+//        body.setUserData("bullet");
+
 
 //        BodyDef bodyDef = new BodyDef();
 //        bodyDef.position.set(SPAWN_X / Constants.PPM, SPAWN_Y / Constants.PPM);
@@ -52,7 +71,6 @@ public class Bullet implements Pool.Poolable {
      */
     public void init(float posX, float posY, float velX, float velY) {
         position.set(posX,  posY);
-//        body.setTransform(posX / Constants.PPM, posY / Constants.PPM, 0);
         velocity.set(velX, velY);
         alive = true;
     }
@@ -67,15 +85,16 @@ public class Bullet implements Pool.Poolable {
         position.set(0, 0);
         alive = false;
         sprite = new Sprite(new Texture("bullet.png"));
+
     }
 
     /**
      * Method called each frame, which updates the bullet.
      */
     public void update (float delta) {
+        bulletLifetime += delta;
 //        body.setLinearVelocity(velocity);
         position.add(velocity.cpy().scl(delta));
-
         sprite.setPosition(position.x - sprite.getWidth() / 2, position.y - sprite.getHeight() / 2);
 
         // calculate the angle with trigonometry! thanks geometry class :D
@@ -85,14 +104,22 @@ public class Bullet implements Pool.Poolable {
         }
         sprite.setRotation(angle * MathUtils.radiansToDegrees);
 
-        // if bullet is out of screen, set it to dead
-        if (isOutOfScreen()) alive = false;
+        //check bullet lifetime
+        if (bulletLifetime > 0.5f) {
+            alive = false;
+            bulletLifetime = 0;
+
+        }
+
+//        // if bullet is out of screen, set it to dead
+//        if (isOutOfScreen()) alive = false;
 
         // render sprite
         if (alive) sprite.draw(GameData.getInstance().getBatch());
     }
 
     private boolean isOutOfScreen() {
+
         float WIDTH = GameData.getInstance().getViewport().getWorldWidth();
         float HEIGHT = GameData.getInstance().getViewport().getWorldHeight();
         return position.x > WIDTH || position.x < 0 || position.y > HEIGHT || position.y < 0;

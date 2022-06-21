@@ -24,7 +24,7 @@ public class ItemSystem extends EntitySystem {
     public void update(float deltaTime) {
         if (items.size() < 15) {
             // generate random number between 100 and 1500
-            int x = (int) (Math.random() * (1500 - 100) + 100);
+            int x = (int) (Math.random() * (2500 - 100) + 100);
             items.add(new Item(Item.ItemType.HANDGUN, x, 700));
         }
 

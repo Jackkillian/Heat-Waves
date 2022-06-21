@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.jackkillian.heatwaves.systems.HudRenderSystem;
 import com.jackkillian.heatwaves.systems.ItemSystem;
 import com.jackkillian.heatwaves.systems.MapRenderSystem;
 
@@ -26,6 +27,7 @@ public class GameData {
     private Item.ItemType itemType;
     private WorldManager worldManager;
     private MapRenderSystem mapRenderSystem;
+    private HudRenderSystem hudRenderSystem;
     private ItemSystem itemSystem;
 
     public void setItemSystem(ItemSystem itemSystem) {
@@ -79,6 +81,13 @@ public class GameData {
 
     public void setWorldManager(WorldManager worldManager) {
         this.worldManager = worldManager;
+    }
+
+    public void setHudRenderSystem(HudRenderSystem hudRenderSystem) {
+        this.hudRenderSystem = hudRenderSystem;
+    }
+    public HudRenderSystem getHudRenderSystem() {
+        return hudRenderSystem;
     }
 
     public World getWorld() {
