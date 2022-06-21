@@ -18,19 +18,19 @@ public class Item {
 
     private Sprite sprite;
     private Body body;
+    private ItemType itemType;
 
     public Item(ItemType type, float x, float y) {
+        itemType = type;
         switch (type) {
             case HANDGUN -> sprite = new Sprite(new Texture("items/handgun.png"));
             case GRAPPLER -> sprite = new Sprite(new Texture("items/grapplerGun.png"));
         }
 
-
         BodyDef bodyDef = new BodyDef();
         bodyDef.position.set(x / Constants.PPM, y / Constants.PPM);
         bodyDef.type = BodyDef.BodyType.DynamicBody;
         body = GameData.getInstance().getWorld().createBody(bodyDef);
-
 
         FixtureDef fdef = new FixtureDef();
         PolygonShape shape = new PolygonShape();
@@ -60,6 +60,7 @@ public class Item {
         return body;
     }
 
-
-
+    public ItemType getType() {
+        return itemType;
+    }
 }

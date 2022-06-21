@@ -24,6 +24,7 @@ public class GameData {
     private Skin skin;
     private FitViewport viewport;
     private boolean touchingPlatform = false;
+    private Item.ItemType itemType;
 
     private MapRenderSystem mapRenderSystem;
     private ItemSystem itemSystem;
@@ -66,5 +67,13 @@ public class GameData {
 
     public boolean isTouchingPlatform() {
         return touchingPlatform;
+    }
+
+    public Item.ItemType getHeldItemType() {
+        return itemType;
+    }
+
+    public void setHeldItemType(Item.ItemType itemType) {
+        this.itemType = itemType;
     }
 }

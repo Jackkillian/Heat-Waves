@@ -44,6 +44,7 @@ public class LoadingScreen implements Screen {
                 super.beginContact(contact);
                 Body playerBody;
                 Body otherBody;
+
                 if (contact.getFixtureA().getBody().getUserData() instanceof Player) {
                     playerBody = contact.getFixtureA().getBody();
                     otherBody = contact.getFixtureB().getBody();
@@ -55,19 +56,16 @@ public class LoadingScreen implements Screen {
                     return;
                 }
 
-                if (otherBody.getUserData() instanceof Item) {
-
-                    GameData.getInstance().getItemSystem().removeItem((Item) otherBody.getUserData(), otherBody);
-
+                if (otherBody.getUserData() instanceof Item item) {
+                    System.out.println("Player collided with item");
+                    GameData.getInstance().setHeldItemType(item.getType());
+                    GameData.getInstance().getItemSystem().removeItem(item, otherBody);
                 }
-                System.out.println(otherBody.getUserData());
 
                 // Collision involves player, player can jump now! (once there are bullets, we'll need to check for bullet user data too)
                 if (!(otherBody.getUserData() instanceof Item)) {
                     gameData.setTouchingPlatform(true);
                 }
-
-
             }
 
             @Override

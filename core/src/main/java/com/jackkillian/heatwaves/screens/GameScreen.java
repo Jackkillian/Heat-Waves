@@ -65,7 +65,6 @@ public class GameScreen implements Screen, InputProcessor {
         Gdx.gl.glClearColor(48f / 255f, 86f / 255f, 99f / 255f, 0.8f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-
         engine.update(delta);
         camera.position.lerp(new Vector3(player.getPosition().x, player.getPosition().y, 0), 0.1f);
         player.update(delta);
