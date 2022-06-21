@@ -7,9 +7,6 @@ import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 
-import static com.jackkillian.heatwaves.Constants.SPAWN_X;
-import static com.jackkillian.heatwaves.Constants.SPAWN_Y;
-
 public class Item {
     public enum ItemType {
         HANDGUN,
@@ -22,9 +19,13 @@ public class Item {
 
     public Item(ItemType type, float x, float y) {
         itemType = type;
-        switch (type) {
-            case HANDGUN -> sprite = new Sprite(new Texture("items/handgun.png"));
-            case GRAPPLER -> sprite = new Sprite(new Texture("items/grapplerGun.png"));
+        switch (type) { // Can't use enhanced switch statements because of the HTML plugin...
+            case HANDGUN:
+                sprite = new Sprite(new Texture("items/handgun.png"));
+                break;
+            case GRAPPLER:
+                sprite = new Sprite(new Texture("items/grapplerGun.png"));
+                break;
         }
 
         BodyDef bodyDef = new BodyDef();
@@ -52,6 +53,7 @@ public class Item {
         sprite.setPosition(body.getPosition().x - sprite.getWidth() / 2, body.getPosition().y - sprite.getHeight() / 2);
 
     }
+
     public Sprite getSprite() {
         return sprite;
     }

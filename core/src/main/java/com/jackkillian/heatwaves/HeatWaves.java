@@ -5,7 +5,6 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.jackkillian.heatwaves.screens.LoadingScreen;
-import com.ray3k.stripe.FreeTypeSkin;
 
 /**
  * {@link com.badlogic.gdx.ApplicationListener} implementation shared by all platforms.

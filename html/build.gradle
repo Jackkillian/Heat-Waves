@@ -28,9 +28,6 @@ gwt {
 }
 
 dependencies {
-    implementation 'com.github.raeleus.stripe:stripe:1.3.1:sources'
-    implementation 'com.github.raeleus.stripe:freetype:1.3.1:sources'
-
 	implementation "com.badlogicgames.ashley:ashley:$ashleyVersion:sources"
 	implementation "com.badlogicgames.box2dlights:box2dlights:$box2dlightsVersion:sources"
 	implementation "com.badlogicgames.gdx:gdx-ai:$aiVersion:sources"
@@ -153,7 +150,7 @@ tasks.draftCompileGwt.dependsOn(addSource)
 tasks.checkGwt.dependsOn(addSource)
 
 // You can change the version below to JavaVersion.VERSION_11 if you use the 2.9.0 backend.
-sourceCompatibility = JavaVersion.VERSION_1_8
+sourceCompatibility = JavaVersion.VERSION_16
 sourceSets.main.java.srcDirs = [ "src/main/java/" ]
 
 eclipse.project.name = appName + "-html"

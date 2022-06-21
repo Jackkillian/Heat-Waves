@@ -103,9 +103,13 @@ public class Player {
         if (itemType != GameData.getInstance().getHeldItemType()) {
             itemType = GameData.getInstance().getHeldItemType();
 
-            switch (itemType) {
-                case HANDGUN -> itemSprite.set(new Sprite(new Texture("items/handgunHeld.png")));
-                case GRAPPLER -> itemSprite.set(new Sprite(new Texture("items/grapplerGunHeld.png")));
+            switch (itemType) { // Can't use enhanced switch statement because of the HTML plugin...
+                case HANDGUN:
+                    itemSprite.set(new Sprite(new Texture("items/handgunHeld.png")));
+                    break;
+                case GRAPPLER:
+                    itemSprite.set(new Sprite(new Texture("items/grapplerGunHeld.png")));
+                    break;
             }
 
             itemSprite.setScale(0.8f);

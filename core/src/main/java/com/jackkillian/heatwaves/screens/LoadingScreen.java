@@ -56,7 +56,8 @@ public class LoadingScreen implements Screen {
                     return;
                 }
 
-                if (otherBody.getUserData() instanceof Item item) {
+                if (otherBody.getUserData() instanceof Item) {
+                    Item item = (Item) otherBody.getUserData();
                     System.out.println("Player collided with item");
                     GameData.getInstance().setHeldItemType(item.getType());
                     GameData.getInstance().getItemSystem().removeItem(item, otherBody);
