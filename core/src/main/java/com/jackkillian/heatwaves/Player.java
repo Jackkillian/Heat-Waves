@@ -229,13 +229,7 @@ public class Player {
     }
 
     public Vector2 getItemPosition() {
-//        System.out.println(itemBody.getPosition());
-//        return new Vector2(itemSprite.getX(), itemSprite.getY());
         return itemBody.getPosition();
-    }
-
-    public float getItemAngleDeg() {
-        return itemBody.getAngle() * MathUtils.radiansToDegrees;
     }
 
     public void onMouseMoved(int screenX, int screenY, OrthographicCamera camera) {

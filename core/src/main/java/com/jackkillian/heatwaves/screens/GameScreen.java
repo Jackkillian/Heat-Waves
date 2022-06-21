@@ -120,7 +120,7 @@ public class GameScreen implements Screen, InputProcessor {
             Vector2 mousePos = new Vector2(worldCoordinates.x, worldCoordinates.y);
 
             float speed = 100f;  // set the speed of the bullet
-            float shooterX = player.getPosition().x; // get player location
+            float shooterX = player.getItemPosition().x; // get player location
             float shooterY = player.getItemPosition().y; // get player location
             float velx = mousePos.x - shooterX; // get distance from shooter to target on x plain
             float vely = mousePos.y  - shooterY; // get distance from shooter to target on y plain
@@ -130,7 +130,6 @@ public class GameScreen implements Screen, InputProcessor {
                 vely = vely / length;  // get required y velocity to aim at target
             }
 
-//            gameData.getWorldManager().createBullet((int) player.getItemPosition().x, (int) player.getItemPosition().y, player.getItemAngleDeg());
             gameData.getWorldManager().createBullet(shooterX, shooterY, velx*speed, vely*speed);
         }
 

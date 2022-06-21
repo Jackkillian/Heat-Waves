@@ -94,11 +94,12 @@ public class MapRenderSystem extends EntitySystem {
         batch.draw(cloudTexture, - cloudOffset + Gdx.graphics.getWidth(), 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         batch.end();
 
-        worldManager.update(deltaTime);
-
         camera.update();
         renderer.setView(camera);
         renderer.render();
+
+        worldManager.update(deltaTime);
+
         debugRenderer.render(world, camera.combined);
     }
 
