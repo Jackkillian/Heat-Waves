@@ -42,7 +42,9 @@ public class Player {
 
     boolean isFlipped = false;
 
-    public Player(World world, SpriteBatch batch) {
+    public Player(WorldManager worldManager, SpriteBatch batch) {
+        World world = worldManager.getWorld();
+
         BodyDef bodyDef = new BodyDef();
         bodyDef.position.set(SPAWN_X / Constants.PPM, SPAWN_Y / Constants.PPM);
         bodyDef.type = BodyDef.BodyType.DynamicBody;
@@ -65,7 +67,6 @@ public class Player {
         body.createFixture(fdef);
         body.setUserData(this);
 
-
         // CREATE ACTIVE HAND FOR PLAYER TO USE ITEMS
         shape.setAsBox(15f / Constants.PPM, 22.5f / Constants.PPM);
         bodyDef.type = BodyDef.BodyType.StaticBody;
@@ -82,6 +83,8 @@ public class Player {
 
         idle = new TextureRegion(new Texture("player/player1.png"));
         idleSprite = new Sprite(new Texture("player/player1.png"));
+        System.out.println("idle sprite origin: " + idleSprite.getOriginX() + " " + idleSprite.getOriginY());
+        idleSprite.setOrigin(idleSprite.getWidth() / 2, idleSprite.getHeight() / 2);
         jumpSprite = new Sprite(new Texture("player/jump.png"));
         itemSprite = new Sprite();
 
@@ -225,6 +228,16 @@ public class Player {
         return body.getPosition();
     }
 
+    public Vector2 getItemPosition() {
+//        System.out.println(itemBody.getPosition());
+//        return new Vector2(itemSprite.getX(), itemSprite.getY());
+        return itemBody.getPosition();
+    }
+
+    public float getItemAngleDeg() {
+        return itemBody.getAngle() * MathUtils.radiansToDegrees;
+    }
+
     public void onMouseMoved(int screenX, int screenY, OrthographicCamera camera) {
         Vector2 centerPosition = new Vector2(itemBody.getPosition().x, itemBody.getPosition().y);
 
@@ -234,7 +247,5 @@ public class Player {
 
         Vector2 direction = mouseLoc.sub(centerPosition);
         angle = direction.angleDeg();
-
-        System.out.println("angle: " + angle);
     }
 }

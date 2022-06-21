@@ -35,6 +35,10 @@ public class LoadingScreen implements Screen {
             }
         });
 
+        WorldManager worldManager = new WorldManager();
+        worldManager.setWorld(world);
+        GameData.getInstance().setWorldManager(worldManager);
+
         //I think our code is becoming a mess - Dave
         // it's a game jam so whatever  :D :D :D
         // GPT3 on top!!!
@@ -58,7 +62,6 @@ public class LoadingScreen implements Screen {
 
                 if (otherBody.getUserData() instanceof Item) {
                     Item item = (Item) otherBody.getUserData();
-                    System.out.println("Player collided with item");
                     GameData.getInstance().setHeldItemType(item.getType());
                     GameData.getInstance().getItemSystem().removeItem(item, otherBody);
                 }
@@ -90,8 +93,6 @@ public class LoadingScreen implements Screen {
                 super.postSolve(contact, impulse);
             }
         });
-
-        gameData.setWorld(world);
 
         gameData.setAssets(assets);
         gameData.setSkin(game.skin);

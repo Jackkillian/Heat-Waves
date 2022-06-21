@@ -20,12 +20,11 @@ public class GameData {
 
     private SpriteBatch batch;
     private Assets assets;
-    private World world;
     private Skin skin;
     private FitViewport viewport;
     private boolean touchingPlatform = false;
     private Item.ItemType itemType;
-
+    private WorldManager worldManager;
     private MapRenderSystem mapRenderSystem;
     private ItemSystem itemSystem;
 
@@ -42,11 +41,8 @@ public class GameData {
     public void setMapRenderSystem(MapRenderSystem mapRenderSystem) {
         this.mapRenderSystem = mapRenderSystem;
     }
-    public void setWorld(World world) {this.world = world;}
     public void setSkin(Skin skin) {this.skin = skin;}
     public void setViewport(FitViewport viewport) {this.viewport = viewport;}
-
-    public World getWorld() {return world;}
     public SpriteBatch getBatch() {
         return batch;
     }
@@ -75,5 +71,17 @@ public class GameData {
 
     public void setHeldItemType(Item.ItemType itemType) {
         this.itemType = itemType;
+    }
+
+    public WorldManager getWorldManager() {
+        return worldManager;
+    }
+
+    public void setWorldManager(WorldManager worldManager) {
+        this.worldManager = worldManager;
+    }
+
+    public World getWorld() {
+        return worldManager.getWorld();
     }
 }

@@ -21,6 +21,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.jackkillian.heatwaves.Constants;
 import com.jackkillian.heatwaves.GameData;
+import com.jackkillian.heatwaves.WorldManager;
 
 public class MapRenderSystem extends EntitySystem {
     private GameData gameData;
@@ -28,6 +29,7 @@ public class MapRenderSystem extends EntitySystem {
     private OrthogonalTiledMapRenderer renderer;
     private TiledMap map;
     private World world;
+    private WorldManager worldManager;
     private OrthographicCamera camera;
     private SpriteBatch batch;
 
@@ -41,6 +43,7 @@ public class MapRenderSystem extends EntitySystem {
         this.gameData = gameData;
         this.camera = camera;
         world = gameData.getWorld();
+        worldManager = gameData.getWorldManager();
         debugRenderer = new Box2DDebugRenderer();
         map = new TmxMapLoader().load("gameMap.tmx");
         renderer = new OrthogonalTiledMapRenderer(map, 1 / Constants.PPM);
@@ -91,10 +94,12 @@ public class MapRenderSystem extends EntitySystem {
         batch.draw(cloudTexture, - cloudOffset + Gdx.graphics.getWidth(), 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         batch.end();
 
+        worldManager.update(deltaTime);
+
         camera.update();
         renderer.setView(camera);
         renderer.render();
-//        debugRenderer.render(world, camera.combined);
+        debugRenderer.render(world, camera.combined);
     }
 
     // https://stackoverflow.com/questions/45805732/libgdx-tiled-map-box2d-collision-with-polygon-map-object

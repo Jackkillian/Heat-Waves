@@ -1,6 +1,7 @@
 package com.jackkillian.heatwaves.screens;
 
 import com.badlogic.ashley.core.Engine;
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
@@ -9,14 +10,13 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.viewport.FitViewport;
-import com.jackkillian.heatwaves.Constants;
-import com.jackkillian.heatwaves.GameData;
+import com.jackkillian.heatwaves.*;
 import com.jackkillian.heatwaves.systems.ItemSystem;
-import com.jackkillian.heatwaves.Player;
 import com.jackkillian.heatwaves.systems.HudRenderSystem;
 import com.jackkillian.heatwaves.systems.MapRenderSystem;
 
@@ -29,7 +29,7 @@ public class GameScreen implements Screen, InputProcessor {
     private OrthogonalTiledMapRenderer renderer;
     private Box2DDebugRenderer debugRenderer;
     private FitViewport viewport;
-    private World world;
+    private WorldManager world;
     private Player player;
 
     public GameScreen() {
@@ -40,7 +40,7 @@ public class GameScreen implements Screen, InputProcessor {
         Gdx.input.setInputProcessor(this);
 
         gameData = GameData.getInstance();
-        world = gameData.getWorld();
+        world = gameData.getWorldManager();
         batch = new SpriteBatch();
         player = new Player(world, batch);
         camera = new OrthographicCamera();
@@ -114,6 +114,26 @@ public class GameScreen implements Screen, InputProcessor {
 
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+        if (gameData.getHeldItemType() == Item.ItemType.HANDGUN) {
+            Vector3 worldCoordinates = new Vector3(screenX, screenY, 0);
+            camera.unproject(worldCoordinates);
+            Vector2 mousePos = new Vector2(worldCoordinates.x, worldCoordinates.y);
+
+            float speed = 100f;  // set the speed of the bullet
+            float shooterX = player.getPosition().x; // get player location
+            float shooterY = player.getItemPosition().y; // get player location
+            float velx = mousePos.x - shooterX; // get distance from shooter to target on x plain
+            float vely = mousePos.y  - shooterY; // get distance from shooter to target on y plain
+            float length = (float) Math.sqrt(velx * velx + vely * vely); // get distance to target direct
+            if (length != 0) {
+                velx = velx / length;  // get required x velocity to aim at target
+                vely = vely / length;  // get required y velocity to aim at target
+            }
+
+//            gameData.getWorldManager().createBullet((int) player.getItemPosition().x, (int) player.getItemPosition().y, player.getItemAngleDeg());
+            gameData.getWorldManager().createBullet(shooterX, shooterY, velx*speed, vely*speed);
+        }
+
         return false;
     }
 
