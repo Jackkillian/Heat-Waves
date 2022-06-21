@@ -21,7 +21,7 @@ public class Item {
         itemType = type;
         switch (type) { // Can't use enhanced switch statements because of the HTML plugin...
             case HANDGUN:
-                sprite = new Sprite(new Texture("items/handgun.png"));
+                sprite = new Sprite(new Texture("items/shotgun.png"));
                 break;
             case GRAPPLER:
                 sprite = new Sprite(new Texture("items/grapplerGun.png"));

@@ -1,6 +1,5 @@
 package com.jackkillian.heatwaves;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -32,6 +31,14 @@ public class Player {
 
     private final Sprite gunSprite;
     private final Sprite grapplerSprite;
+
+    //mouse vectors set here to improve performance
+    private final Vector2 direction = new Vector2();
+    private final Vector3 worldCoordinates = new Vector3();
+    private final Vector2 centerPosition = new Vector2();
+    private Vector2 mouseLoc = new Vector2();
+
+
 
     //mouse angle
     private float angle;
@@ -200,9 +207,11 @@ public class Player {
 
         batch.end();
 
+        //player has respawned
         if (body.getPosition().y < -250) {
             body.setTransform(SPAWN_X / Constants.PPM, SPAWN_Y / Constants.PPM, 0);
             GameData.getInstance().setHeldItemType(null);
+            GameData.getInstance().getHudRenderSystem().setActiveItem(null);
         }
     }
 
@@ -245,11 +254,12 @@ public class Player {
     }
 
     public void onMouseMoved(int screenX, int screenY, OrthographicCamera camera) {
-        Vector2 centerPosition = new Vector2(itemBody.getPosition().x, itemBody.getPosition().y);
+        centerPosition.set(itemBody.getPosition().x, itemBody.getPosition().y);
 
-        Vector3 worldCoordinates = new Vector3(screenX, screenY, 0);
+        worldCoordinates.set(screenX, screenY, 0);
         camera.unproject(worldCoordinates);
-        Vector2 mouseLoc = new Vector2(worldCoordinates.x, worldCoordinates.y);
+
+        mouseLoc.set(worldCoordinates.x, worldCoordinates.y);
 
         Vector2 direction = mouseLoc.sub(centerPosition);
         angle = direction.angleDeg();

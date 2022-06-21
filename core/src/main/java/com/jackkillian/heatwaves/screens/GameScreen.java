@@ -5,6 +5,7 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -32,6 +33,8 @@ public class GameScreen implements Screen, InputProcessor {
     private WorldManager world;
     private Player player;
 
+    private Music music;
+
     public GameScreen() {
     }
 
@@ -56,8 +59,12 @@ public class GameScreen implements Screen, InputProcessor {
         GameData.getInstance().setItemSystem(new ItemSystem(gameData, batch));
         GameData.getInstance().setHudRenderSystem(new HudRenderSystem(gameData));
         engine.addSystem(GameData.getInstance().getMapRenderSystem());
-        engine.addSystem(GameData.getInstance().getHudRenderSystem());
         engine.addSystem(GameData.getInstance().getItemSystem());
+        engine.addSystem(GameData.getInstance().getHudRenderSystem());
+
+        music = Gdx.audio.newMusic(Gdx.files.internal("themeSong.wav"));
+        music.setLooping(true);
+        music.play();
     }
 
     @Override

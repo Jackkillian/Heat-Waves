@@ -2,15 +2,18 @@ package com.jackkillian.heatwaves.systems;
 
 import com.badlogic.ashley.core.EntitySystem;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Colors;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Stack;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.badlogic.gdx.utils.Align;
 import com.jackkillian.heatwaves.Assets;
 import com.jackkillian.heatwaves.GameData;
 
@@ -54,7 +57,8 @@ public class HudRenderSystem extends EntitySystem {
         hotbar.setScale(5f);
 
         activeItem = new Image();
-        activeItem.setScale(2.5f);
+        activeItem.setScale(5f);
+
 
         healthLabel = new Label("100", gameData.getSkin());
         shieldLabel = new Label("100", gameData.getSkin());
@@ -73,6 +77,12 @@ public class HudRenderSystem extends EntitySystem {
         table.add(shieldLabel).pad(10f);
         table.row();
 
+        Stack stack = new Stack();
+        stack.add(hotbar);
+        stack.add(activeItem);
+        table.add(stack).padTop(70f);
+
+
 
         Table tableRight = new Table();
         tableRight.setFillParent(true);
@@ -83,8 +93,6 @@ public class HudRenderSystem extends EntitySystem {
         Table bottomRight = new Table();
         bottomRight.setFillParent(true);
         bottomRight.bottom().right();
-        bottomRight.add(hotbar).padRight(100f);
-        bottomRight.add(activeItem).padRight(100f);
         stage.addActor(bottomRight);
 
 
@@ -104,6 +112,10 @@ public class HudRenderSystem extends EntitySystem {
     }
 
     public void setActiveItem(Texture texture) {
+        if (texture == null) {
+            activeItem.setDrawable(null);
+            return;
+        }
         activeItem.setDrawable(new TextureRegionDrawable(texture));
     }
 }
