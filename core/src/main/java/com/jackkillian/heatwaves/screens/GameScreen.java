@@ -1,24 +1,28 @@
 package com.jackkillian.heatwaves.screens;
 
 import com.badlogic.ashley.core.Engine;
-import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.audio.Sound;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
-import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.jackkillian.heatwaves.*;
-import com.jackkillian.heatwaves.systems.ItemSystem;
 import com.jackkillian.heatwaves.systems.HudRenderSystem;
+import com.jackkillian.heatwaves.systems.ItemSystem;
 import com.jackkillian.heatwaves.systems.MapRenderSystem;
 
 public class GameScreen implements Screen, InputProcessor {
@@ -32,8 +36,9 @@ public class GameScreen implements Screen, InputProcessor {
     private FitViewport viewport;
     private WorldManager world;
     private Player player;
-
+    private Sound shootSound;
     private Music music;
+    private Sprite grapplingHookRope;
 
     public GameScreen() {
     }
@@ -49,7 +54,6 @@ public class GameScreen implements Screen, InputProcessor {
         camera = new OrthographicCamera();
         camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         camera.zoom = 0.5f;
-
         viewport = new FitViewport(Gdx.graphics.getWidth() / Constants.PPM, Gdx.graphics.getHeight() / Constants.PPM, camera);
         gameData.setViewport(viewport);
 
@@ -62,9 +66,14 @@ public class GameScreen implements Screen, InputProcessor {
         engine.addSystem(GameData.getInstance().getItemSystem());
         engine.addSystem(GameData.getInstance().getHudRenderSystem());
 
+        shootSound = Gdx.audio.newSound(Gdx.files.internal("shoot.wav"));
+
         music = Gdx.audio.newMusic(Gdx.files.internal("themeSong.wav"));
         music.setLooping(true);
         music.play();
+
+        grapplingHookRope = new Sprite(new Texture("items/grapplingHookRope.png"));
+//        grapplingHookRope.setFlip(false, true); // inverted for some reason...
     }
 
     @Override
@@ -76,6 +85,55 @@ public class GameScreen implements Screen, InputProcessor {
         engine.update(delta);
         camera.position.lerp(new Vector3(player.getPosition().x, player.getPosition().y, 0), 0.1f);
         player.update(delta);
+
+        if (gameData.isGrapplingShot()) {
+            // draw a line from the player to the grappling hook
+            Vector2 playerPos = player.getItemPosition();
+            Vector2 hookPos = gameData.getGrapplingPosition();
+
+            // a**2 == b**2 + c**2
+            float b = hookPos.y - playerPos.y;
+            float c = playerPos.x - hookPos.x;
+            float a = (float) Math.sqrt(Math.pow(c, 2) + Math.pow(b, 2));
+
+            System.out.println("a: " + a);
+            System.out.println("b: " + b);
+            System.out.println("c: " + c);
+
+            // looks like we gotta use trig again :D
+            float angle = (float) Math.atan(b / c) * MathUtils.radiansToDegrees;
+            if (hookPos.x < playerPos.x) {
+                angle += 180;
+            }
+            angle *= -1;
+
+            // draw a line from the player to the grappling hook
+            batch.begin();
+            grapplingHookRope.setSize(a, grapplingHookRope.getHeight());
+            grapplingHookRope.setPosition(playerPos.x, playerPos.y);
+            grapplingHookRope.setRotation(angle);
+            grapplingHookRope.draw(batch);
+            batch.end();
+        }
+
+        if (gameData.isGrapplingPulling()) {
+            Vector2 playerPos = player.getPosition();
+            Vector2 hookPos = gameData.getGrapplingPosition();
+
+            // a**2 == b**2 + c**2
+            float b = hookPos.y - playerPos.y;
+            float c = playerPos.x - hookPos.x;
+            float a = (float) Math.sqrt(Math.pow(c, 2) + Math.pow(b, 2));
+
+            // move the player closer to the grappling hook
+            player.setPosition(playerPos.x + (hookPos.x - playerPos.x) / 10, playerPos.y + (hookPos.y - playerPos.y) / 10);
+
+            // if the player is close enough to the grappling hook, destroy the grappling hook
+            if (a < 20) {
+                gameData.setGrapplingPulling(false);
+                gameData.setGrapplingPosition(null);
+            }
+        }
     }
 
     @Override
@@ -122,23 +180,36 @@ public class GameScreen implements Screen, InputProcessor {
 
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-        if (gameData.getHeldItemType() == Item.ItemType.HANDGUN) {
-            Vector3 worldCoordinates = new Vector3(screenX, screenY, 0);
-            camera.unproject(worldCoordinates);
-            Vector2 mousePos = new Vector2(worldCoordinates.x, worldCoordinates.y);
+        if (gameData.getHeldItemType() == null) return false;
 
-            float speed = 250f;  // set the speed of the bullet
-            float shooterX = player.getItemPosition().x; // get player location
-            float shooterY = player.getItemPosition().y; // get player location
-            float velx = mousePos.x - shooterX; // get distance from shooter to target on x plain
-            float vely = mousePos.y  - shooterY; // get distance from shooter to target on y plain
-            float length = (float) Math.sqrt(velx * velx + vely * vely); // get distance to target direct
-            if (length != 0) {
-                velx = velx / length;  // get required x velocity to aim at target
-                vely = vely / length;  // get required y velocity to aim at target
-            }
+        Vector3 worldCoordinates = new Vector3(screenX, screenY, 0);
+        camera.unproject(worldCoordinates);
+        Vector2 mousePos = new Vector2(worldCoordinates.x, worldCoordinates.y);
 
-            gameData.getWorldManager().createBullet(shooterX, shooterY, velx*speed, vely*speed);
+        float speed = 250f;  // set the speed of the bullet
+        float shooterX = player.getItemPosition().x; // get player location
+        float shooterY = player.getItemPosition().y; // get player location
+        float velx = mousePos.x - shooterX; // get distance from shooter to target on x plain
+        float vely = mousePos.y - shooterY; // get distance from shooter to target on y plain
+        float length = (float) Math.sqrt(velx * velx + vely * vely); // get distance to target direct
+        if (length != 0) {
+            velx = velx / length;  // get required x velocity to aim at target
+            vely = vely / length;  // get required y velocity to aim at target
+        }
+
+        if (gameData.getHeldItemType() == Item.ItemType.HANDGUN
+                || gameData.getHeldItemType() == Item.ItemType.SHOTGUN
+                || gameData.getHeldItemType() == Item.ItemType.PISTOL) {
+
+            shootSound.play();
+            gameData.getWorldManager().createBullet(shooterX, shooterY, velx * speed, vely * speed);
+        }
+
+        if (gameData.getHeldItemType() == Item.ItemType.GRAPPLER && !gameData.isGrapplingShot() && !gameData.isGrapplingPulling()) {
+            speed /= 2;
+            shootSound.play();
+            gameData.setGrapplingShot(true);
+            gameData.getWorldManager().createGrapplingHook(shooterX, shooterY, velx * speed, vely * speed);
         }
 
         return false;

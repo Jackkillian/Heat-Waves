@@ -25,7 +25,10 @@ public class ItemSystem extends EntitySystem {
         if (items.size() < 15) {
             // generate random number between 100 and 1500
             int x = (int) (Math.random() * (2500 - 100) + 100);
-            items.add(new Item(Item.ItemType.HANDGUN, x, 700));
+            int y = (int) (Math.random() * (2500 - 100) + 100);
+            // choose random item from enum Item.ItemType
+            Item.ItemType itemType = Item.ItemType.values()[(int) (Math.random() * Item.ItemType.values().length)];
+            items.add(new Item(itemType, x, y));
         }
 
         for (Body body : bodieToRemove) {

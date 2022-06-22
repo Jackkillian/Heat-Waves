@@ -50,6 +50,8 @@ public class LoadingScreen implements Screen {
                 Body playerBody;
                 Body otherBody;
 
+                if (contact.getFixtureA().getBody().getUserData() == null || contact.getFixtureB().getBody().getUserData() == null) return;
+
                 if (contact.getFixtureA().getBody().getUserData() instanceof Player) {
                     playerBody = contact.getFixtureA().getBody();
                     otherBody = contact.getFixtureB().getBody();
@@ -60,9 +62,13 @@ public class LoadingScreen implements Screen {
                     if (contact.getFixtureA().getBody().getUserData().equals("bullet") || contact.getFixtureB().getBody().getUserData().equals("bullet")) {
                         System.out.println("bullet" + number++);
                     }
+                    if (contact.getFixtureA().getBody().getUserData().equals("grapplingHook") || contact.getFixtureB().getBody().getUserData().equals("grapplingHook")) {
+                        if (contact.getFixtureA().getBody().getUserData().equals("wall") || contact.getFixtureB().getBody().getUserData().equals("wall")) {
+                            gameData.setGrapplingHit(true);
+                        }
+                    }
                     return;
                 }
-
 
                 if (otherBody.getUserData() instanceof Item) {
                     Item item = (Item) otherBody.getUserData();
@@ -72,10 +78,10 @@ public class LoadingScreen implements Screen {
                 }
 
 
-
                 // Collision involves player, player can jump now! (once there are bullets, we'll need to check for bullet user data too)
                 //this is very hacky
-                if (!(otherBody.getUserData() instanceof Item)) {
+                // no it's not >:C
+                if (!(otherBody.getUserData() instanceof Item) && !otherBody.getUserData().equals("bullet") && !otherBody.getUserData().equals("grapplingHook")) {
 
                     gameData.setTouchingPlatform(true);
                 }

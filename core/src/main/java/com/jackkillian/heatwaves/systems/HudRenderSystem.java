@@ -65,8 +65,6 @@ public class HudRenderSystem extends EntitySystem {
         heatWavesTimer = new Label("Heat Waves in" + countdown, gameData.getSkin());
         heatWavesTimer.setFontScale(2.5f);
 
-
-
         healthLabel.setFontScale(2f);
         shieldLabel.setFontScale(2f);
 
@@ -82,8 +80,6 @@ public class HudRenderSystem extends EntitySystem {
         stack.add(activeItem);
         table.add(stack).padTop(70f);
 
-
-
         Table tableRight = new Table();
         tableRight.setFillParent(true);
         tableRight.top().right();
@@ -94,15 +90,11 @@ public class HudRenderSystem extends EntitySystem {
         bottomRight.setFillParent(true);
         bottomRight.bottom().right();
         stage.addActor(bottomRight);
-
-
-
-
     }
 
     public void update(float deltaTime) {
-
         countdown -= deltaTime;
+
         heatWavesTimer.setText("Heat Waves in: " + (int) countdown);
         if (countdown < 0) {
             countdown = 30;

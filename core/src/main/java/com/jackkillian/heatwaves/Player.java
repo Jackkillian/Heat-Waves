@@ -36,11 +36,7 @@ public class Player {
     private final Vector2 direction = new Vector2();
     private final Vector3 worldCoordinates = new Vector3();
     private final Vector2 centerPosition = new Vector2();
-    private Vector2 mouseLoc = new Vector2();
-
-
-
-    //mouse angle
+    private final Vector2 mouseLoc = new Vector2();
     private float angle;
 
     // Keys
@@ -92,7 +88,6 @@ public class Player {
 
         idle = new TextureRegion(new Texture("player/player1.png"));
         idleSprite = new Sprite(new Texture("player/player1.png"));
-        System.out.println("idle sprite origin: " + idleSprite.getOriginX() + " " + idleSprite.getOriginY());
         idleSprite.setOrigin(idleSprite.getWidth() / 2, idleSprite.getHeight() / 2);
         jumpSprite = new Sprite(new Texture("player/jump.png"));
         itemSprite = new Sprite();
@@ -111,7 +106,6 @@ public class Player {
     public void update(float delta) {
         stateTime += delta;
 
-        System.out.println(angle);
         boolean isJumping = body.getLinearVelocity().y > 0.15; // When on ground, the velocity is still 0.11...
         boolean isFalling = body.getLinearVelocity().y < 0;
         boolean isRunning = !isFalling && !isJumping && (body.getLinearVelocity().x > 0.1 || body.getLinearVelocity().x < -0);
@@ -125,15 +119,8 @@ public class Player {
                 itemSprite.setTexture(null);
                 return;
             }
-            switch (itemType) { // Can't use enhanced switch statement because of the HTML plugin...
-                case HANDGUN:
-                    itemSprite.set(gunSprite);
-                    break;
-                case GRAPPLER:
-                    itemSprite.set(grapplerSprite);
-                    break;
-            }
 
+            itemSprite.set(new Sprite(Item.getTexture(itemType, true)));
             itemSprite.setScale(0.8f);
             itemSprite.setOrigin(idleSprite.getOriginX(), idleSprite.getOriginY());
         }
@@ -161,8 +148,6 @@ public class Player {
 //        }
 
         batch.begin();
-
-
 
         // Items
         itemBody.setTransform(body.getPosition().x + (!isFlipped? 7: -7) , body.getPosition().y, angle * MathUtils.degreesToRadians);
@@ -263,5 +248,9 @@ public class Player {
 
         Vector2 direction = mouseLoc.sub(centerPosition);
         angle = direction.angleDeg();
+    }
+
+    public void setPosition(float v, float v1) {
+        body.setTransform(v, v1, 0);
     }
 }

@@ -1,7 +1,9 @@
 package com.jackkillian.heatwaves;
 
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.TextureData;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
@@ -11,6 +13,8 @@ public class Item {
     public enum ItemType {
         HANDGUN,
         GRAPPLER,
+        SHOTGUN,
+        PISTOL
     }
 
     private Sprite sprite;
@@ -19,14 +23,7 @@ public class Item {
 
     public Item(ItemType type, float x, float y) {
         itemType = type;
-        switch (type) { // Can't use enhanced switch statements because of the HTML plugin...
-            case HANDGUN:
-                sprite = new Sprite(new Texture("items/shotgun.png"));
-                break;
-            case GRAPPLER:
-                sprite = new Sprite(new Texture("items/grapplerGun.png"));
-                break;
-        }
+        sprite = new Sprite(getTexture(type));
 
         BodyDef bodyDef = new BodyDef();
         bodyDef.position.set(x / Constants.PPM, y / Constants.PPM);
@@ -35,7 +32,7 @@ public class Item {
 
         FixtureDef fdef = new FixtureDef();
         PolygonShape shape = new PolygonShape();
-        shape.setAsBox(10f / Constants.PPM, 15f / Constants.PPM);
+        shape.setAsBox(10f / Constants.PPM, 10f / Constants.PPM);
         fdef.shape = shape;
 
 //        CircleShape circleShape = new CircleShape();
@@ -64,5 +61,46 @@ public class Item {
 
     public ItemType getType() {
         return itemType;
+    }
+
+    public static Texture getTexture(ItemType type) {
+        Texture texture = null;
+        switch (type) { // Can't use enhanced switch statements because of the HTML plugin...
+            case HANDGUN:
+                texture = new Texture("items/handgun.png");
+                break;
+            case GRAPPLER:
+                texture = new Texture("items/grapplerGun.png");
+                break;
+            case SHOTGUN:
+                texture = new Texture("items/shotgun.png");
+                break;
+            case PISTOL:
+                texture = new Texture("items/pistol.png");
+                break;
+        }
+        return texture;
+    }
+
+    public static Texture getTexture(ItemType type, boolean held) {
+        if (!held) {
+            return getTexture(type);
+        }
+        Texture texture = null;
+        switch (type) { // Can't use enhanced switch statements because of the HTML plugin...
+            case HANDGUN:
+                texture = new Texture("items/handgunHeld.png");
+                break;
+            case GRAPPLER:
+                texture = new Texture("items/grapplerGunHeld.png");
+                break;
+            case SHOTGUN:
+                texture = new Texture("items/shotgunHeld.png");
+                break;
+            case PISTOL:
+                texture = new Texture("items/pistolHeld.png");
+                break;
+        }
+        return texture;
     }
 }

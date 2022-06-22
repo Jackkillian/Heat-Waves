@@ -37,9 +37,10 @@ public class WorldManager {
             if (!item.alive) {
                 activeBullets.removeIndex(i);
                 bulletPool.free(item);
+            } else {
+                // Render bullets
+                item.update(delta);
             }
-            // Render bullets
-            item.update(delta);
         }
         GameData.getInstance().getBatch().end();
     }
@@ -48,6 +49,12 @@ public class WorldManager {
         // if you want to spawn a new bullet:
         Bullet item = bulletPool.obtain();
         item.init(x, y, xVel, yVel);
+        activeBullets.add(item);
+    }
+
+    public void createGrapplingHook(float shooterX, float shooterY, float v, float v1) {
+        Bullet item = bulletPool.obtain();
+        item.init(shooterX, shooterY, v, v1, true);
         activeBullets.add(item);
     }
 }
