@@ -15,6 +15,12 @@ public class Bullet implements Pool.Poolable {
     public boolean alive;
     public boolean grapplingHook;
     public float bulletLifetime;
+    public Origin origin;
+
+    public enum Origin{
+        PLAYER,
+        NPC
+    }
 
     /**
      * Bullet constructor. Just initialize variables.
@@ -42,7 +48,7 @@ public class Bullet implements Pool.Poolable {
         fdef.filter.maskBits = Constants.WALL_BIT;
         body.createFixture(fdef);
         body.setGravityScale(0f);
-        body.setUserData("bullet");
+        body.setUserData(this);
 
 
 //        BodyDef bodyDef = new BodyDef();
@@ -69,8 +75,9 @@ public class Bullet implements Pool.Poolable {
     public void init(float posX, float posY, float velX, float velY) {
         position.set(posX,  posY);
         velocity.set(velX, velY);
+        body.setTransform(posX, posY, 0);
         alive = true;
-        body.setUserData("bullet");
+        body.setUserData(this);
     }
 
     /**
@@ -98,6 +105,7 @@ public class Bullet implements Pool.Poolable {
         grapplingHook = false;
         bulletLifetime = 0;
         body.setTransform(position, 0);
+        body.setLinearVelocity(0, 0);
     }
 
     /**
@@ -106,11 +114,12 @@ public class Bullet implements Pool.Poolable {
     public void update (float delta) {
         bulletLifetime += delta;
 
-        position.add(velocity.cpy().scl(delta));
-        if (position.x != 0 && position.y != 0) body.setTransform(position.x, position.y, 0);
-        sprite.setPosition(position.x - sprite.getWidth() / 2, position.y - sprite.getHeight() / 2);
+        position.add(velocity.cpy().scl(delta * 80f));
+        body.applyForce(velocity.cpy().scl(delta * 80f), body.getWorldCenter(), true);
+//        if (position.x != 0 && position.y != 0) body.setTransform(position.x, position.y, 0);
+        sprite.setPosition(body.getPosition().x - sprite.getWidth() / 2, body.getPosition().y - sprite.getHeight() / 2);
 
-        // calculate the angle with trigonometry! thanks geometry class :D
+        // calculate the angle with trigonometry! thanks geometry class :D - JackFromHappuPlanet
         float angle = (float) Math.atan(velocity.y/ velocity.x) * MathUtils.radiansToDegrees;
         if (velocity.x < 0) {
             angle += 180;

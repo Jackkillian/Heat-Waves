@@ -85,6 +85,7 @@ public class GameScreen implements Screen, InputProcessor {
         engine.update(delta);
         camera.position.lerp(new Vector3(player.getPosition().x, player.getPosition().y, 0), 0.1f);
 
+        //hey you're clogging up the main render method
         if (gameData.isGrapplingShot()) {
             // draw a line from the player to the grappling hook
             Vector2 playerPos = player.getItemPosition();
@@ -177,21 +178,23 @@ public class GameScreen implements Screen, InputProcessor {
 
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+        GameData.getInstance().getWorldManager().createNPC(NPC.NPCType.MCMUFFIN_HENCHMAN, Constants.SPAWN_X, Constants.SPAWN_Y);
+
         if (gameData.getHeldItemType() == null) return false;
 
         Vector3 worldCoordinates = new Vector3(screenX, screenY, 0);
         camera.unproject(worldCoordinates);
         Vector2 mousePos = new Vector2(worldCoordinates.x, worldCoordinates.y);
 
-        float speed = 250f;  // set the speed of the bullet
+        float speed = 300f;  // set the speed of the bullet
         float shooterX = player.getItemPosition().x; // get player location
         float shooterY = player.getItemPosition().y; // get player location
         float velx = mousePos.x - shooterX; // get distance from shooter to target on x plain
         float vely = mousePos.y - shooterY; // get distance from shooter to target on y plain
         float length = (float) Math.sqrt(velx * velx + vely * vely); // get distance to target direct
         if (length != 0) {
-            velx = velx / length;  // get required x velocity to aim at target
-            vely = vely / length;  // get required y velocity to aim at target
+            velx = velx / length * 1.5f;  // get required x velocity to aim at target
+            vely = vely / length * 1.5f;  // get required y velocity to aim at target
         }
 
         if (gameData.getHeldItemType() == Item.ItemType.HANDGUN
@@ -199,7 +202,7 @@ public class GameScreen implements Screen, InputProcessor {
                 || gameData.getHeldItemType() == Item.ItemType.PISTOL) {
 
             shootSound.play();
-            gameData.getWorldManager().createBullet(shooterX, shooterY, velx * speed, vely * speed);
+            gameData.getWorldManager().createBullet(shooterX, shooterY, velx * speed, vely * speed, Bullet.Origin.PLAYER);
         }
 
         if (gameData.getHeldItemType() == Item.ItemType.GRAPPLER && !gameData.isGrapplingShot() && !gameData.isGrapplingPulling()) {

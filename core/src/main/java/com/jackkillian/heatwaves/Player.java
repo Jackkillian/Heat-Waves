@@ -54,6 +54,8 @@ public class Player {
         bodyDef.position.set(SPAWN_X / Constants.PPM, SPAWN_Y / Constants.PPM);
         bodyDef.type = BodyDef.BodyType.DynamicBody;
         body = world.createBody(bodyDef);
+
+
         this.batch = batch;
 
         FixtureDef fdef = new FixtureDef();
@@ -235,7 +237,8 @@ public class Player {
     }
 
     public Vector2 getItemPosition() {
-        return itemBody.getPosition();
+        return new Vector2(itemBody.getPosition().x + (!isFlipped? 7: -7), itemBody.getPosition().y);
+
     }
 
     public void onMouseMoved(int screenX, int screenY, OrthographicCamera camera) {
