@@ -14,9 +14,9 @@ public class Constants {
     //a fixture's category bits is basically who am I
     //a fixture's mask bits is who can I collide with
 
-    public static final short WALL_BIT = 1;
-    public static final short ITEM_BIT = 2;
-    public static final short PLAYER_BIT = 4;
+    public static final short WALL_BIT = 0x001;
+    public static final short ITEM_BIT = 0x002;
+    public static final short PLAYER_BIT = 0x004;
 
 
 

@@ -12,8 +12,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.*;
 
-import static com.jackkillian.heatwaves.Constants.SPAWN_X;
-import static com.jackkillian.heatwaves.Constants.SPAWN_Y;
+import static com.jackkillian.heatwaves.Constants.*;
 
 //TODO: Fix the bug where the player moves slower in fullscreen mode
 
@@ -70,7 +69,7 @@ public class Player {
         fdef.friction = 100f;
         fdef.restitution = 0.09f; // 0.09f
         fdef.filter.categoryBits = Constants.PLAYER_BIT;
-        fdef.filter.maskBits = Constants.WALL_BIT;
+        fdef.filter.maskBits = WALL_BIT | ITEM_BIT;
         body.createFixture(fdef);
         body.setUserData(this);
 

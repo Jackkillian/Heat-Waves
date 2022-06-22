@@ -29,18 +29,19 @@ public class LoadingScreen implements Screen {
         GameData gameData = GameData.getInstance();
 
         World world = new World(new Vector2(0, -80), false);
-        world.setContactFilter(new ContactFilter() {
-            @Override
-            public boolean shouldCollide(Fixture fixtureA, Fixture fixtureB) {
-                Object object1 = fixtureA.getBody().getUserData();
-                Object object2 = fixtureA.getBody().getUserData();
-                if (object1 instanceof Bullet || object2 instanceof Bullet) {
-                    System.out.println("overrode contact filter");
-                    return true;
-                }
-                return (fixtureA.getFilterData().categoryBits == fixtureB.getFilterData().maskBits) || (fixtureB.getFilterData().categoryBits == fixtureA.getFilterData().maskBits);
-            }
-        });
+//        world.setContactFilter(new ContactFilter() {
+//            @Override
+//            public boolean shouldCollide(Fixture fixtureA, Fixture fixtureB) {
+//                Object object1 = fixtureA.getBody().getUserData();
+//                Object object2 = fixtureA.getBody().getUserData();
+//                if (object1 instanceof Bullet || object2 instanceof Bullet) {
+//                    System.out.println("overrode contact filter");
+//                    return true;
+//                }
+////                return true;
+//                return (fixtureA.getFilterData().categoryBits == fixtureB.getFilterData().maskBits) || (fixtureB.getFilterData().categoryBits == fixtureA.getFilterData().maskBits);
+//            }
+//        });
 
         WorldManager worldManager = new WorldManager();
         worldManager.setWorld(world);

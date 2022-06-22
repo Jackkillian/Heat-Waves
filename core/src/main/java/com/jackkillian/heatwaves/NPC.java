@@ -47,7 +47,7 @@ public class NPC {
         fdef.friction = 100f;
         fdef.restitution = 0.09f; // 0.09f
         fdef.filter.categoryBits = Constants.PLAYER_BIT;
-        fdef.filter.maskBits = Constants.WALL_BIT;
+        fdef.filter.maskBits = Constants.WALL_BIT | Constants.ITEM_BIT;
         body.createFixture(fdef);
 
         sprite = new Sprite(getTexture(type));
@@ -73,7 +73,7 @@ public class NPC {
         sprite.draw(GameData.getInstance().getBatch());
 
         if (isHit) {
-            offset += 0.1f;
+            offset += 0.2f;
             tempTimer += delta;
             Constants.font.draw(GameData.getInstance().getBatch(), "-" + damage, body.getPosition().x, body.getPosition().y + offset);
 

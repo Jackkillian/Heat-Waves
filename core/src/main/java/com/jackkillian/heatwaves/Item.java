@@ -43,7 +43,7 @@ public class Item {
         fdef.restitution = 0.09f;
         fdef.isSensor = false;
         fdef.filter.categoryBits = Constants.ITEM_BIT;
-        fdef.filter.maskBits = Constants.WALL_BIT;
+        fdef.filter.maskBits = Constants.WALL_BIT | Constants.PLAYER_BIT;
         body.createFixture(fdef);
         body.setUserData(this);
 

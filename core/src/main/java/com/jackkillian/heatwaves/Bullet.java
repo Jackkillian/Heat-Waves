@@ -45,7 +45,7 @@ public class Bullet implements Pool.Poolable {
         fdef.shape = shape;
         fdef.isSensor = true;
         fdef.filter.categoryBits = Constants.ITEM_BIT;
-        fdef.filter.maskBits = Constants.WALL_BIT;
+        fdef.filter.maskBits = Constants.WALL_BIT | Constants.PLAYER_BIT;
         body.createFixture(fdef);
         body.setGravityScale(0f);
         body.setUserData(this);
