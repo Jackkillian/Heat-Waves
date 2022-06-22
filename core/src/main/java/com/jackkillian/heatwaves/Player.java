@@ -112,7 +112,7 @@ public class Player {
         isFlipped = angle > 100 && angle < 266;
         boolean canJump = GameData.getInstance().isTouchingPlatform() || (!isJumping && !isFalling);
 
-        if (itemType != GameData.getInstance().getHeldItemType()) {
+        if (itemType != GameData.getInstance().getHeldItemType() || itemSprite.getTexture() != Item.getTexture(itemType, true)) {
             itemType = GameData.getInstance().getHeldItemType();
 
             if (itemType == null) {

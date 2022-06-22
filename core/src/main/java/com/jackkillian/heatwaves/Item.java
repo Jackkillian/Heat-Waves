@@ -48,7 +48,6 @@ public class Item {
         body.setUserData(this);
 
         sprite.setPosition(body.getPosition().x - sprite.getWidth() / 2, body.getPosition().y - sprite.getHeight() / 2);
-
     }
 
     public Sprite getSprite() {
@@ -83,6 +82,7 @@ public class Item {
     }
 
     public static Texture getTexture(ItemType type, boolean held) {
+        if (type == null) return null;
         if (!held) {
             return getTexture(type);
         }
@@ -92,7 +92,11 @@ public class Item {
                 texture = new Texture("items/handgunHeld.png");
                 break;
             case GRAPPLER:
-                texture = new Texture("items/grapplerGunHeld.png");
+                if (GameData.getInstance().isGrapplingShot()) {
+                    texture = new Texture("items/grapplerGunHeldShot.png");
+                } else {
+                    texture = new Texture("items/grapplerGunHeld.png");
+                }
                 break;
             case SHOTGUN:
                 texture = new Texture("items/shotgunHeld.png");

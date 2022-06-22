@@ -84,7 +84,6 @@ public class GameScreen implements Screen, InputProcessor {
 
         engine.update(delta);
         camera.position.lerp(new Vector3(player.getPosition().x, player.getPosition().y, 0), 0.1f);
-        player.update(delta);
 
         if (gameData.isGrapplingShot()) {
             // draw a line from the player to the grappling hook
@@ -95,10 +94,6 @@ public class GameScreen implements Screen, InputProcessor {
             float b = hookPos.y - playerPos.y;
             float c = playerPos.x - hookPos.x;
             float a = (float) Math.sqrt(Math.pow(c, 2) + Math.pow(b, 2));
-
-            System.out.println("a: " + a);
-            System.out.println("b: " + b);
-            System.out.println("c: " + c);
 
             // looks like we gotta use trig again :D
             float angle = (float) Math.atan(b / c) * MathUtils.radiansToDegrees;
@@ -134,6 +129,8 @@ public class GameScreen implements Screen, InputProcessor {
                 gameData.setGrapplingPosition(null);
             }
         }
+
+        player.update(delta);
     }
 
     @Override
