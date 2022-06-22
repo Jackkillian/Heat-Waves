@@ -9,6 +9,8 @@ import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 
+// TODO: Give different guns different stats (reload time, damage, etc.)
+
 public class Item {
     public enum ItemType {
         HANDGUN,
