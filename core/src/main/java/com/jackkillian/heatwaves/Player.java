@@ -1,6 +1,7 @@
 package com.jackkillian.heatwaves;
 
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
@@ -28,8 +29,6 @@ public class Player {
     private Item.ItemType itemType;
     private final Sprite itemSprite;
 
-    private final Sprite gunSprite;
-    private final Sprite grapplerSprite;
 
     //mouse vectors set here to improve performance
     private final Vector2 direction = new Vector2();
@@ -45,6 +44,16 @@ public class Player {
     private boolean keyDownPressed = false;
 
     boolean isFlipped = false;
+
+    private boolean shouldRespawn = false;
+
+    //hit damage marker
+    private boolean isHit;
+    private float tempTimer;
+    private int damage;
+    private float offset = 20f;
+    private Color color = Color.BLUE;
+
 
     public Player(WorldManager worldManager, SpriteBatch batch) {
         World world = worldManager.getWorld();
@@ -69,7 +78,7 @@ public class Player {
         fdef.friction = 100f;
         fdef.restitution = 0.09f; // 0.09f
         fdef.filter.categoryBits = Constants.PLAYER_BIT;
-        fdef.filter.maskBits = WALL_BIT | ITEM_BIT;
+        fdef.filter.maskBits = WALL_BIT | ITEM_BIT | BULLET_BIT;
         body.createFixture(fdef);
         body.setUserData(this);
 
@@ -98,10 +107,7 @@ public class Player {
         runningAnimation = new Animation<>(0.1f, runFrames);
         runningAnimation.setPlayMode(Animation.PlayMode.LOOP);
 
-        //set gun sprites, so we don't create new ones in the update method
-        //big performance improvements
-        gunSprite = new Sprite(new Texture("items/handgunHeld.png"));
-        grapplerSprite = new Sprite(new Texture("items/grapplerGunHeld.png"));
+
     }
 
     public void update(float delta) {
@@ -191,6 +197,19 @@ public class Player {
             idleSprite.draw(batch);
         }
 
+        //draw player was hit font
+        if (isHit) {
+            offset += 0.2f;
+            tempTimer += delta;
+            Constants.font.draw(GameData.getInstance().getBatch(), "-" + damage, body.getPosition().x, body.getPosition().y + offset);
+
+            if (tempTimer > 0.5f) {
+                offset = 20;
+                tempTimer = 0;
+                isHit = false;
+            }
+        }
+
         batch.end();
 
         //player has respawned
@@ -198,6 +217,12 @@ public class Player {
             body.setTransform(SPAWN_X / Constants.PPM, SPAWN_Y / Constants.PPM, 0);
             GameData.getInstance().setHeldItemType(null);
             GameData.getInstance().getHudRenderSystem().setActiveItem(null);
+        }
+        if (shouldRespawn) {
+            body.setTransform(SPAWN_X / Constants.PPM, SPAWN_Y / Constants.PPM, 0);
+            GameData.getInstance().setHeldItemType(null);
+            GameData.getInstance().getHudRenderSystem().setActiveItem(null);
+            shouldRespawn = false;
         }
     }
 
@@ -254,5 +279,27 @@ public class Player {
 
     public void setPosition(float v, float v1) {
         body.setTransform(v, v1, 0);
+    }
+
+    public void respawn() {
+        shouldRespawn = true;
+    }
+
+    public void hit(int damage, Color color) {
+        Constants.font.setColor(color);
+        if (isHit) {
+            offset = 20;
+            tempTimer = 0;
+        }
+        isHit = true;
+        this.damage = damage;
+
+
+    }
+
+    public void dispose() {
+        itemSprite.getTexture().dispose();
+        jumpSprite.getTexture().dispose();
+        idleSprite.getTexture().dispose();
     }
 }

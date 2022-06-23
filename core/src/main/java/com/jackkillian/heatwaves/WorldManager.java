@@ -33,11 +33,15 @@ public class WorldManager {
         //spawn new NPCs
         if (activeNPCs.size < 5) {
             // generate random number between 100 and 1500
-            int x = (int) (Math.random() * (2500 - 100) + 100);
+            int x = (int) (Math.random() * (2000 - 100) + 400);
             int y = (int) (Math.random() * (2500 - 100) + 100);
             // choose random item from enum Item.ItemType
             NPC.NPCType npcType = NPC.NPCType.values()[(int) (Math.random() * NPC.NPCType.values().length)];
-            activeNPCs.add(new NPC(npcType, x, y));
+            if (GameData.getInstance().getWorld().isLocked() == false) {
+                NPC npc = new NPC(npcType, x, y);
+                activeNPCs.add(npc);
+
+            }
         }
 
         // if you want to free dead bullets, returning them to the pool:
@@ -72,9 +76,13 @@ public class WorldManager {
 
     public void createBullet(float x, float y, float xVel, float yVel, Bullet.Origin origin) {
         // if you want to spawn a new bullet:
-        Bullet item = bulletPool.obtain();
-        item.init(x, y, xVel, yVel, origin);
-        activeBullets.add(item);
+        if (GameData.getInstance().getWorld().isLocked() == false) {
+            Bullet item = bulletPool.obtain();
+            item.init(x, y, xVel, yVel, origin);
+//            System.out.println(x + "/" +  y + "/" +  xVel + "/" + yVel);
+            activeBullets.add(item);
+        }
+
     }
 
     public void createGrapplingHook(float shooterX, float shooterY, float v, float v1) {

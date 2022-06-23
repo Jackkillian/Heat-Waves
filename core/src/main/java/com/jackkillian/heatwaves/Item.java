@@ -14,7 +14,8 @@ public class Item {
         HANDGUN,
         GRAPPLER,
         SHOTGUN,
-        PISTOL
+//        PISTOL, pistol is basically a handgun
+        MEDKIT
     }
 
     private Sprite sprite;
@@ -74,8 +75,11 @@ public class Item {
             case SHOTGUN:
                 texture = new Texture("items/shotgun.png");
                 break;
-            case PISTOL:
-                texture = new Texture("items/pistol.png");
+//            case PISTOL:
+//                texture = new Texture("items/pistol.png");
+//                break;
+            case MEDKIT:
+                texture = new Texture("items/medkit.png");
                 break;
         }
         return texture;
@@ -101,8 +105,11 @@ public class Item {
             case SHOTGUN:
                 texture = new Texture("items/shotgunHeld.png");
                 break;
-            case PISTOL:
-                texture = new Texture("items/pistolHeld.png");
+//            case PISTOL:
+//                texture = new Texture("items/pistolHeld.png");
+//                break;
+            case MEDKIT:
+                texture = new Texture("items/medkitHeld.png");
                 break;
         }
         return texture;

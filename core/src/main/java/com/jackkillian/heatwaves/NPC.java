@@ -16,12 +16,14 @@ public class NPC {
     private Sprite gun;
     private GameData gameData;
     private float cooldownTimer;
+    private boolean isFlipped = false;
 
     //hit damage marker
     private boolean isHit;
     private float tempTimer;
     private int damage;
     private float offset = 20f;
+
 
 
     public enum NPCType {
@@ -53,15 +55,15 @@ public class NPC {
         fdef.friction = 100f;
         fdef.restitution = 0.09f; // 0.09f
         fdef.filter.categoryBits = Constants.PLAYER_BIT;
-        fdef.filter.maskBits = Constants.WALL_BIT | Constants.ITEM_BIT;
+        fdef.filter.maskBits = Constants.WALL_BIT | Constants.ITEM_BIT | Constants.BULLET_BIT;
         body.createFixture(fdef);
 
         sprite = new Sprite(getTexture(type));
         if (type == NPCType.MCMUFFIN_HENCHMAN) {
-            gun = new Sprite(Item.getTexture(Item.ItemType.HANDGUN, true));
+            gun = new Sprite(Item.getTexture(Item.ItemType.SHOTGUN, true));
             gun.setPosition(body.getPosition().x - gun.getWidth() / 2, body.getPosition().y - gun.getHeight() / 2);
         } else {
-            gun = new Sprite(Item.getTexture(Item.ItemType.PISTOL, true));
+            gun = new Sprite(Item.getTexture(Item.ItemType.HANDGUN, true));
             gun.setPosition(body.getPosition().x - gun.getWidth() / 2, body.getPosition().y - gun.getHeight() / 2);
         }
         body.setUserData(this);
@@ -83,8 +85,21 @@ public class NPC {
     public void update(float delta) {
         cooldownTimer += delta;
 
+        if (isHit) {
+            offset += 0.2f;
+            tempTimer += delta;
+            Constants.font.draw(GameData.getInstance().getBatch(), "-" + damage, body.getPosition().x, body.getPosition().y + offset);
+
+            if (tempTimer > 0.5f) {
+                offset = 20;
+                tempTimer = 0;
+                isHit = false;
+            }
+        }
+
+        //my signature coding "(isFlipped? 7: -7)"
         sprite.setPosition(body.getPosition().x - sprite.getWidth() / 2, body.getPosition().y - sprite.getHeight() / 2);
-        gun.setPosition(body.getPosition().x - gun.getWidth() / 2, body.getPosition().y - gun.getHeight() / 2);
+        gun.setPosition(body.getPosition().x - gun.getWidth() / 2 + (isFlipped? 7: -7), body.getPosition().y - gun.getHeight() / 2);
         sprite.draw(GameData.getInstance().getBatch());
         gun.draw(GameData.getInstance().getBatch());
 
@@ -93,12 +108,14 @@ public class NPC {
         if (distance < 300f) {
             if (GameData.getInstance().getPlayer().getPosition().x > body.getPosition().x) {
                 if (sprite.isFlipX()) {
+                    isFlipped = true;
                     sprite.flip(true, false);
                     gun.flip(true, false);
                 }
                 body.setTransform(body.getPosition().x + 10 * delta, body.getPosition().y, 0);
             } else {
                 if (!sprite.isFlipX()) {
+                    isFlipped = false;
                     sprite.flip(true, false);
                     gun.flip(true, false);
                 }
@@ -111,7 +128,7 @@ public class NPC {
             }
         }
         if (distance < 100f) {
-            if (cooldownTimer > 0.7f) {
+            if (cooldownTimer > 0.6f) {
                 cooldownTimer = 0f;
             } else {
                 return;
@@ -119,34 +136,24 @@ public class NPC {
             float speed = 300f;  // set the speed of the bullet
             float shooterX = gameData.getPlayer().getPosition().x; // get player location
             float shooterY = gameData.getPlayer().getPosition().y; // get player location
-            float velx = shooterX - sprite.getX(); // get distance from shooter to target on x plain
-            float vely = shooterY - sprite.getY(); // get distance from shooter to target on y plain
+            float velx = shooterX - body.getPosition().x; // get distance from shooter to target on x plain
+            float vely = shooterY - body.getPosition().y; // get distance from shooter to target on y plain
             float length = (float) Math.sqrt(velx * velx + vely * vely); // get distance to target direct
             if (length != 0) {
-                velx = velx / length * 1.5f;  // get required x velocity to aim at target
-                vely = vely / length * 1.5f;  // get required y velocity to aim at target
+                velx = velx / length ;  // get required x velocity to aim at target
+                vely = vely / length ;  // get required y velocity to aim at target
             }
 
-            gameData.getWorldManager().createBullet(sprite.getX(), sprite.getY(), velx * speed, vely * speed, Bullet.Origin.NPC);
+            gameData.getWorldManager().createBullet(body.getPosition().x + 5, body.getPosition().y, velx * speed, vely * speed, Bullet.Origin.NPC);
         }
 
-
-        if (isHit) {
-            offset += 0.2f;
-            tempTimer += delta;
-            Constants.font.draw(GameData.getInstance().getBatch(), "-" + damage, body.getPosition().x, body.getPosition().y + offset);
-
-            if (tempTimer > 0.6f) {
-                offset = 20;
-                tempTimer = 0;
-                isHit = false;
-            }
-
-        }
 
         if (health <= 0) {
             alive = false;
-            GameData.getInstance().getWorld().destroyBody(body);
+            sprite.getTexture().dispose();
+            gun.getTexture().dispose();
+            //item system has a queue to safely remove bodies
+            GameData.getInstance().getItemSystem().removeBody(body);
         }
     }
 

@@ -17,6 +17,7 @@ import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
+import com.jackkillian.heatwaves.Bullet;
 import com.jackkillian.heatwaves.Constants;
 import com.jackkillian.heatwaves.GameData;
 import com.jackkillian.heatwaves.WorldManager;
@@ -71,7 +72,7 @@ public class MapRenderSystem extends EntitySystem {
             Body body = world.createBody(bdef);
             fdef.shape = shape;
             fdef.filter.categoryBits = Constants.WALL_BIT;
-            fdef.filter.maskBits = Constants.PLAYER_BIT | Constants.ITEM_BIT;
+            fdef.filter.maskBits = Constants.PLAYER_BIT | Constants.ITEM_BIT | Constants.BULLET_BIT;
             body.createFixture(fdef);
             body.setUserData("wall");
         }
@@ -99,7 +100,7 @@ public class MapRenderSystem extends EntitySystem {
 
         worldManager.update(deltaTime);
 
-        debugRenderer.render(world, camera.combined);
+//        debugRenderer.render(world, camera.combined);
     }
 
     // https://stackoverflow.com/questions/45805732/libgdx-tiled-map-box2d-collision-with-polygon-map-object
@@ -150,5 +151,11 @@ public class MapRenderSystem extends EntitySystem {
         ChainShape chain = new ChainShape();
         chain.createChain(worldVertices);
         return chain;
+    }
+
+    public void dispose() {
+        renderer.dispose();
+        debugRenderer.dispose();
+        map.dispose();
     }
 }

@@ -17,6 +17,7 @@ public class Constants {
     public static final short WALL_BIT = 0x001;
     public static final short ITEM_BIT = 0x002;
     public static final short PLAYER_BIT = 0x004;
+    public static final short BULLET_BIT = 0x008;
 
 
 

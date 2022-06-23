@@ -2,6 +2,7 @@ package com.jackkillian.heatwaves.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
@@ -59,18 +60,27 @@ public class LoadingScreen implements Screen {
                 if (contact.getFixtureA().getBody().getUserData() == null || contact.getFixtureB().getBody().getUserData() == null) return;
 
 
-
-//                if ((contact.getFixtureA().getBody().getUserData().equals("wall") || contact.getFixtureB().getBody().getUserData().equals("wall")) && bulletBody != null) {
-//                    //bullet hit wall
-//                    System.out.println("wall");
-//                    Bullet bullet = (Bullet) bulletBody.getUserData();
-//                    bullet.alive = false;
-//                }
-                if (contact.getFixtureB().getBody().getUserData().equals("wall") && contact.getFixtureA().getBody().getUserData() instanceof Bullet) {
-                    System.out.println("all");
-                } {
-
+                Body bulletBody;
+                //check if bullet hit wall
+                if (contact.getFixtureA().getBody().getUserData() instanceof Bullet) {
+                    bulletBody = contact.getFixtureA().getBody();
+                    otherBody = contact.getFixtureB().getBody();
+                    if (otherBody.getUserData().equals("wall")) {
+                        Bullet bullet = (Bullet) bulletBody.getUserData();
+                        bullet.alive = false;
+                        return;
+                    }
+                } else if (contact.getFixtureB().getBody().getUserData() instanceof Bullet) {
+                    bulletBody = contact.getFixtureB().getBody();
+                    otherBody = contact.getFixtureA().getBody();
+                    if (otherBody.getUserData().equals("wall")) {
+                        Bullet bullet = (Bullet) bulletBody.getUserData();
+                        bullet.alive = false;
+                        return;
+                    }
                 }
+
+
 
                 if (contact.getFixtureA().getBody().getUserData() instanceof Player) {
                     playerBody = contact.getFixtureA().getBody();
@@ -105,7 +115,6 @@ public class LoadingScreen implements Screen {
                             NPC npc = (NPC) npcBody.getUserData();
                             npc.hit(30);
                             bullet.alive = false;
-                            System.out.println("hit to npc. Hit Number: " + number++);
                         }
                     }
 
@@ -126,12 +135,23 @@ public class LoadingScreen implements Screen {
                 if (otherBody.getUserData() instanceof Bullet) {
                     Bullet bullet = (Bullet) otherBody.getUserData();
                     if (bullet.origin != Bullet.Origin.PLAYER) {
+                        //random number between 15 and 30
+                        int damage = (int) (Math.random() * 15) + 15;
                         bullet.alive = false;
-                        // damage player
+                        // damaged player to shield?
+                        boolean isBlueHit;
                         if (gameData.getPlayerShield() > 0) {
-                            gameData.setPlayerShield(gameData.getPlayerShield() - 20);
+                            isBlueHit = true;
+                            gameData.setPlayerShield(gameData.getPlayerShield() - damage);
                         } else {
-                            gameData.setPlayerHealth(gameData.getPlayerHealth() - 20);
+                            isBlueHit = false;
+                            gameData.setPlayerHealth(gameData.getPlayerHealth() - damage);
+                        }
+                        gameData.getPlayer().hit(damage, (isBlueHit? Color.CYAN: Color.GOLD));
+                        if (gameData.getPlayerHealth() <= 0) {
+//                            gameData.setPlayerHealth(100);
+//                            gameData.setPlayerShield(100);
+//                            gameData.getPlayer().respawn();
                         }
                     }
                 }

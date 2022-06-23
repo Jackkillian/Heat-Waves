@@ -38,6 +38,8 @@ For example, `core:clean` removes `build` folder only from the `core` project.
 
 
 ## The Story
+It's 
+
 Keep the floating city afloat and protect it from the heat waves. Also fight Evil McMuffin's henchmen as they try to take control of the city! 
 
 Hold the various checkpoints around the city for as long as you can. You lose if Evil McMuffin can hold them longer than you. Make sure to hold the heat wave checkpoint when the heat wave is active.

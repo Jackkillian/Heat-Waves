@@ -28,13 +28,25 @@ public class ItemSystem extends EntitySystem {
             int y = (int) (Math.random() * (2500 - 100) + 100);
             // choose random item from enum Item.ItemType
             Item.ItemType itemType = Item.ItemType.values()[(int) (Math.random() * Item.ItemType.values().length)];
-            items.add(new Item(itemType, x, y));
+            if (GameData.getInstance().getWorld().isLocked() == false) {
+                Item item = new Item(itemType, x, y);
+                items.add(item);
+
+            }
         }
 
+        boolean canClear = true;
         for (Body body : bodieToRemove) {
-            GameData.getInstance().getWorld().destroyBody(body);
+            if (GameData.getInstance().getWorld().isLocked()) {
+                canClear = false;
+
+            } else {
+                GameData.getInstance().getWorld().destroyBody(body);
+            }
+
         }
-        bodieToRemove.clear();
+        if (canClear) bodieToRemove.clear();
+
 
 
         batch.begin();
@@ -51,6 +63,9 @@ public class ItemSystem extends EntitySystem {
 
     public void removeItem(Item item, Body body) {
         items.remove(item);
+        bodieToRemove.add(body);
+    }
+    public void removeBody(Body body) {
         bodieToRemove.add(body);
     }
 }

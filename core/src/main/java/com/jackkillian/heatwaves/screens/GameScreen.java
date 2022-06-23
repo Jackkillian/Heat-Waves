@@ -160,7 +160,11 @@ public class GameScreen implements Screen, InputProcessor {
 
     @Override
     public void dispose() {
-
+        player.dispose();
+        GameData.getInstance().getAssets().getManager().dispose();
+        GameData.getInstance().getWorld().dispose();
+        GameData.getInstance().getBatch().dispose();
+        GameData.getInstance().getMapRenderSystem().dispose();
     }
 
     @Override
@@ -203,7 +207,7 @@ public class GameScreen implements Screen, InputProcessor {
 
         if (gameData.getHeldItemType() == Item.ItemType.HANDGUN
                 || gameData.getHeldItemType() == Item.ItemType.SHOTGUN
-                || gameData.getHeldItemType() == Item.ItemType.PISTOL) {
+                ) {
 
             shootSound.play();
             gameData.getWorldManager().createBullet(shooterX, shooterY, velx * speed, vely * speed, Bullet.Origin.PLAYER);
