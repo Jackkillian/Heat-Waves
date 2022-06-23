@@ -110,8 +110,8 @@ public class NPC {
             float speed = 300f;  // set the speed of the bullet
             float shooterX = gameData.getPlayer().getPosition().x; // get player location
             float shooterY = gameData.getPlayer().getPosition().y; // get player location
-            float velx = sprite.getX() - shooterX; // get distance from shooter to target on x plain
-            float vely = sprite.getY() - shooterY; // get distance from shooter to target on y plain
+            float velx = shooterX - sprite.getX(); // get distance from shooter to target on x plain
+            float vely = shooterY - sprite.getY(); // get distance from shooter to target on y plain
             float length = (float) Math.sqrt(velx * velx + vely * vely); // get distance to target direct
             if (length != 0) {
                 velx = velx / length * 1.5f;  // get required x velocity to aim at target
