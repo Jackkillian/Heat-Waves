@@ -101,10 +101,12 @@ public class LoadingScreen implements Screen {
                     //bullet has collided with npc
                     if (otherBody2.getUserData() instanceof Bullet) {
                         Bullet bullet = (Bullet) otherBody2.getUserData();
-                        NPC npc = (NPC) npcBody.getUserData();
-                        npc.hit(30);
-                        bullet.alive = false;
-                        System.out.println("hit to npc. Hit Number: " + number++);
+                        if (bullet.origin != Bullet.Origin.NPC) {
+                            NPC npc = (NPC) npcBody.getUserData();
+                            npc.hit(30);
+                            bullet.alive = false;
+                            System.out.println("hit to npc. Hit Number: " + number++);
+                        }
                     }
 
                     return;
@@ -123,12 +125,11 @@ public class LoadingScreen implements Screen {
                 //player bullet hit handler
                 if (otherBody.getUserData() instanceof Bullet) {
                     Bullet bullet = (Bullet) otherBody.getUserData();
-                    if (bullet.origin == Bullet.Origin.PLAYER) {
-                        return;
-                        //this bullet was fired by a player
-                    }
-                    System.out.println("hit to player");
+                    if (bullet.origin != Bullet.Origin.PLAYER) {
+                        bullet.alive = false;
 
+                        System.out.println("hit to player");
+                    }
                 }
 
 

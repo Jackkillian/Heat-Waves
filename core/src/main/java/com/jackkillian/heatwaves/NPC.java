@@ -15,6 +15,7 @@ public class NPC {
     public int health;
     private Sprite gun;
     private GameData gameData;
+    private float cooldownTimer;
 
     //hit damage marker
     private boolean isHit;
@@ -38,6 +39,7 @@ public class NPC {
         body = world.createBody(bodyDef);
         batch = GameData.getInstance().getBatch();
         gameData = GameData.getInstance();
+        cooldownTimer = 0f;
 
         FixtureDef fdef = new FixtureDef();
         PolygonShape shape = new PolygonShape();
@@ -79,6 +81,8 @@ public class NPC {
     }
 
     public void update(float delta) {
+        cooldownTimer += delta;
+
         sprite.setPosition(body.getPosition().x - sprite.getWidth() / 2, body.getPosition().y - sprite.getHeight() / 2);
         gun.setPosition(body.getPosition().x - gun.getWidth() / 2, body.getPosition().y - gun.getHeight() / 2);
         sprite.draw(GameData.getInstance().getBatch());
@@ -106,7 +110,12 @@ public class NPC {
                 body.setTransform(body.getPosition().x, body.getPosition().y - 10 * delta, 0);
             }
         }
-        if (distance < 50f) {
+        if (distance < 100f) {
+            if (cooldownTimer > 0.3f) {
+                cooldownTimer = 0f;
+            } else {
+                return;
+            }
             float speed = 300f;  // set the speed of the bullet
             float shooterX = gameData.getPlayer().getPosition().x; // get player location
             float shooterY = gameData.getPlayer().getPosition().y; // get player location
