@@ -3,6 +3,7 @@ package com.jackkillian.heatwaves;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.*;
@@ -97,6 +98,14 @@ public class NPC {
             }
         }
 
+        Vector2 legs = gameData.getPlayer().getPosition().sub(body.getPosition());
+
+        // use trig again :D
+        float angle = (float) Math.atan2(legs.y, legs.x);
+        gun.setRotation(angle * MathUtils.radiansToDegrees);
+
+        gun.setFlip(false, !isFlipped);
+
         //my signature coding "(isFlipped? 7: -7)"
         sprite.setPosition(body.getPosition().x - sprite.getWidth() / 2, body.getPosition().y - sprite.getHeight() / 2);
         gun.setPosition(body.getPosition().x - gun.getWidth() / 2 + (isFlipped? 7: -7), body.getPosition().y - gun.getHeight() / 2);
@@ -104,7 +113,7 @@ public class NPC {
         gun.draw(GameData.getInstance().getBatch());
 
         // AI shoot player if in range
-        float distance = GameData.getInstance().getPlayer().getPosition().sub(body.getPosition()).len();
+        float distance = legs.len();
         if (distance < 300f) {
             if (GameData.getInstance().getPlayer().getPosition().x > body.getPosition().x) {
                 if (sprite.isFlipX()) {
