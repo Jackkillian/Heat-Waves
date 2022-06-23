@@ -100,7 +100,7 @@ public class NPC {
         // AI shoot player if in range
         float distance = legs.len();
         if (distance < 300f) {
-            body.setTransform(body.getPosition().x, body.getPosition().y + ((gameData.getPlayer().getPosition().x > body.getPosition().x ? 10 : -10) * delta), 0);
+            body.setTransform(body.getPosition().x + (gameData.getPlayer().getPosition().x > body.getPosition().x ? 10 : -10) * delta, body.getPosition().y, 0);
             if (gameData.getPlayer().getPosition().x > body.getPosition().x) {
                 sprite.setFlip(false, false);
                 gun.setFlip(false, false);
@@ -112,7 +112,6 @@ public class NPC {
                     if (!gun.isFlipY()) gun.setFlip(false, true);
                 }
             }
-//            }
             if (gameData.getPlayer().getPosition().y > body.getPosition().y) {
                 body.setTransform(body.getPosition().x, body.getPosition().y + 10 * delta, 0);
             } else {
