@@ -36,6 +36,8 @@ public class MapRenderSystem extends EntitySystem {
     private float cloudOffset = 0;
     private Texture cloudTexture;
 
+
+
     public MapRenderSystem(GameData gameData, OrthographicCamera camera ) {
         batch = new SpriteBatch();
         Box2D.init();
@@ -82,7 +84,7 @@ public class MapRenderSystem extends EntitySystem {
     }
 
     public void update(float deltaTime) {
-        world.step(1 / 60f, 6, 2);
+        world.step(1/45f, 6, 2);
 
         cloudOffset += deltaTime * 80f;
         if (cloudOffset > Gdx.graphics.getWidth()) {

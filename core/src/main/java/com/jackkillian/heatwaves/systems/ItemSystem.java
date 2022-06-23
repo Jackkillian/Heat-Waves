@@ -51,10 +51,6 @@ public class ItemSystem extends EntitySystem {
 
         batch.begin();
         for (Item item : items) {
-            if (item.getBody().getPosition().y < 55) {
-                item.getBody().setGravityScale(0f);
-                item.getBody().setLinearVelocity(0, 0);
-            }
             item.getSprite().setPosition(item.getBody().getPosition().x - item.getSprite().getWidth() / 2, item.getBody().getPosition().y - item.getSprite().getHeight() / 2);
             item.getSprite().draw(batch);
         }
