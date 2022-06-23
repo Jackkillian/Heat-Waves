@@ -32,9 +32,9 @@ public class WorldManager {
     public void update(float delta) {
         //spawn new NPCs
         if (activeNPCs.size < 5) {
-            // generate random number between 100 and 1500
-            int x = (int) (Math.random() * (2000 - 100) + 400);
-            int y = (int) (Math.random() * (2500 - 100) + 100);
+            // generate random number between 400 and 2800
+            int x = (int) (Math.random() * (2800 - 100) + 400);
+            int y = 600; // any lower and the npcs might spawn inside buildings and cause crashes probably
             // choose random item from enum Item.ItemType
             NPC.NPCType npcType = NPC.NPCType.values()[(int) (Math.random() * NPC.NPCType.values().length)];
             if (GameData.getInstance().getWorld().isLocked() == false) {

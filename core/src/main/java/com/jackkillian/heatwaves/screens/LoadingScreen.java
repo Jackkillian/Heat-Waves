@@ -29,7 +29,7 @@ public class LoadingScreen implements Screen {
         assets = new Assets();
         GameData gameData = GameData.getInstance();
 
-        World world = new World(new Vector2(0, -80), false);
+        World world = new World(new Vector2(0, -130), false);
 //        world.setContactFilter(new ContactFilter() {
 //            @Override
 //            public boolean shouldCollide(Fixture fixtureA, Fixture fixtureB) {
@@ -124,6 +124,10 @@ public class LoadingScreen implements Screen {
 
                 if (otherBody.getUserData() instanceof Item) {
                     Item item = (Item) otherBody.getUserData();
+                    if (GameData.getInstance().isInvLocked() == true) {
+                        GameData.getInstance().getItemSystem().removeItem(item, otherBody);
+                        return;
+                    }
                     GameData.getInstance().getHudRenderSystem().setActiveItem(item.getSprite().getTexture());
                     GameData.getInstance().setHeldItemType(item.getType());
                     GameData.getInstance().getItemSystem().removeItem(item, otherBody);
@@ -141,17 +145,24 @@ public class LoadingScreen implements Screen {
                         // damaged player to shield?
                         boolean isBlueHit;
                         if (gameData.getPlayerShield() > 0) {
+                            if (gameData.getPlayerShield() <= 0) {
+                                gameData.setPlayerShield(0);
+                            }
                             isBlueHit = true;
                             gameData.setPlayerShield(gameData.getPlayerShield() - damage);
                         } else {
+
                             isBlueHit = false;
                             gameData.setPlayerHealth(gameData.getPlayerHealth() - damage);
                         }
+                        GameScreen.hitSound.play();
                         gameData.getPlayer().hit(damage, (isBlueHit? Color.CYAN: Color.GOLD));
                         if (gameData.getPlayerHealth() <= 0) {
-//                            gameData.setPlayerHealth(100);
-//                            gameData.setPlayerShield(100);
-//                            gameData.getPlayer().respawn();
+                            //respawn the player
+                            gameData.setPlayerHealth(100);
+                            gameData.setPlayerShield(100);
+                            gameData.getPlayer().respawn();
+
                         }
                     }
                 }

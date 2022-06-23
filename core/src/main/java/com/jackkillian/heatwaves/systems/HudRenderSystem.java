@@ -27,6 +27,8 @@ public class HudRenderSystem extends EntitySystem {
     private Image health;
     private Image shield;
 
+    private Image lock;
+
     private Label healthLabel;
     private Label shieldLabel;
 
@@ -56,6 +58,9 @@ public class HudRenderSystem extends EntitySystem {
         hotbar = new Image(assets.getManager().get("hud/inventory.png", Texture.class));
         hotbar.setScale(5f);
 
+        lock = new Image(assets.getManager().get("hud/unlocked.png", Texture.class));
+        lock.setScale(5f);
+
         activeItem = new Image();
         activeItem.setScale(5f);
 
@@ -79,6 +84,7 @@ public class HudRenderSystem extends EntitySystem {
         stack.add(hotbar);
         stack.add(activeItem);
         table.add(stack).padTop(70f);
+        table.add(lock).padLeft(20f).padTop(40f);
 
         Table tableRight = new Table();
         tableRight.setFillParent(true);
@@ -111,5 +117,12 @@ public class HudRenderSystem extends EntitySystem {
             return;
         }
         activeItem.setDrawable(new TextureRegionDrawable(texture));
+    }
+    public void setLockTexture(boolean locked) {
+        if (locked) {
+            lock.setDrawable(new TextureRegionDrawable(assets.getManager().get("hud/locked.png", Texture.class)));
+        } else {
+            lock.setDrawable(new TextureRegionDrawable(assets.getManager().get("hud/unlocked.png", Texture.class)));
+        }
     }
 }

@@ -12,6 +12,12 @@ public class Assets {
         manager.load("hud/shield.png", Texture.class);
         manager.load("player/player1.png", Texture.class);
         manager.load("hud/inventory.png", Texture.class);
+        manager.load("items/handgun.png", Texture.class);
+        manager.load("items/shotgun.png", Texture.class);
+        manager.load("items/grapplerGun.png", Texture.class);
+        manager.load("items/medkit.png", Texture.class);
+        manager.load("hud/locked.png", Texture.class);
+        manager.load("hud/unlocked.png", Texture.class);
     }
 
     public AssetManager getManager() {

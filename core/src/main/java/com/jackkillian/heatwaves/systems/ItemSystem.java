@@ -24,8 +24,8 @@ public class ItemSystem extends EntitySystem {
     public void update(float deltaTime) {
         if (items.size() < 15) {
             // generate random number between 100 and 1500
-            int x = (int) (Math.random() * (2500 - 100) + 100);
-            int y = (int) (Math.random() * (2500 - 100) + 100);
+            int x = (int) (Math.random() * (2800 - 100) + 100);
+            int y = 600;
             // choose random item from enum Item.ItemType
             Item.ItemType itemType = Item.ItemType.values()[(int) (Math.random() * Item.ItemType.values().length)];
             if (GameData.getInstance().getWorld().isLocked() == false) {

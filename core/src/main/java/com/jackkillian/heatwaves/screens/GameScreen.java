@@ -38,6 +38,7 @@ public class GameScreen implements Screen, InputProcessor {
     private Player player;
     private Sound shootSound;
     private Music music;
+    public static Sound hitSound = Gdx.audio.newSound(Gdx.files.internal("hit.wav"));
     private Sprite grapplingHookRope;
 
     public GameScreen() {
@@ -214,7 +215,7 @@ public class GameScreen implements Screen, InputProcessor {
         }
 
         if (gameData.getHeldItemType() == Item.ItemType.GRAPPLER && !gameData.isGrapplingShot() && !gameData.isGrapplingPulling()) {
-            speed /= 2;
+            speed /= 0.5f;
             shootSound.play();
             gameData.setGrapplingShot(true);
             gameData.getWorldManager().createGrapplingHook(shooterX, shooterY, velx * speed, vely * speed);

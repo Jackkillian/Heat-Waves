@@ -114,7 +114,7 @@
   <object id="56" x="1007.88" y="958.125" width="90.25" height="9"/>
   <object id="57" x="1007.63" y="981.125" width="90.75" height="8.5"/>
   <object id="58" x="1016.63" y="966.875" width="73" height="137.5"/>
-  <object id="59" x="0" y="1103.93" width="2320.08" height="23.9128"/>
+  <object id="59" x="0" y="1103.93" width="2320.08" height="63.8295"/>
   <object id="61" x="405.455" y="944.545">
    <polygon points="-0.3125,-0.4375 -16.5455,15.2727 197.199,14.5966 181.381,-0.494318"/>
   </object>
@@ -125,6 +125,6 @@
   <object id="75" x="1763.69" y="1029.31" width="12.5" height="5.25"/>
   <object id="76" x="1594.63" y="1029.24" width="11.75" height="5.6875"/>
   <object id="81" x="2319.05" y="1115.36" width="505.351" height="16.8796"/>
-  <object id="84" x="2815.62" y="1104.52" width="384.351" height="16.8796"/>
+  <object id="84" x="2815.62" y="1104.52" width="384.351" height="63.3796"/>
  </objectgroup>
 </map>

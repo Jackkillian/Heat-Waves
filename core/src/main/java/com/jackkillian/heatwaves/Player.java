@@ -12,6 +12,7 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.*;
+import com.jackkillian.heatwaves.screens.GameScreen;
 
 import static com.jackkillian.heatwaves.Constants.*;
 
@@ -113,11 +114,11 @@ public class Player {
     public void update(float delta) {
         stateTime += delta;
 
-        boolean isJumping = body.getLinearVelocity().y > 0.15; // When on ground, the velocity is still 0.11...
+        boolean isJumping = body.getLinearVelocity().y > 0.26; // When on ground, the velocity is still 0.11...
         boolean isFalling = body.getLinearVelocity().y < 0;
         boolean isRunning = !isFalling && !isJumping && (body.getLinearVelocity().x > 0.1 || body.getLinearVelocity().x < -0);
         isFlipped = angle > 100 && angle < 266;
-        boolean canJump = GameData.getInstance().isTouchingPlatform() || (!isJumping && !isFalling);
+        boolean canJump = GameData.getInstance().isTouchingPlatform();
 
         if (itemType != GameData.getInstance().getHeldItemType() || itemSprite.getTexture() != Item.getTexture(itemType, true)) {
             itemType = GameData.getInstance().getHeldItemType();
@@ -134,20 +135,20 @@ public class Player {
 
         if (keyLeftPressed) {
             if (canJump) {
-                body.setLinearVelocity(-70, body.getLinearVelocity().y);
+                body.setLinearVelocity(-80, body.getLinearVelocity().y);
             } else {
-                body.setLinearVelocity(-50, body.getLinearVelocity().y);
+                body.setLinearVelocity(-60, body.getLinearVelocity().y);
             }
         }
         if (keyRightPressed) {
             if (canJump) {
-                body.setLinearVelocity(70, body.getLinearVelocity().y);
+                body.setLinearVelocity(80, body.getLinearVelocity().y);
             } else {
-                body.setLinearVelocity(50, body.getLinearVelocity().y);
+                body.setLinearVelocity(60, body.getLinearVelocity().y);
             }
         }
         if (keyUpPressed && canJump) {
-            body.setLinearVelocity(body.getLinearVelocity().x, 50);
+            body.setLinearVelocity(body.getLinearVelocity().x, 60);
         }
 
 //        if (!keyLeftPressed && !keyRightPressed && keyUpPressed) {
@@ -223,10 +224,19 @@ public class Player {
             GameData.getInstance().setHeldItemType(null);
             GameData.getInstance().getHudRenderSystem().setActiveItem(null);
             shouldRespawn = false;
+
         }
     }
 
     public void onKeyDown(int key) {
+        if (key == Input.Keys.Q) {
+            GameData.getInstance().setInvLocked(!GameData.getInstance().isInvLocked());
+            if (GameData.getInstance().isInvLocked()) {
+                GameData.getInstance().getHudRenderSystem().setLockTexture(true);
+            } else {
+                GameData.getInstance().getHudRenderSystem().setLockTexture(false);
+            }
+        }
         if (key == Input.Keys.A) {
             keyLeftPressed = true;
         }

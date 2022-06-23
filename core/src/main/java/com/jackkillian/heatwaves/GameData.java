@@ -40,6 +40,7 @@ public class GameData {
     private Player player;
     private int health;
     private int shield;
+    private boolean invLocked = false;
 
     public void setItemSystem(ItemSystem itemSystem) {
         this.itemSystem = itemSystem;
@@ -65,8 +66,16 @@ public class GameData {
         this.viewport = viewport;
     }
 
+    public void setInvLocked(boolean invLocked) {
+        this.invLocked = invLocked;
+    }
+
     public SpriteBatch getBatch() {
         return batch;
+    }
+
+    public boolean isInvLocked() {
+        return invLocked;
     }
 
     public Assets getAssets() {
@@ -76,6 +85,7 @@ public class GameData {
     public Skin getSkin() {
         return skin;
     }
+
 
     public FitViewport getViewport() {
         return viewport;

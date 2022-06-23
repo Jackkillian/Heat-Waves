@@ -22,8 +22,13 @@ public class Item {
     private Body body;
     private ItemType itemType;
 
+    private static Assets assets;
+
+
+
     public Item(ItemType type, float x, float y) {
         itemType = type;
+        assets = GameData.getInstance().getAssets();
         sprite = new Sprite(getTexture(type));
 
         BodyDef bodyDef = new BodyDef();
@@ -67,19 +72,19 @@ public class Item {
         Texture texture = null;
         switch (type) { // Can't use enhanced switch statements because of the HTML plugin...
             case HANDGUN:
-                texture = new Texture("items/handgun.png");
+                texture = assets.getManager().get("items/handgun.png", Texture.class);
                 break;
             case GRAPPLER:
-                texture = new Texture("items/grapplerGun.png");
+                texture = assets.getManager().get("items/grapplerGun.png", Texture.class);
                 break;
             case SHOTGUN:
-                texture = new Texture("items/shotgun.png");
+                texture = assets.getManager().get("items/shotgun.png", Texture.class);
                 break;
 //            case PISTOL:
 //                texture = new Texture("items/pistol.png");
 //                break;
             case MEDKIT:
-                texture = new Texture("items/medkit.png");
+                texture = assets.getManager().get("items/medkit.png", Texture.class);
                 break;
         }
         return texture;
