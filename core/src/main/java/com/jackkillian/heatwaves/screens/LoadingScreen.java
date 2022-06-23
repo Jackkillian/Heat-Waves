@@ -127,8 +127,12 @@ public class LoadingScreen implements Screen {
                     Bullet bullet = (Bullet) otherBody.getUserData();
                     if (bullet.origin != Bullet.Origin.PLAYER) {
                         bullet.alive = false;
-
-                        System.out.println("hit to player");
+                        // damage player
+                        if (gameData.getPlayerShield() > 0) {
+                            gameData.setPlayerShield(gameData.getPlayerShield() - 20);
+                        } else {
+                            gameData.setPlayerHealth(gameData.getPlayerHealth() - 20);
+                        }
                     }
                 }
 

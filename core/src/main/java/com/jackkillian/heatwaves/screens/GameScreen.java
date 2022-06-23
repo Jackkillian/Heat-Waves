@@ -59,6 +59,8 @@ public class GameScreen implements Screen, InputProcessor {
 
         engine = new Engine();
 
+        gameData.setPlayerHealth(100);
+        gameData.setPlayerShield(100);
         gameData.setPlayer(player);
         gameData.setBatch(batch);
         gameData.setMapRenderSystem(new MapRenderSystem(gameData, camera));

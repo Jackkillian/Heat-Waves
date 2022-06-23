@@ -99,6 +99,8 @@ public class HudRenderSystem extends EntitySystem {
         if (countdown < 0) {
             countdown = 30;
         }
+        healthLabel.setText(GameData.getInstance().getPlayerHealth());
+        shieldLabel.setText(GameData.getInstance().getPlayerShield());
         stage.act(deltaTime);
         stage.draw();
     }

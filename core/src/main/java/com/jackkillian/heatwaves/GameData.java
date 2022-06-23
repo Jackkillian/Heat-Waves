@@ -38,6 +38,8 @@ public class GameData {
     private boolean grapplingPulling = false;
     private Vector2 grapplingPosition;
     private Player player;
+    private int health;
+    private int shield;
 
     public void setItemSystem(ItemSystem itemSystem) {
         this.itemSystem = itemSystem;
@@ -162,5 +164,21 @@ public class GameData {
     
     public void setPlayer(Player player) {
         this.player = player;
+    }
+
+    public int getPlayerShield() {
+        return shield;
+    }
+
+    public int getPlayerHealth() {
+        return health;
+    }
+
+    public void setPlayerHealth(int health) {
+        this.health = health;
+    }
+
+    public void setPlayerShield(int shield) {
+        this.shield = shield;
     }
 }

@@ -111,7 +111,7 @@ public class NPC {
             }
         }
         if (distance < 100f) {
-            if (cooldownTimer > 0.3f) {
+            if (cooldownTimer > 0.7f) {
                 cooldownTimer = 0f;
             } else {
                 return;
