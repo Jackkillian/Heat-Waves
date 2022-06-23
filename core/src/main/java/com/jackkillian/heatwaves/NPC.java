@@ -68,6 +68,7 @@ public class NPC {
             gun.setPosition(body.getPosition().x - gun.getWidth() / 2, body.getPosition().y - gun.getHeight() / 2);
         }
         body.setUserData(this);
+        gun.setScale(0.8f);
     }
 
     private Texture getTexture(NPCType type) {
@@ -104,33 +105,30 @@ public class NPC {
         float angle = (float) Math.atan2(legs.y, legs.x);
         gun.setRotation(angle * MathUtils.radiansToDegrees);
 
-        gun.setFlip(false, !isFlipped);
+
 
         //my signature coding "(isFlipped? 7: -7)"
         sprite.setPosition(body.getPosition().x - sprite.getWidth() / 2, body.getPosition().y - sprite.getHeight() / 2);
-        gun.setPosition(body.getPosition().x - gun.getWidth() / 2 + (isFlipped? 7: -7), body.getPosition().y - gun.getHeight() / 2);
-        sprite.draw(GameData.getInstance().getBatch());
-        gun.draw(GameData.getInstance().getBatch());
+        gun.setPosition(body.getPosition().x - gun.getWidth() / 2 + (sprite.isFlipX() ? -7 : 7), body.getPosition().y - gun.getHeight() / 2);
+        sprite.draw(gameData.getBatch());
+        gun.draw(gameData.getBatch());
 
         // AI shoot player if in range
         float distance = legs.len();
         if (distance < 300f) {
-            if (GameData.getInstance().getPlayer().getPosition().x > body.getPosition().x) {
-                if (sprite.isFlipX()) {
-                    isFlipped = true;
-                    sprite.flip(true, false);
-                    gun.flip(true, false);
-                }
-                body.setTransform(body.getPosition().x + 10 * delta, body.getPosition().y, 0);
+            body.setTransform(body.getPosition().x + (gameData.getPlayer().getPosition().x > body.getPosition().x ? 10 : -10) * delta, body.getPosition().y, 0);
+            if (gameData.getPlayer().getPosition().x > body.getPosition().x) {
+                sprite.setFlip(false, false);
+                gun.setFlip(false, false);
             } else {
-                if (!sprite.isFlipX()) {
-                    isFlipped = false;
-                    sprite.flip(true, false);
-                    gun.flip(true, false);
+                sprite.setFlip(true, false);
+                if (gameData.getPlayer().getPosition().y > body.getPosition().y) {
+                    gun.setFlip(false, true);
+                } else {
+                    if (!gun.isFlipY()) gun.setFlip(false, true);
                 }
-                body.setTransform(body.getPosition().x - 10 * delta, body.getPosition().y, 0);
             }
-            if (GameData.getInstance().getPlayer().getPosition().y > body.getPosition().y) {
+            if (gameData.getPlayer().getPosition().y > body.getPosition().y) {
                 body.setTransform(body.getPosition().x, body.getPosition().y + 10 * delta, 0);
             } else {
                 body.setTransform(body.getPosition().x, body.getPosition().y - 10 * delta, 0);
