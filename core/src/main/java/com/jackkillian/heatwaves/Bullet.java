@@ -17,7 +17,7 @@ public class Bullet implements Pool.Poolable {
     public float bulletLifetime;
     public Origin origin;
 
-    public enum Origin{
+    public enum Origin {
         PLAYER,
         NPC
     }
@@ -73,11 +73,16 @@ public class Bullet implements Pool.Poolable {
      * Initialize the bullet. Call this method after getting a bullet from the pool.
      */
     public void init(float posX, float posY, float velX, float velY) {
-        position.set(posX,  posY);
+        position.set(posX, posY);
         velocity.set(velX, velY);
         body.setTransform(posX, posY, 0);
         alive = true;
         body.setUserData(this);
+    }
+
+    public void init(float posX, float posY, float velX, float velY, Origin origin) {
+        init(posX, posY, velX, velY);
+        this.origin = origin;
     }
 
     /**
@@ -106,12 +111,13 @@ public class Bullet implements Pool.Poolable {
         bulletLifetime = 0;
         body.setTransform(position, 0);
         body.setLinearVelocity(0, 0);
+
     }
 
     /**
      * Method called each frame, which updates the bullet.
      */
-    public void update (float delta) {
+    public void update(float delta) {
         bulletLifetime += delta;
 
         position.add(velocity.cpy().scl(delta * 80f));
@@ -120,14 +126,14 @@ public class Bullet implements Pool.Poolable {
         sprite.setPosition(body.getPosition().x - sprite.getWidth() / 2, body.getPosition().y - sprite.getHeight() / 2);
 
         // calculate the angle with trigonometry! thanks geometry class :D - JackFromHappuPlanet
-        float angle = (float) Math.atan(velocity.y/ velocity.x) * MathUtils.radiansToDegrees;
+        float angle = (float) Math.atan(velocity.y / velocity.x) * MathUtils.radiansToDegrees;
         if (velocity.x < 0) {
             angle += 180;
         }
         sprite.setRotation(angle);
 
         // Check bullet lifetime
-        if (grapplingHook ? bulletLifetime > 1.5f : bulletLifetime > 0.5f) {
+        if (grapplingHook ? bulletLifetime > 1.5f : bulletLifetime > 1f) {
             alive = false;
             bulletLifetime = 0;
         }

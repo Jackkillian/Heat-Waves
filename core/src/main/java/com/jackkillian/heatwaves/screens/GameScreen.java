@@ -58,13 +58,15 @@ public class GameScreen implements Screen, InputProcessor {
         gameData.setViewport(viewport);
 
         engine = new Engine();
-        GameData.getInstance().setBatch(batch);
-        GameData.getInstance().setMapRenderSystem(new MapRenderSystem(gameData, camera));
-        GameData.getInstance().setItemSystem(new ItemSystem(gameData, batch));
-        GameData.getInstance().setHudRenderSystem(new HudRenderSystem(gameData));
-        engine.addSystem(GameData.getInstance().getMapRenderSystem());
-        engine.addSystem(GameData.getInstance().getItemSystem());
-        engine.addSystem(GameData.getInstance().getHudRenderSystem());
+
+        gameData.setPlayer(player);
+        gameData.setBatch(batch);
+        gameData.setMapRenderSystem(new MapRenderSystem(gameData, camera));
+        gameData.setItemSystem(new ItemSystem(gameData, batch));
+        gameData.setHudRenderSystem(new HudRenderSystem(gameData));
+        engine.addSystem(gameData.getMapRenderSystem());
+        engine.addSystem(gameData.getItemSystem());
+        engine.addSystem(gameData.getHudRenderSystem());
 
         shootSound = Gdx.audio.newSound(Gdx.files.internal("shoot.wav"));
 
@@ -178,7 +180,7 @@ public class GameScreen implements Screen, InputProcessor {
 
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-        GameData.getInstance().getWorldManager().createNPC(NPC.NPCType.MCMUFFIN_HENCHMAN, Constants.SPAWN_X, Constants.SPAWN_Y);
+        gameData.getWorldManager().createNPC(NPC.NPCType.MCMUFFIN_HENCHMAN, Constants.SPAWN_X, Constants.SPAWN_Y);
 
         if (gameData.getHeldItemType() == null) return false;
 

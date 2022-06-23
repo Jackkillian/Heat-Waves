@@ -73,8 +73,7 @@ public class WorldManager {
     public void createBullet(float x, float y, float xVel, float yVel, Bullet.Origin origin) {
         // if you want to spawn a new bullet:
         Bullet item = bulletPool.obtain();
-        item.origin = origin;
-        item.init(x, y, xVel, yVel);
+        item.init(x, y, xVel, yVel, origin);
         activeBullets.add(item);
     }
 

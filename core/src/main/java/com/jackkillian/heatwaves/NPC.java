@@ -3,6 +3,8 @@ package com.jackkillian.heatwaves;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.*;
 
 public class NPC {
@@ -11,6 +13,8 @@ public class NPC {
     private SpriteBatch batch;
     public boolean alive;
     public int health;
+    private Sprite gun;
+    private GameData gameData;
 
     //hit damage marker
     private boolean isHit;
@@ -19,8 +23,7 @@ public class NPC {
     private float offset = 20f;
 
 
-
-    public enum NPCType{
+    public enum NPCType {
         MCMUFFIN_HENCHMAN,
         VILLAGER
     }
@@ -34,6 +37,7 @@ public class NPC {
         bodyDef.type = BodyDef.BodyType.DynamicBody;
         body = world.createBody(bodyDef);
         batch = GameData.getInstance().getBatch();
+        gameData = GameData.getInstance();
 
         FixtureDef fdef = new FixtureDef();
         PolygonShape shape = new PolygonShape();
@@ -51,26 +55,72 @@ public class NPC {
         body.createFixture(fdef);
 
         sprite = new Sprite(getTexture(type));
+        if (type == NPCType.MCMUFFIN_HENCHMAN) {
+            gun = new Sprite(Item.getTexture(Item.ItemType.HANDGUN, true));
+            gun.setPosition(body.getPosition().x - gun.getWidth() / 2, body.getPosition().y - gun.getHeight() / 2);
+        } else {
+            gun = new Sprite(Item.getTexture(Item.ItemType.PISTOL, true));
+            gun.setPosition(body.getPosition().x - gun.getWidth() / 2, body.getPosition().y - gun.getHeight() / 2);
+        }
         body.setUserData(this);
-
-
     }
 
     private Texture getTexture(NPCType type) {
         Texture texture = null;
         switch (type) { // Can't use enhanced switch statements because of the HTML plugin...
             case MCMUFFIN_HENCHMAN:
-                texture =  new Texture("player/henchman.png");
+                texture = new Texture("player/henchman.png");
                 break;
-            default: texture = new Texture("player/villagerIdle1.png");
-
+            default:
+                texture = new Texture("player/villagerIdle1.png");
+                break;
         }
         return texture;
     }
 
     public void update(float delta) {
-        sprite.setPosition(body.getPosition().x - sprite.getWidth() / 2, body.getPosition().y  - sprite.getHeight() / 2);
+        sprite.setPosition(body.getPosition().x - sprite.getWidth() / 2, body.getPosition().y - sprite.getHeight() / 2);
+        gun.setPosition(body.getPosition().x - gun.getWidth() / 2, body.getPosition().y - gun.getHeight() / 2);
         sprite.draw(GameData.getInstance().getBatch());
+        gun.draw(GameData.getInstance().getBatch());
+
+        // AI shoot player if in range
+        float distance = GameData.getInstance().getPlayer().getPosition().sub(body.getPosition()).len();
+        if (distance < 300f) {
+            if (GameData.getInstance().getPlayer().getPosition().x > body.getPosition().x) {
+                if (sprite.isFlipX()) {
+                    sprite.flip(true, false);
+                    gun.flip(true, false);
+                }
+                body.setTransform(body.getPosition().x + 10 * delta, body.getPosition().y, 0);
+            } else {
+                if (!sprite.isFlipX()) {
+                    sprite.flip(true, false);
+                    gun.flip(true, false);
+                }
+                body.setTransform(body.getPosition().x - 10 * delta, body.getPosition().y, 0);
+            }
+            if (GameData.getInstance().getPlayer().getPosition().y > body.getPosition().y) {
+                body.setTransform(body.getPosition().x, body.getPosition().y + 10 * delta, 0);
+            } else {
+                body.setTransform(body.getPosition().x, body.getPosition().y - 10 * delta, 0);
+            }
+        }
+        if (distance < 50f) {
+            float speed = 300f;  // set the speed of the bullet
+            float shooterX = gameData.getPlayer().getPosition().x; // get player location
+            float shooterY = gameData.getPlayer().getPosition().y; // get player location
+            float velx = sprite.getX() - shooterX; // get distance from shooter to target on x plain
+            float vely = sprite.getY() - shooterY; // get distance from shooter to target on y plain
+            float length = (float) Math.sqrt(velx * velx + vely * vely); // get distance to target direct
+            if (length != 0) {
+                velx = velx / length * 1.5f;  // get required x velocity to aim at target
+                vely = vely / length * 1.5f;  // get required y velocity to aim at target
+            }
+
+            gameData.getWorldManager().createBullet(sprite.getX(), sprite.getY(), velx * speed, vely * speed, Bullet.Origin.NPC);
+        }
+
 
         if (isHit) {
             offset += 0.2f;
@@ -83,6 +133,11 @@ public class NPC {
                 isHit = false;
             }
 
+        }
+
+        if (health <= 0) {
+            alive = false;
+            GameData.getInstance().getWorld().destroyBody(body);
         }
     }
 

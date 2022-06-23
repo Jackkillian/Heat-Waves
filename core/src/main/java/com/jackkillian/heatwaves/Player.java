@@ -236,8 +236,8 @@ public class Player {
     }
 
     public Vector2 getItemPosition() {
-        return new Vector2(itemBody.getPosition().x + (!isFlipped? 7: -7), itemBody.getPosition().y);
-
+        return itemBody.getPosition(); // This is more accurate
+//        return new Vector2(itemBody.getPosition().x + (!isFlipped? 7: -7), itemBody.getPosition().y);
     }
 
     public void onMouseMoved(int screenX, int screenY, OrthographicCamera camera) {

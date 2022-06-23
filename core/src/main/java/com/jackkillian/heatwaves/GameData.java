@@ -37,6 +37,7 @@ public class GameData {
     private boolean grapplingHit = false;
     private boolean grapplingPulling = false;
     private Vector2 grapplingPosition;
+    private Player player;
 
     public void setItemSystem(ItemSystem itemSystem) {
         this.itemSystem = itemSystem;
@@ -153,5 +154,13 @@ public class GameData {
 
     public void setGrapplingPosition(Vector2 grapplingPosition) {
         this.grapplingPosition = grapplingPosition;
+    }
+
+    public Player getPlayer() {
+        return player;
+    }
+    
+    public void setPlayer(Player player) {
+        this.player = player;
     }
 }
