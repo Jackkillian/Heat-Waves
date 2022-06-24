@@ -4,11 +4,13 @@ package com.jackkillian.heatwaves;
 import com.jackkillian.heatwaves.screens.GameOverScreen;
 
 public class EventHandler {
-    private float countdown = 10;
+    private float countdown = 30;
 
     private int r = 135;
     private int g = 206;
     private int b = 235;
+
+    private int npcMax = 5;
 
     private boolean eventIsActive = false;
     private int kills;
@@ -61,6 +63,10 @@ public class EventHandler {
             System.out.println(EventType.HEAT_SHIMMER.end);
             if (EventType.HEAT_SHIMMER.end) {
 
+                if (kills < EventType.HEAT_SHIMMER.kills) {
+                    GameData.getInstance().getGame().setScreen(new GameOverScreen(false));
+                }
+
                 activeEvent = EventType.HEAT_WAVES;
                 eventString = "Heat Waves in: ";
                 // this is countdown to next event
@@ -79,11 +85,15 @@ public class EventHandler {
         }
         if (countdown <= 0 && activeEvent == EventType.HEAT_WAVES) {
             eventString = "Heat Waves end in: ";
+            npcMax = 8;
 
             eventIsActive = true;
             kills = 0;
 
             if (EventType.HEAT_WAVES.end) {
+                if (kills < EventType.HEAT_WAVES.kills) {
+                    GameData.getInstance().getGame().setScreen(new GameOverScreen(false));
+                }
                 activeEvent = EventType.HEAT_BLAZE;
                 eventString = "Heat Blaze in: ";
                 // this is countdown to next event
@@ -102,6 +112,7 @@ public class EventHandler {
         }
         if (countdown <= 0 && activeEvent == EventType.HEAT_BLAZE) {
             eventString = "Heat Blaze ends in: ";
+            npcMax = 15;
             kills = 0;
             r = 227;
             g = 169;
@@ -110,6 +121,9 @@ public class EventHandler {
 
             if (EventType.HEAT_BLAZE.end) {
                 //game over either way
+                if (kills < EventType.HEAT_BLAZE.kills) {
+                    GameData.getInstance().getGame().setScreen(new GameOverScreen(false));
+                }
             }
             countdown = EventType.HEAT_BLAZE.duration;
             EventType.HEAT_BLAZE.end = true;
@@ -143,6 +157,10 @@ public class EventHandler {
     public void addKill() {
         if (kills >= activeEvent.kills) return;
         kills++;
+    }
+
+    public int getNpcMax() {
+        return npcMax;
     }
 
 }

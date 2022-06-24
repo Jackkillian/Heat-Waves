@@ -22,6 +22,8 @@ public class Item {
     private Body body;
     private ItemType itemType;
 
+    private float countDown = 15f;
+
     private static Assets assets;
 
 
@@ -118,5 +120,12 @@ public class Item {
                 break;
         }
         return texture;
+    }
+
+    public void update(float delta) {
+        countDown -= delta;
+        if (countDown <= 0) {
+            GameData.getInstance().getItemSystem().removeItem(this, body);
+        }
     }
 }

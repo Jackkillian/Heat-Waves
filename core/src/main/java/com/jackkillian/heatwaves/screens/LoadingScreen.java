@@ -115,11 +115,12 @@ public class LoadingScreen implements Screen {
                     if (otherBody2.getUserData() instanceof Bullet) {
                         Bullet bullet = (Bullet) otherBody2.getUserData();
                         if (bullet.origin != Bullet.Origin.NPC) {
+                            int damage = (int) (Math.random() * (50 - 20 + 1)) + 20;
                             NPC npc = (NPC) npcBody.getUserData();
                             if (!(npc.health > 0)) {
                                 return;
                             }
-                            npc.hit(30);
+                            npc.hit(damage);
                             bullet.alive = false;
                         }
                     }

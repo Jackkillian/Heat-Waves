@@ -102,7 +102,7 @@ public class MapRenderSystem extends EntitySystem {
 
         worldManager.update(deltaTime);
 
-        debugRenderer.render(world, camera.combined);
+//        debugRenderer.render(world, camera.combined);
     }
 
     // https://stackoverflow.com/questions/45805732/libgdx-tiled-map-box2d-collision-with-polygon-map-object

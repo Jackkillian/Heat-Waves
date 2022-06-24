@@ -3,10 +3,12 @@ package com.jackkillian.heatwaves;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.Pool;
+import org.w3c.dom.Text;
 
 public class Bullet implements Pool.Poolable {
     public Sprite sprite;
@@ -17,6 +19,10 @@ public class Bullet implements Pool.Poolable {
     public boolean grapplingHook;
     public float bulletLifetime;
     public Origin origin;
+
+    private TextureRegion shotgunShell = new TextureRegion(new Texture("shotgunShell.png"));
+    private TextureRegion bullet = new TextureRegion(new Texture("bullet.png"));
+    private TextureRegion grapple = new TextureRegion(new Texture("items/grapplingHook.png"));
 
     public enum Origin {
         PLAYER,
@@ -30,7 +36,8 @@ public class Bullet implements Pool.Poolable {
         this.position = new Vector2();
         this.velocity = new Vector2();
         this.alive = false;
-        this.sprite = new Sprite(new Texture("bullet.png"));
+        sprite = new Sprite(bullet);
+
 
         //create bullet body
         BodyDef bodyDef = new BodyDef();
@@ -111,7 +118,7 @@ public class Bullet implements Pool.Poolable {
         //multiple bodies at same position may cause slow performance
         position.set(randomX,randomY );
         alive = false;
-        sprite = new Sprite(new Texture("bullet.png"));
+        sprite.setRegion(bullet);
         grapplingHook = false;
         bulletLifetime = 0;
         body.setTransform(position, 0);
@@ -123,6 +130,16 @@ public class Bullet implements Pool.Poolable {
      * Method called each frame, which updates the bullet.
      */
     public void update(float delta) {
+        if (this.origin == Origin.NPC) {
+            sprite.setRegion(bullet);
+        }
+        else if (GameData.getInstance().getHeldItemType() == Item.ItemType.SHOTGUN) {
+            sprite.setRegion(shotgunShell);
+        } else if (GameData.getInstance().getHeldItemType() == Item.ItemType.HANDGUN) {
+            sprite.setRegion(bullet);
+        }
+
+
         bulletLifetime += delta;
 
         position.add(velocity.cpy().scl(delta * 80f));

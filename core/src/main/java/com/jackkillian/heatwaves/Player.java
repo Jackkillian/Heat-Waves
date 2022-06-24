@@ -285,7 +285,7 @@ public class Player {
     }
 
     public void respawn() {
-//        shouldRespawn = true;
+        shouldRespawn = true;
     }
 
     public void hit(int damage, Color color) {

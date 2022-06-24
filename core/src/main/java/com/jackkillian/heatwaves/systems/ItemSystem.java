@@ -12,6 +12,8 @@ public class ItemSystem extends EntitySystem {
     public ArrayList<Item> items = new ArrayList<Item>();
     public ArrayList<Body> bodieToRemove = new ArrayList<Body>();
 
+    private ArrayList<Item> itemsToRemove = new ArrayList<Item>();
+
 
     private SpriteBatch batch;
 
@@ -49,10 +51,16 @@ public class ItemSystem extends EntitySystem {
         }
         if (canClear) bodieToRemove.clear();
 
+        for (Item item : itemsToRemove) {
+            items.remove(item);
+        }
+        itemsToRemove.clear();
+
 
 
         batch.begin();
         for (Item item : items) {
+            item.update(deltaTime);
             item.getSprite().setPosition(item.getBody().getPosition().x - item.getSprite().getWidth() / 2, item.getBody().getPosition().y - item.getSprite().getHeight() / 2);
             item.getSprite().draw(batch);
         }
@@ -60,7 +68,7 @@ public class ItemSystem extends EntitySystem {
     }
 
     public void removeItem(Item item, Body body) {
-        items.remove(item);
+        itemsToRemove.add(item);
         bodieToRemove.add(body);
     }
     public void removeBody(Body body) {
