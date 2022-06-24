@@ -32,7 +32,7 @@ public class WorldManager {
     public void update(float delta) {
         //spawn new NPCs
         if (activeNPCs.size < 8) {
-            // generate random number between 400 and 1450
+            // generate random number between 600 and 1450
             //world only goes to 1.5k x axis. Box2d might crash because the npc is infinitely falling
             int x = (int) (Math.random() * (1450 - 100) + 600);
             int y = 900; // any lower and the npcs might spawn inside buildings and cause crashes probably

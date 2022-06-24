@@ -172,16 +172,16 @@ public class NPC {
             deathTimer -= delta;
             sprite.setRegion(death);
             if (deathTimer < 0) {
-                alive = false;
                 GameData.getInstance().getEventHandler().addKill();
+                alive = false;
             }
         }
     }
 
     public void destroy() {
-        death.getTexture().dispose();
-        sprite.getTexture().dispose();
-        gun.getTexture().dispose();
+//        death.getTexture().dispose();
+//        sprite.getTexture().dispose();
+//        gun.getTexture().dispose();
         GameData.getInstance().getItemSystem().removeBody(body);
     }
 

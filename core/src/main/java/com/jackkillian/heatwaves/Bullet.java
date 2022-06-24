@@ -36,6 +36,7 @@ public class Bullet implements Pool.Poolable {
         BodyDef bodyDef = new BodyDef();
 //        bodyDef.bullet = true;
         bodyDef.type = BodyDef.BodyType.DynamicBody;
+        bodyDef.bullet = true;
         bodyDef.position.set(position.x / Constants.PPM, position.y / Constants.PPM);
         body = GameData.getInstance().getWorld().createBody(bodyDef);
 
@@ -125,7 +126,9 @@ public class Bullet implements Pool.Poolable {
         bulletLifetime += delta;
 
         position.add(velocity.cpy().scl(delta * 80f));
+        System.out.println("start call");
         body.applyForce(velocity.cpy().scl(delta * 80f), body.getWorldCenter(), true);
+        System.out.println("end call");
 //        if (position.x != 0 && position.y != 0) body.setTransform(position.x, position.y, 0);
         sprite.setPosition(body.getPosition().x - sprite.getWidth() / 2, body.getPosition().y - sprite.getHeight() / 2);
 
