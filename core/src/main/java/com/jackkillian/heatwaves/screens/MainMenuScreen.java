@@ -11,10 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.Event;
 import com.badlogic.gdx.scenes.scene2d.EventListener;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Button;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.FitViewport;
@@ -50,6 +47,10 @@ public class MainMenuScreen implements Screen {
         logo.setScale(1.5f);
         logo.setAlign(Align.center);
         table.add(logo).padBottom(50).row();
+
+        Label instructions = new Label("Controls\n\nMove - WAD\nAim - Move cursor\nUse item - Click", game.skin);
+        instructions.setAlignment(Align.center);
+        table.add(instructions).pad(10).row();
 
         TextButton playButton = new TextButton("Play", game.skin);
         playButton.addListener(new ClickListener() {
