@@ -10,6 +10,9 @@ build/
 hs_err_pid*
 .attach_pid*
 
+## JDK
+jdk-17.0.2+8-jre/
+
 ## Android:
 android/libs/armeabi-v7a/
 android/libs/arm64-v8a/
