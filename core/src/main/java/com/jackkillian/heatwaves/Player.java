@@ -197,6 +197,7 @@ public class Player {
             }
             idleSprite.draw(batch);
         }
+        System.out.println(body.getPosition().x + "/" + body.getPosition().y);
 
         //draw player was hit font
         if (isHit) {
@@ -229,14 +230,6 @@ public class Player {
     }
 
     public void onKeyDown(int key) {
-        if (key == Input.Keys.Q) {
-            GameData.getInstance().setInvLocked(!GameData.getInstance().isInvLocked());
-            if (GameData.getInstance().isInvLocked()) {
-                GameData.getInstance().getHudRenderSystem().setLockTexture(true);
-            } else {
-                GameData.getInstance().getHudRenderSystem().setLockTexture(false);
-            }
-        }
         if (key == Input.Keys.A) {
             keyLeftPressed = true;
         }
@@ -292,7 +285,7 @@ public class Player {
     }
 
     public void respawn() {
-        shouldRespawn = true;
+//        shouldRespawn = true;
     }
 
     public void hit(int damage, Color color) {

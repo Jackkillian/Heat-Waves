@@ -15,6 +15,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.jackkillian.heatwaves.Assets;
+import com.jackkillian.heatwaves.EventHandler;
 import com.jackkillian.heatwaves.GameData;
 
 
@@ -27,18 +28,21 @@ public class HudRenderSystem extends EntitySystem {
     private Image health;
     private Image shield;
 
-    private Image lock;
 
     private Label healthLabel;
     private Label shieldLabel;
 
     private Label heatWavesTimer;
-    private float countdown = 30;
+    private Label required;
+
 
     private Image hotbar;
     private Image activeItem;
 
+    private GameData gameData;
+
     public HudRenderSystem(GameData gameData) {
+        this.gameData = gameData;
         camera = new OrthographicCamera();
         this.assets = gameData.getAssets();
         stage = new Stage();
@@ -58,16 +62,15 @@ public class HudRenderSystem extends EntitySystem {
         hotbar = new Image(assets.getManager().get("hud/inventory.png", Texture.class));
         hotbar.setScale(5f);
 
-        lock = new Image(assets.getManager().get("hud/unlocked.png", Texture.class));
-        lock.setScale(5f);
-
         activeItem = new Image();
         activeItem.setScale(5f);
 
 
         healthLabel = new Label("100", gameData.getSkin());
         shieldLabel = new Label("100", gameData.getSkin());
-        heatWavesTimer = new Label("Heat Waves in" + countdown, gameData.getSkin());
+        heatWavesTimer = new Label("", gameData.getSkin());
+        required = new Label("", gameData.getSkin());
+        required.setFontScale(2f);
         heatWavesTimer.setFontScale(2.5f);
 
         healthLabel.setFontScale(2f);
@@ -84,12 +87,13 @@ public class HudRenderSystem extends EntitySystem {
         stack.add(hotbar);
         stack.add(activeItem);
         table.add(stack).padTop(70f);
-        table.add(lock).padLeft(20f).padTop(40f);
 
         Table tableRight = new Table();
         tableRight.setFillParent(true);
         tableRight.top().right();
         tableRight.add(heatWavesTimer).pad(10f);
+        tableRight.row();
+        tableRight.add(required);
         stage.addActor(tableRight);
 
         Table bottomRight = new Table();
@@ -99,12 +103,13 @@ public class HudRenderSystem extends EntitySystem {
     }
 
     public void update(float deltaTime) {
-        countdown -= deltaTime;
-
-        heatWavesTimer.setText("Heat Waves in: " + (int) countdown);
-        if (countdown < 0) {
-            countdown = 30;
+        if (gameData.getEventHandler().isEventActive()) {
+            required.setText("Kills Required: " + gameData.getEventHandler().getRequiredKills());
+        } else {
+            required.setText("");
         }
+
+        heatWavesTimer.setText(gameData.getEventHandler().getEventString() + (int) gameData.getEventHandler().getCountdown());
         healthLabel.setText(GameData.getInstance().getPlayerHealth());
         shieldLabel.setText(GameData.getInstance().getPlayerShield());
         stage.act(deltaTime);
@@ -118,11 +123,5 @@ public class HudRenderSystem extends EntitySystem {
         }
         activeItem.setDrawable(new TextureRegionDrawable(texture));
     }
-    public void setLockTexture(boolean locked) {
-        if (locked) {
-            lock.setDrawable(new TextureRegionDrawable(assets.getManager().get("hud/locked.png", Texture.class)));
-        } else {
-            lock.setDrawable(new TextureRegionDrawable(assets.getManager().get("hud/unlocked.png", Texture.class)));
-        }
-    }
+
 }

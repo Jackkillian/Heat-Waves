@@ -1,5 +1,6 @@
 package com.jackkillian.heatwaves;
 
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
@@ -23,6 +24,8 @@ public class GameData {
     }
 
 
+    private Game game;
+    private EventHandler eventHandler;
     private SpriteBatch batch;
     private Assets assets;
     private Skin skin;
@@ -41,6 +44,14 @@ public class GameData {
     private int health;
     private int shield;
     private boolean invLocked = false;
+
+    public void setEventHandler(EventHandler eventHandler) {
+        this.eventHandler = eventHandler;
+    }
+
+    public void setGame(Game game) {
+        this.game = game;
+    }
 
     public void setItemSystem(ItemSystem itemSystem) {
         this.itemSystem = itemSystem;
@@ -66,6 +77,7 @@ public class GameData {
         this.viewport = viewport;
     }
 
+
     public void setInvLocked(boolean invLocked) {
         this.invLocked = invLocked;
     }
@@ -84,6 +96,14 @@ public class GameData {
 
     public Skin getSkin() {
         return skin;
+    }
+
+    public Game getGame() {
+        return game;
+    }
+
+    public EventHandler getEventHandler() {
+        return eventHandler;
     }
 
 

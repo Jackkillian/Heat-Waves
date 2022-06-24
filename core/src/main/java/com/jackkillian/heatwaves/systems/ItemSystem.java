@@ -23,9 +23,10 @@ public class ItemSystem extends EntitySystem {
 
     public void update(float deltaTime) {
         if (items.size() < 15) {
-            // generate random number between 100 and 1500
-            int x = (int) (Math.random() * (2800 - 100) + 100);
-            int y = 600;
+            // generate random number between 100 and 1450
+            //don't go over 1.5k
+            int x = (int) (Math.random() * (1450 - 100) + 100);
+            int y = 900;
             // choose random item from enum Item.ItemType
             Item.ItemType itemType = Item.ItemType.values()[(int) (Math.random() * Item.ItemType.values().length)];
             if (GameData.getInstance().getWorld().isLocked() == false) {
@@ -39,6 +40,7 @@ public class ItemSystem extends EntitySystem {
         for (Body body : bodieToRemove) {
             if (GameData.getInstance().getWorld().isLocked()) {
                 canClear = false;
+                System.out.println("cannot clear");
 
             } else {
                 GameData.getInstance().getWorld().destroyBody(body);

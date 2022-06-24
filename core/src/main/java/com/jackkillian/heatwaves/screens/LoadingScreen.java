@@ -25,6 +25,7 @@ public class LoadingScreen implements Screen {
         this.game = game;
         assets = new Assets();
         GameData gameData = GameData.getInstance();
+        gameData.setGame(game);
         World world = new World(new Vector2(0, -130), false);
 
         Pixmap pixmap = new Pixmap(Gdx.files.internal("cursor.png"));
@@ -115,6 +116,9 @@ public class LoadingScreen implements Screen {
                         Bullet bullet = (Bullet) otherBody2.getUserData();
                         if (bullet.origin != Bullet.Origin.NPC) {
                             NPC npc = (NPC) npcBody.getUserData();
+                            if (!(npc.health > 0)) {
+                                return;
+                            }
                             npc.hit(30);
                             bullet.alive = false;
                         }
@@ -126,10 +130,6 @@ public class LoadingScreen implements Screen {
 
                 if (otherBody.getUserData() instanceof Item) {
                     Item item = (Item) otherBody.getUserData();
-                    if (GameData.getInstance().isInvLocked()) {
-                        GameData.getInstance().getItemSystem().removeItem(item, otherBody);
-                        return;
-                    }
                     GameData.getInstance().getHudRenderSystem().setActiveItem(item.getSprite().getTexture());
                     GameData.getInstance().setHeldItemType(item.getType());
                     GameData.getInstance().getItemSystem().removeItem(item, otherBody);
@@ -162,6 +162,7 @@ public class LoadingScreen implements Screen {
                             gameData.setGrapplingHit(false);
                             gameData.healHealth(100);
                             gameData.healShield(100);
+                            gameData.getEventHandler().playerOnDeath();
                             gameData.getPlayer().respawn();
                         }
                     }

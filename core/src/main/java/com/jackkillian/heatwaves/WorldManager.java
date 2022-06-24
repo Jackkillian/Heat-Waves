@@ -31,10 +31,11 @@ public class WorldManager {
 
     public void update(float delta) {
         //spawn new NPCs
-        if (activeNPCs.size < 5) {
-            // generate random number between 400 and 2800
-            int x = (int) (Math.random() * (2800 - 100) + 400);
-            int y = 600; // any lower and the npcs might spawn inside buildings and cause crashes probably
+        if (activeNPCs.size < 8) {
+            // generate random number between 400 and 1450
+            //world only goes to 1.5k x axis. Box2d might crash because the npc is infinitely falling
+            int x = (int) (Math.random() * (1450 - 100) + 600);
+            int y = 900; // any lower and the npcs might spawn inside buildings and cause crashes probably
             // choose random item from enum Item.ItemType
             NPC.NPCType npcType = NPC.NPCType.values()[(int) (Math.random() * NPC.NPCType.values().length)];
             if (GameData.getInstance().getWorld().isLocked() == false) {
@@ -64,8 +65,8 @@ public class WorldManager {
         for (int i = len; --i >= 0;) {
             NPC npc = activeNPCs.get(i);
             if (!npc.alive) {
-                npc.destroy();
                 activeNPCs.removeIndex(i);
+                npc.destroy();
             } else {
                 npc.update(delta);
             }

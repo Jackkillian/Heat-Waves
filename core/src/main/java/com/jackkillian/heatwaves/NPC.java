@@ -3,6 +3,7 @@ package com.jackkillian.heatwaves;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
@@ -18,6 +19,9 @@ public class NPC {
     private GameData gameData;
     private float cooldownTimer;
     private boolean isFlipped = false;
+
+    private TextureRegion death;
+    private float deathTimer = 2f;
 
     //hit damage marker
     private boolean isHit;
@@ -56,7 +60,7 @@ public class NPC {
         fdef.friction = 100f;
         fdef.restitution = 0.09f; // 0.09f
         fdef.filter.categoryBits = Constants.PLAYER_BIT;
-        fdef.filter.maskBits = Constants.WALL_BIT | Constants.ITEM_BIT | Constants.BULLET_BIT;
+        fdef.filter.maskBits = Constants.WALL_BIT | Constants.BULLET_BIT;
         body.createFixture(fdef);
 
         sprite = new Sprite(getTexture(type));
@@ -66,6 +70,12 @@ public class NPC {
         } else {
             gun = new Sprite(Item.getTexture(Item.ItemType.HANDGUN, true));
             gun.setPosition(body.getPosition().x - gun.getWidth() / 2, body.getPosition().y - gun.getHeight() / 2);
+        }
+
+        if (type == NPCType.VILLAGER) {
+            death = new TextureRegion(new Texture("player/villagerDead.png"));
+        } else {
+            death = new TextureRegion(new Texture("player/henchmanDead.png"));
         }
         body.setUserData(this);
         gun.setScale(0.8f);
@@ -100,21 +110,29 @@ public class NPC {
         }
 
         Vector2 legs = gameData.getPlayer().getPosition().sub(body.getPosition());
+        isFlipped = legs.x < 0;
+
 
         // use trig again :D
-        float angle = (float) Math.atan2(legs.y, legs.x);
+        float angle =  (float) Math.atan2(legs.y, legs.x);
         gun.setRotation(angle * MathUtils.radiansToDegrees);
 
         //my signature coding "(isFlipped? 7: -7)"
         sprite.setPosition(body.getPosition().x - sprite.getWidth() / 2, body.getPosition().y - sprite.getHeight() / 2);
         gun.setPosition(body.getPosition().x - gun.getWidth() / 2 + (sprite.isFlipX() ? -7 : 7), body.getPosition().y - gun.getHeight() / 2);
         sprite.draw(gameData.getBatch());
-        gun.draw(gameData.getBatch());
+        if (health > 0) gun.draw(gameData.getBatch());
+
 
         // AI shoot player if in range
         float distance = legs.len();
-        if (distance < 300f) {
-            body.setTransform(body.getPosition().x + (gameData.getPlayer().getPosition().x > body.getPosition().x ? 10 : -10) * delta, body.getPosition().y, 0);
+        if (distance < 300f && health > 0) {
+            //setting a body's transform may cause freezes
+            //https://neutroniogames.blogspot.com/2016/05/things-that-make-your-box2d-world-freeze.html
+            if (Math.abs(body.getLinearVelocity().x) < 15f) {
+                body.setLinearVelocity(isFlipped ? -20f : 20f, 0);
+            }
+
             if (gameData.getPlayer().getPosition().x > body.getPosition().x) {
                 sprite.setFlip(false, false);
                 gun.setFlip(false, false);
@@ -126,20 +144,16 @@ public class NPC {
                     if (!gun.isFlipY()) gun.setFlip(false, true);
                 }
             }
-            if (gameData.getPlayer().getPosition().y > body.getPosition().y) {
-                body.setTransform(body.getPosition().x, body.getPosition().y + 10 * delta, 0);
-            } else {
-                body.setTransform(body.getPosition().x, body.getPosition().y - 10 * delta, 0);
-            }
+
         }
 
-        if (distance < 100f) {
+        if (distance < 100f && health > 0) {
             if (cooldownTimer > 0.6f) {
                 cooldownTimer = 0f;
             } else {
                 return;
             }
-            float speed = 300f;  // set the speed of the bullet
+            float speed = 450f;  // set the speed of the bullet
             float shooterX = gameData.getPlayer().getPosition().x; // get player location
             float shooterY = gameData.getPlayer().getPosition().y; // get player location
             float velx = shooterX - body.getPosition().x; // get distance from shooter to target on x plain
@@ -155,11 +169,17 @@ public class NPC {
 
 
         if (health <= 0) {
-            alive = false;
+            deathTimer -= delta;
+            sprite.setRegion(death);
+            if (deathTimer < 0) {
+                alive = false;
+                GameData.getInstance().getEventHandler().addKill();
+            }
         }
     }
 
     public void destroy() {
+        death.getTexture().dispose();
         sprite.getTexture().dispose();
         gun.getTexture().dispose();
         GameData.getInstance().getItemSystem().removeBody(body);

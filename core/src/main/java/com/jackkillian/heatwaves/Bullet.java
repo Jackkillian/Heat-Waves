@@ -1,5 +1,6 @@
 package com.jackkillian.heatwaves;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.MathUtils;
@@ -104,7 +105,10 @@ public class Bullet implements Pool.Poolable {
      */
     @Override
     public void reset() {
-        position.set(0, 0);
+        float randomX = MathUtils.random(500, 800);
+        float randomY = MathUtils.random(500, 800);
+        //multiple bodies at same position may cause slow performance
+        position.set(randomX,randomY );
         alive = false;
         sprite = new Sprite(new Texture("bullet.png"));
         grapplingHook = false;

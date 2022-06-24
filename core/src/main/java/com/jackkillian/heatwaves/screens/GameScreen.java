@@ -40,6 +40,7 @@ public class GameScreen implements Screen, InputProcessor {
     private Music music;
     public static Sound hitSound = Gdx.audio.newSound(Gdx.files.internal("hit.wav"));
     private Sprite grapplingHookRope;
+    private EventHandler eventHandler;
 
     public GameScreen() {
     }
@@ -78,15 +79,19 @@ public class GameScreen implements Screen, InputProcessor {
         music.play();
 
         grapplingHookRope = new Sprite(new Texture("items/grapplingHookRope.png"));
+
+        eventHandler = new EventHandler();
+        gameData.setEventHandler(eventHandler);
 //        grapplingHookRope.setFlip(false, true); // inverted for some reason...
     }
 
     @Override
     public void render(float delta) {
         batch.setProjectionMatrix(camera.combined);
-        Gdx.gl.glClearColor(135 / 255f, 206 / 255f, 235 / 255f, 0.3f);
+        Gdx.gl.glClearColor(eventHandler.getR() / 255f, eventHandler.getG() / 255f, eventHandler.getB() / 255f, 0.3f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
+        gameData.getEventHandler().update(delta);
         engine.update(delta);
         camera.position.lerp(new Vector3(player.getPosition().x, player.getPosition().y, 0), 0.1f);
 
@@ -203,7 +208,7 @@ public class GameScreen implements Screen, InputProcessor {
         camera.unproject(worldCoordinates);
         Vector2 mousePos = new Vector2(worldCoordinates.x, worldCoordinates.y);
 
-        float speed = 300f;  // set the speed of the bullet
+        float speed = 450f;  // set the speed of the bullet
         float shooterX = player.getItemPosition().x; // get player location
         float shooterY = player.getItemPosition().y; // get player location
         float velx = mousePos.x - shooterX; // get distance from shooter to target on x plain
