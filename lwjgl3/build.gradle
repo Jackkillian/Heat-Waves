@@ -1,4 +1,6 @@
-apply plugin: 'application'
+apply plugin: "java"
+apply plugin: "application"
+apply plugin: "org.mini2Dx.parcl"
 
 sourceSets.main.resources.srcDirs += [ rootProject.file('assets').path ]
 mainClassName = 'com.jackkillian.heatwaves.lwjgl3.Lwjgl3Launcher'
@@ -13,6 +15,17 @@ dependencies {
 }
 
 def os = System.properties['os.name'].toLowerCase()
+
+mainClassName = "com.jackkillian.heatwaves.lwjgl3.Lwjgl3Launcher"
+
+parcl {
+	exe {
+		exeName = "Heat Waves"
+		zipName = "Heat Waves.zip"
+		println project.rootDir.toString() + "/jdk-17.0.2+8-jre"
+		withJre(project.buildDir.toString() + "/../../jdk-17.0.2+8-jre")
+	}
+}
 
 run {
 	workingDir = rootProject.file('assets').path
