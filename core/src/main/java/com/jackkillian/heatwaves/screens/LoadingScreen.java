@@ -2,9 +2,7 @@ package com.jackkillian.heatwaves.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -28,8 +26,15 @@ public class LoadingScreen implements Screen {
         this.game = game;
         assets = new Assets();
         GameData gameData = GameData.getInstance();
-
         World world = new World(new Vector2(0, -130), false);
+
+        Pixmap pixmap = new Pixmap(Gdx.files.internal("cursor.png"));
+        int xHotspot = pixmap.getWidth() / 2;
+        int yHotspot = pixmap.getHeight() / 2;
+        Cursor cursor = Gdx.graphics.newCursor(pixmap, xHotspot, yHotspot);
+        Gdx.graphics.setCursor(cursor);
+        pixmap.dispose();
+
 //        world.setContactFilter(new ContactFilter() {
 //            @Override
 //            public boolean shouldCollide(Fixture fixtureA, Fixture fixtureB) {

@@ -75,7 +75,7 @@ public class WorldManager {
 
     public void createBullet(float x, float y, float xVel, float yVel, Bullet.Origin origin) {
         // if you want to spawn a new bullet:
-        if (GameData.getInstance().getWorld().isLocked() == false) {
+        if (!GameData.getInstance().getWorld().isLocked()) {
             Bullet item = bulletPool.obtain();
             item.init(x, y, xVel, yVel, origin);
 //            System.out.println(x + "/" +  y + "/" +  xVel + "/" + yVel);
