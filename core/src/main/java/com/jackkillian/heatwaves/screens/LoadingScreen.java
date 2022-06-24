@@ -19,7 +19,6 @@ public class LoadingScreen implements Screen {
     private Stage stage;
     private ProgressBar bar;
     private Label countLeftLabel;
-    private int number = 0;
 
 
     public LoadingScreen(HeatWaves game) {

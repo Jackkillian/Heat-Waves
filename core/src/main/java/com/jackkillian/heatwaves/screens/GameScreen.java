@@ -127,7 +127,9 @@ public class GameScreen implements Screen, InputProcessor {
             float a = (float) Math.sqrt(Math.pow(c, 2) + Math.pow(b, 2));
 
             // move the player closer to the grappling hook
-            player.setPosition(playerPos.x + (hookPos.x - playerPos.x) / 10, playerPos.y + (hookPos.y - playerPos.y) / 10);
+//            player.setPosition(playerPos.x + (hookPos.x - playerPos.x) / 5, playerPos.y + (hookPos.y - playerPos.y) / 5);
+            Vector2 newPos = player.getPosition().cpy().lerp(new Vector2(hookPos.x, hookPos.y), 0.1f);
+            player.setPosition(newPos.x, newPos.y);
 
             // if the player is close enough to the grappling hook, destroy the grappling hooka
             if (a < 10) {
