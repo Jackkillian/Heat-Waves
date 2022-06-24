@@ -60,8 +60,8 @@ public class GameScreen implements Screen, InputProcessor {
 
         engine = new Engine();
 
-        gameData.setPlayerHealth(100);
-        gameData.setPlayerShield(100);
+        gameData.healHealth(100);
+        gameData.healShield(100);
         gameData.setPlayer(player);
         gameData.setBatch(batch);
         gameData.setMapRenderSystem(new MapRenderSystem(gameData, camera));
@@ -129,8 +129,8 @@ public class GameScreen implements Screen, InputProcessor {
             // move the player closer to the grappling hook
             player.setPosition(playerPos.x + (hookPos.x - playerPos.x) / 10, playerPos.y + (hookPos.y - playerPos.y) / 10);
 
-            // if the player is close enough to the grappling hook, destroy the grappling hook
-            if (a < 20) {
+            // if the player is close enough to the grappling hook, destroy the grappling hooka
+            if (a < 10) {
                 gameData.setGrapplingPulling(false);
                 gameData.setGrapplingPosition(null);
             }
@@ -190,6 +190,12 @@ public class GameScreen implements Screen, InputProcessor {
         gameData.getWorldManager().createNPC(NPC.NPCType.MCMUFFIN_HENCHMAN, Constants.SPAWN_X, Constants.SPAWN_Y);
 
         if (gameData.getHeldItemType() == null) return false;
+        if (gameData.getHeldItemType() == Item.ItemType.MEDKIT) {
+            gameData.getHudRenderSystem().setActiveItem(null);
+            gameData.setHeldItemType(null);
+            gameData.healHealth(25);
+            return false;
+        }
 
         Vector3 worldCoordinates = new Vector3(screenX, screenY, 0);
         camera.unproject(worldCoordinates);

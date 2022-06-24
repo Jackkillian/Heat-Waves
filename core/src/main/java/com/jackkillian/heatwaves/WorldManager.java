@@ -59,18 +59,17 @@ public class WorldManager {
                 item.update(delta);
             }
         }
+
         len = activeNPCs.size;
         for (int i = len; --i >= 0;) {
             NPC npc = activeNPCs.get(i);
             if (!npc.alive) {
+                npc.destroy();
                 activeNPCs.removeIndex(i);
             } else {
-                // Render bullets
                 npc.update(delta);
             }
         }
-
-
         GameData.getInstance().getBatch().end();
     }
 

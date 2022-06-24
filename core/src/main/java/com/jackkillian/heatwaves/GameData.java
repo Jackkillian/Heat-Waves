@@ -184,11 +184,45 @@ public class GameData {
         return health;
     }
 
-    public void setPlayerHealth(int health) {
-        this.health = health;
+//    public void setPlayerHealth(int health) {
+//        this.health = health;
+//    }
+//
+//    public void setPlayerShield(int shield) {
+//        this.shield = shield;
+//    }
+
+    public void healHealth(int health) {
+        this.health += health;
+        if (this.health > 100) {
+            this.health = 100;
+        }
     }
 
-    public void setPlayerShield(int shield) {
-        this.shield = shield;
+    public void damageHealth(int damage) {
+        health -= damage;
+        if (health < 0) {
+            health = 0;
+        }
+    }
+
+    public void healShield(int shield) {
+        this.shield += shield;
+        if (this.shield > 100) {
+            this.shield = 100;
+        }
+    }
+
+    public void damageShield(int damage) {
+        if (damage > shield) {
+            int leftover = damage - shield;
+            shield = 0;
+            damageHealth(leftover);
+        } else {
+            shield -= damage;
+            if (shield < 0) {
+                shield = 0;
+            }
+        }
     }
 }

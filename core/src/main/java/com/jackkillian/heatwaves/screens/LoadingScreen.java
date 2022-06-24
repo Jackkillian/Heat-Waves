@@ -80,8 +80,6 @@ public class LoadingScreen implements Screen {
                     }
                 }
 
-
-
                 if (contact.getFixtureA().getBody().getUserData() instanceof Player) {
                     playerBody = contact.getFixtureA().getBody();
                     otherBody = contact.getFixtureB().getBody();
@@ -124,7 +122,7 @@ public class LoadingScreen implements Screen {
 
                 if (otherBody.getUserData() instanceof Item) {
                     Item item = (Item) otherBody.getUserData();
-                    if (GameData.getInstance().isInvLocked() == true) {
+                    if (GameData.getInstance().isInvLocked()) {
                         GameData.getInstance().getItemSystem().removeItem(item, otherBody);
                         return;
                     }
@@ -145,24 +143,22 @@ public class LoadingScreen implements Screen {
                         // damaged player to shield?
                         boolean isBlueHit;
                         if (gameData.getPlayerShield() > 0) {
-                            if (gameData.getPlayerShield() <= 0) {
-                                gameData.setPlayerShield(0);
-                            }
+                            gameData.damageShield(damage);
                             isBlueHit = true;
-                            gameData.setPlayerShield(gameData.getPlayerShield() - damage);
                         } else {
-
                             isBlueHit = false;
-                            gameData.setPlayerHealth(gameData.getPlayerHealth() - damage);
+                            gameData.damageHealth(damage);
                         }
                         GameScreen.hitSound.play();
                         gameData.getPlayer().hit(damage, (isBlueHit? Color.CYAN: Color.GOLD));
                         if (gameData.getPlayerHealth() <= 0) {
-                            //respawn the player
-                            gameData.setPlayerHealth(100);
-                            gameData.setPlayerShield(100);
+                            // respawn the player
+                            gameData.setGrapplingPulling(false);
+                            gameData.setGrapplingShot(false);
+                            gameData.setGrapplingHit(false);
+                            gameData.healHealth(100);
+                            gameData.healShield(100);
                             gameData.getPlayer().respawn();
-
                         }
                     }
                 }
@@ -173,12 +169,14 @@ public class LoadingScreen implements Screen {
                 //this is very hacky
                 // no it's not >:C
                 // >:D  "optimizing performance"
-                boolean hacky = otherBody.getUserData().equals("wall");
-                gameData.setTouchingPlatform(hacky);
-//                if (!(otherBody.getUserData() instanceof Item) && !otherBody.getUserData().equals("bullet") && !otherBody.getUserData().equals("grapplingHook")) {
-//
-//                    gameData.setTouchingPlatform(true);
-//                }
+
+                // game stopped freezing for me after I went back to the old method lol
+//                boolean hacky = otherBody.getUserData().equals("wall");
+//                gameData.setTouchingPlatform(hacky);
+                if (!(otherBody.getUserData() instanceof Item) && !(otherBody.getUserData() instanceof Bullet) && !otherBody.getUserData().equals("grapplingHook")) {
+
+                    gameData.setTouchingPlatform(true);
+                }
 
             }
 

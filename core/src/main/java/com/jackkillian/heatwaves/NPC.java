@@ -26,11 +26,11 @@ public class NPC {
     private float offset = 20f;
 
 
-
     public enum NPCType {
         MCMUFFIN_HENCHMAN,
         VILLAGER
     }
+
 
     public NPC(NPCType type, float x, float y) {
         health = 150;
@@ -105,8 +105,6 @@ public class NPC {
         float angle = (float) Math.atan2(legs.y, legs.x);
         gun.setRotation(angle * MathUtils.radiansToDegrees);
 
-
-
         //my signature coding "(isFlipped? 7: -7)"
         sprite.setPosition(body.getPosition().x - sprite.getWidth() / 2, body.getPosition().y - sprite.getHeight() / 2);
         gun.setPosition(body.getPosition().x - gun.getWidth() / 2 + (sprite.isFlipX() ? -7 : 7), body.getPosition().y - gun.getHeight() / 2);
@@ -134,6 +132,7 @@ public class NPC {
                 body.setTransform(body.getPosition().x, body.getPosition().y - 10 * delta, 0);
             }
         }
+
         if (distance < 100f) {
             if (cooldownTimer > 0.6f) {
                 cooldownTimer = 0f;
@@ -157,11 +156,13 @@ public class NPC {
 
         if (health <= 0) {
             alive = false;
-            sprite.getTexture().dispose();
-            gun.getTexture().dispose();
-            //item system has a queue to safely remove bodies
-            GameData.getInstance().getItemSystem().removeBody(body);
         }
+    }
+
+    public void destroy() {
+        sprite.getTexture().dispose();
+        gun.getTexture().dispose();
+        GameData.getInstance().getItemSystem().removeBody(body);
     }
 
     public void hit(int damage) {
