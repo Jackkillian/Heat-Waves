@@ -35,6 +35,8 @@ public class GameScreen implements Screen, InputProcessor {
     private Player player;
     private Sound shootSound;
     public Music music;
+    private Sound shotgunSound;
+    private Sound dryFireSound;
     public static Sound hitSound = Gdx.audio.newSound(Gdx.files.internal("hit.wav"));
     private Sprite grapplingHookRope;
     private EventHandler eventHandler;
@@ -123,7 +125,15 @@ public class GameScreen implements Screen, InputProcessor {
                     if (otherBody2.getUserData() instanceof Bullet) {
                         Bullet bullet = (Bullet) otherBody2.getUserData();
                         if (bullet.origin != Bullet.Origin.NPC) {
-                            int damage = (int) (Math.random() * (50 - 20 + 1)) + 20;
+                            int damage = 10;
+                            if (GameData.getInstance().getHeldItemType() == Item.ItemType.SHOTGUN) {
+                                //random number between 40 and 65
+                                damage = (int) (Math.random() * (65 - 40 + 1)) + 40;
+                            } else if (GameData.getInstance().getHeldItemType() == Item.ItemType.HANDGUN) {
+                                //random number between 15 and 25
+                                damage = (int) (Math.random() * (25 - 15 + 1)) + 15;
+                            }
+
                             NPC npc = (NPC) npcBody.getUserData();
                             if (!(npc.health > 0)) {
                                 return;
@@ -146,6 +156,7 @@ public class GameScreen implements Screen, InputProcessor {
                     if (item.getType() == Item.ItemType.MEDKIT) {
                         gameData.healHealth(25);
                     } else {
+                        gameData.setAmmo(item.getAmmo());
                         gameData.getHudRenderSystem().setActiveItem(item.getSprite().getTexture());
                         gameData.setHeldItemType(item.getType());
                     }
@@ -158,8 +169,9 @@ public class GameScreen implements Screen, InputProcessor {
                 if (otherBody.getUserData() instanceof Bullet) {
                     Bullet bullet = (Bullet) otherBody.getUserData();
                     if (bullet.origin != Bullet.Origin.PLAYER) {
-                        //random number between 15 and 30
-                        int damage = (int) (Math.random() * 15) + 15;
+                        //random number between 20 and 30
+                        int damage = (int) (Math.random() * (50 - 20 + 1)) + 20;
+
                         bullet.alive = false;
                         // damaged player to shield?
                         boolean isBlueHit;
@@ -218,7 +230,7 @@ public class GameScreen implements Screen, InputProcessor {
         camera = new OrthographicCamera();
         camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         camera.zoom = 0.5f;
-        viewport = new FitViewport(Gdx.graphics.getWidth() / Constants.PPM, Gdx.graphics.getHeight() / Constants.PPM, camera);
+        viewport = new FitViewport(1280 / Constants.PPM, 720 / Constants.PPM, camera);
         gameData.setViewport(viewport);
 
         engine = new Engine();
@@ -236,6 +248,8 @@ public class GameScreen implements Screen, InputProcessor {
         engine.addSystem(gameData.getHudRenderSystem());
 
         shootSound = Gdx.audio.newSound(Gdx.files.internal("shoot.wav"));
+        shotgunSound = Gdx.audio.newSound(Gdx.files.internal("shotgun.wav"));
+        dryFireSound = Gdx.audio.newSound(Gdx.files.internal("dryfire.wav"));
 
         music = Gdx.audio.newMusic(Gdx.files.internal("themeSong.wav"));
         music.setLooping(true);
@@ -387,11 +401,24 @@ public class GameScreen implements Screen, InputProcessor {
             vely = vely / length * 1.5f;  // get required y velocity to aim at target
         }
 
-        if (gameData.getHeldItemType() == Item.ItemType.HANDGUN
-                || gameData.getHeldItemType() == Item.ItemType.SHOTGUN
-                ) {
+        //really hacky way
+        if (gameData.getHeldItemType() == Item.ItemType.MEDKIT) {return false;}
 
+        if (gameData.getHeldItemType() == Item.ItemType.HANDGUN) {
+            if (gameData.getAmmo() <= 0) {
+                dryFireSound.play();
+                return false;
+            }
+            gameData.setAmmo(gameData.getAmmo() - 1);
             shootSound.play();
+            gameData.getWorldManager().createBullet(shooterX, shooterY, velx * speed, vely * speed, Bullet.Origin.PLAYER);
+        } else if (gameData.getHeldItemType() == Item.ItemType.SHOTGUN) {
+            if (gameData.getAmmo() <= 0) {
+                dryFireSound.play();
+                return false;
+            }
+            gameData.setAmmo(gameData.getAmmo() - 1);
+            shotgunSound.play();
             gameData.getWorldManager().createBullet(shooterX, shooterY, velx * speed, vely * speed, Bullet.Origin.PLAYER);
         }
 
