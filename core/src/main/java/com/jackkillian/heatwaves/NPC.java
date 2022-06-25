@@ -11,9 +11,9 @@ import com.badlogic.gdx.physics.box2d.*;
 
 public class NPC {
     protected Sprite sprite;
-    protected Texture deathTexture;
+    protected TextureRegion deathTexture;
     protected Body body;
-    protected float deathTimer;
+    protected float deathTimer = 2f;
     public boolean alive;
     public int health;
 
@@ -27,8 +27,7 @@ public class NPC {
         this.health = 150;
         this.alive = true;
         this.sprite = sprite;
-        this.deathTexture = deathTexture;
-
+        this.deathTexture = new TextureRegion(deathTexture);
 
         World world = GameData.getInstance().getWorld();
         BodyDef bodyDef = new BodyDef();
@@ -45,6 +44,7 @@ public class NPC {
         fdef.filter.categoryBits = Constants.PLAYER_BIT;
         fdef.filter.maskBits = Constants.WALL_BIT | Constants.BULLET_BIT;
         body.createFixture(fdef);
+        body.setUserData(this);
 
 //        sprite = new Sprite(getTexture(type));
 //        if (type == NPCType.MCMUFFIN_HENCHMAN) {
@@ -77,13 +77,18 @@ public class NPC {
 
         if (health <= 0) {
             deathTimer -= delta;
-            sprite.setTexture(deathTexture);
+            sprite.setRegion(deathTexture);
             if (deathTimer < 0) {
                 GameData.getInstance().getEventHandler().addKill();
                 alive = false;
             }
         }
     };
+
+    protected void drawSprite() {
+        sprite.setPosition(body.getPosition().x - sprite.getWidth() / 2, body.getPosition().y - sprite.getHeight() / 2);
+        sprite.draw(GameData.getInstance().getBatch());
+    }
 
     public void destroy() {
 //        death.getTexture().dispose();

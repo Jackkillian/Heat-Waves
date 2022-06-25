@@ -23,7 +23,6 @@ public class GameData {
         return instance;
     }
 
-
     private Game game;
     private EventHandler eventHandler;
     private SpriteBatch batch;
@@ -43,7 +42,7 @@ public class GameData {
     private Player player;
     private int health;
     private int shield;
-    private boolean invLocked = false;
+    private int score;
 
     public void setEventHandler(EventHandler eventHandler) {
         this.eventHandler = eventHandler;
@@ -77,17 +76,8 @@ public class GameData {
         this.viewport = viewport;
     }
 
-
-    public void setInvLocked(boolean invLocked) {
-        this.invLocked = invLocked;
-    }
-
     public SpriteBatch getBatch() {
         return batch;
-    }
-
-    public boolean isInvLocked() {
-        return invLocked;
     }
 
     public Assets getAssets() {
@@ -105,7 +95,6 @@ public class GameData {
     public EventHandler getEventHandler() {
         return eventHandler;
     }
-
 
     public FitViewport getViewport() {
         return viewport;
@@ -191,7 +180,7 @@ public class GameData {
     public Player getPlayer() {
         return player;
     }
-    
+
     public void setPlayer(Player player) {
         this.player = player;
     }
@@ -203,14 +192,6 @@ public class GameData {
     public int getPlayerHealth() {
         return health;
     }
-
-//    public void setPlayerHealth(int health) {
-//        this.health = health;
-//    }
-//
-//    public void setPlayerShield(int shield) {
-//        this.shield = shield;
-//    }
 
     public void healHealth(int health) {
         this.health += health;
@@ -244,5 +225,13 @@ public class GameData {
                 shield = 0;
             }
         }
+    }
+
+    public void setScore(int score) {
+        this.score = score;
+    }
+
+    public int getScore() {
+        return score;
     }
 }

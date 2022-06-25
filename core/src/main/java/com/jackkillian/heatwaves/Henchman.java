@@ -11,10 +11,9 @@ import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 
 public class Henchman extends NPC {
-    private Sprite gun;
+    private final Sprite gun;
     private float cooldownTimer;
     private final GameData gameData;
-    private boolean isFlipped = false;
 
     public Henchman(float x, float y) {
         super(new Sprite(new Texture("player/henchman.png")), new Texture("player/henchmanDead.png"), x, y);
@@ -26,27 +25,21 @@ public class Henchman extends NPC {
         gun = new Sprite(Item.getTexture(Item.ItemType.HANDGUN, true));
         gun.setPosition(body.getPosition().x - gun.getWidth() / 2, body.getPosition().y - gun.getHeight() / 2);
         gun.setScale(0.8f);
-        body.setUserData(this);
     }
 
     @Override
     public void update(float delta) {
         cooldownTimer += delta;
         Vector2 legs = gameData.getPlayer().getPosition().sub(body.getPosition());
-        isFlipped = legs.x < 0;
+        boolean isFlipped = legs.x < 0;
+
+        drawSprite();
 
         // use trig again :D
         float angle = (float) Math.atan2(legs.y, legs.x);
         gun.setRotation(angle * MathUtils.radiansToDegrees);
-
-        // my signature coding "(isFlipped? 7: -7)"
-        sprite.setPosition(body.getPosition().x - sprite.getWidth() / 2, body.getPosition().y - sprite.getHeight() / 2);
-        sprite.draw(gameData.getBatch());
-
-
         gun.setPosition(body.getPosition().x - gun.getWidth() / 2 + (sprite.isFlipX() ? -7 : 7), body.getPosition().y - gun.getHeight() / 2);
         if (health > 0) gun.draw(gameData.getBatch());
-
 
         // AI shoot player if in range
         float distance = legs.len();
