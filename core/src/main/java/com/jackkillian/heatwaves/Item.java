@@ -17,7 +17,7 @@ public class Item {
 //        PISTOL, pistol is basically a handgun
         MEDKIT
     }
-
+    private int ammo;
     private Sprite sprite;
     private Body body;
     private ItemType itemType;
@@ -29,6 +29,12 @@ public class Item {
 
 
     public Item(ItemType type, float x, float y) {
+        if (type == ItemType.SHOTGUN) {
+            ammo = 10;
+        } else {
+            //basically infinity lolz
+            ammo = 1000;
+        }
         itemType = type;
         assets = GameData.getInstance().getAssets();
         sprite = new Sprite(getTexture(type));
@@ -126,6 +132,10 @@ public class Item {
         countDown -= delta;
         if (countDown <= 0) {
             GameData.getInstance().getItemSystem().removeItem(this, body);
+            countDown = 15f;
         }
+    }
+    public int getAmmo() {
+        return ammo;
     }
 }

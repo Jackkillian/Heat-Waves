@@ -46,6 +46,7 @@ public class GameData {
     private int score;
     private boolean gameOver = false;
     private Engine engine;
+    private int ammo;
 
     public void setEventHandler(EventHandler eventHandler) {
         this.eventHandler = eventHandler;
@@ -254,6 +255,13 @@ public class GameData {
 
     public void setEngine(Engine engine) {
         this.engine = engine;
+    }
+
+    public void setAmmo(int ammo) {
+        this.ammo = ammo;
+    }
+    public int getAmmo() {
+        return ammo;
     }
 
     public Engine getEngine() {
