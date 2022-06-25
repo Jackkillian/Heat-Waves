@@ -84,7 +84,8 @@ public class MapRenderSystem extends EntitySystem {
     }
 
     public void update(float deltaTime) {
-        world.step(1/45f, 6, 2);
+
+
 
         cloudOffset += deltaTime * 80f;
         if (cloudOffset > Gdx.graphics.getWidth()) {
@@ -100,7 +101,6 @@ public class MapRenderSystem extends EntitySystem {
         renderer.setView(camera);
         renderer.render();
 
-        worldManager.update(deltaTime);
 
 //        debugRenderer.render(world, camera.combined);
     }

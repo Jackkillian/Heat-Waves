@@ -197,7 +197,6 @@ public class Player {
             }
             idleSprite.draw(batch);
         }
-        System.out.println(body.getPosition().x + "/" + body.getPosition().y);
 
         //draw player was hit font
         if (isHit) {
@@ -285,7 +284,7 @@ public class Player {
     }
 
     public void respawn() {
-        shouldRespawn = true;
+//        shouldRespawn = true;
     }
 
     public void hit(int damage, Color color) {

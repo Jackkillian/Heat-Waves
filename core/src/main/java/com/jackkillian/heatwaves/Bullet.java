@@ -141,9 +141,8 @@ public class Bullet implements Pool.Poolable {
         bulletLifetime += delta;
 
         position.add(velocity.cpy().scl(delta * 80f));
-        System.out.println("start call");
         body.applyForce(velocity.cpy().scl(delta * 80f), body.getWorldCenter(), true);
-        System.out.println("end call");
+
 //        if (position.x != 0 && position.y != 0) body.setTransform(position.x, position.y, 0);
         sprite.setPosition(body.getPosition().x - sprite.getWidth() / 2, body.getPosition().y - sprite.getHeight() / 2);
 

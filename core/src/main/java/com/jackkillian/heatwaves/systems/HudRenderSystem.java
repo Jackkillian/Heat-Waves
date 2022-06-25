@@ -103,6 +103,7 @@ public class HudRenderSystem extends EntitySystem {
     }
 
     public void update(float deltaTime) {
+        System.out.println("debug hud start");
         if (gameData.getEventHandler().isEventActive()) {
             required.setText("Kills Required: " + gameData.getEventHandler().getRequiredKills());
         } else {
@@ -114,6 +115,7 @@ public class HudRenderSystem extends EntitySystem {
         shieldLabel.setText(GameData.getInstance().getPlayerShield());
         stage.act(deltaTime);
         stage.draw();
+        System.out.println("debug hud end");
     }
 
     public void setActiveItem(Texture texture) {
