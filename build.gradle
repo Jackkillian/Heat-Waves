@@ -11,6 +11,7 @@ buildscript {
 	}
 	dependencies {
 		classpath "org.wisepersist:gwt-gradle-plugin:$gwtPluginVersion"
+		classpath group: 'org.mini2Dx', name: 'parcl', version: '1.8.0'
 
 		// This follows advice from https://blog.gradle.org/log4j-vulnerability
 		constraints {

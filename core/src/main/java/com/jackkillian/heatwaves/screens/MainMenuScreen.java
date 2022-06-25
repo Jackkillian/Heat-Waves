@@ -48,19 +48,19 @@ public class MainMenuScreen implements Screen {
         logo.setAlign(Align.center);
         table.add(logo).padBottom(50).row();
 
-        Label instructions = new Label("""
-                [GOLD]Objective[WHITE]
+        Label instructions = new Label(
+                "[GOLD]Objective[WHITE]\n\n" +
 
-                [SKY]Get as many points as you can.[WHITE]
-                Shooting henchman [LIME]gives[WHITE] you points,
-                and shooting innocent villagers [SCARLET]loses[WHITE] you points.
+                "[SKY]Get as many points as you can.[WHITE]\n" +
+                "Shooting henchman [LIME]gives[WHITE] you points,\n" +
+                "and shooting innocent villagers [SCARLET]loses[WHITE] you points.\n\n\n" +
 
 
-                [GOLD]Controls[WHITE]
+                "[GOLD]Controls[WHITE]\n\n" +
 
-                [CYAN]Move[WHITE] - [PINK]WAD
-                [CYAN]Aim[WHITE] - [PINK]Move cursor
-                [CYAN]Use item[WHITE] - [PINK]Click""", game.skin);
+                "[CYAN]Move[WHITE] - [PINK]WAD\n" +
+                "[CYAN]Aim[WHITE] - [PINK]Move cursor\n" +
+                "[CYAN]Use item[WHITE] - [PINK]Click", game.skin);
         instructions.setAlignment(Align.center);
         table.add(instructions).pad(10).row();
 
