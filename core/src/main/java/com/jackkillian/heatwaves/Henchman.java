@@ -47,9 +47,6 @@ public class Henchman extends NPC {
 
         // use trig again :D
         float angle = (float) Math.atan2(legs.y, legs.x);
-        gun.setRotation(angle * MathUtils.radiansToDegrees);
-        gun.setPosition(body.getPosition().x - gun.getWidth() / 2 + (sprite.isFlipX() ? -7 : 7), body.getPosition().y - gun.getHeight() / 2);
-        if (health > 0) gun.draw(gameData.getBatch());
 
         // AI shoot player if in range
         float distance = legs.len();
@@ -74,6 +71,9 @@ public class Henchman extends NPC {
         }
 
         drawSprite();
+        gun.setRotation(angle * MathUtils.radiansToDegrees);
+        gun.setPosition(body.getPosition().x - gun.getWidth() / 2 + (sprite.isFlipX() ? -7 : 7), body.getPosition().y - gun.getHeight() / 2);
+        if (health > 0) gun.draw(gameData.getBatch());
 
         if (distance < 100f && health > 0) {
             if (cooldownTimer > 0.6f) {
