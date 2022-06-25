@@ -39,6 +39,9 @@ public class GameScreen implements Screen, InputProcessor {
     private Sprite grapplingHookRope;
     private EventHandler eventHandler;
 
+    private float shootingCooldown = 1f;
+    private boolean canShoot = false;
+
     public GameScreen() {
     }
 
@@ -250,6 +253,14 @@ public class GameScreen implements Screen, InputProcessor {
 
     @Override
     public void render(float delta) {
+        shootingCooldown -= delta;
+        //shooting cooldown
+        if (shootingCooldown <= 0) {
+            shootingCooldown = 1f;
+            canShoot = true;
+        } else if (shootingCooldown < 0.5f) {
+            canShoot = false;
+        }
         System.out.println("debug world start");
         GameData.getInstance().getWorld().step(delta * 1.2f, 6, 2);
         System.out.println("debug world end");
@@ -371,6 +382,7 @@ public class GameScreen implements Screen, InputProcessor {
 
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+        if (canShoot) {return false;}
         if (gameData.getHeldItemType() == null) return false;
 
         Vector3 worldCoordinates = new Vector3(screenX, screenY, 0);

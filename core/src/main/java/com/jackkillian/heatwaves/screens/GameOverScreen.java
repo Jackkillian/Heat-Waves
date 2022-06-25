@@ -34,7 +34,7 @@ public class GameOverScreen implements Screen {
         stage.addActor(table);
         Gdx.input.setInputProcessor(stage);
 
-        Label label = new Label("Game Over", GameData.getInstance().getSkin());
+        Label label = new Label("Game Over, Couldn't beat the heat?", GameData.getInstance().getSkin());
         label.setFontScale(2f);
         label.setAlignment(Align.center);
         table.add(label).center().pad(10f).row();

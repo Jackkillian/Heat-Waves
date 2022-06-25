@@ -90,6 +90,9 @@ public class EventHandler {
             npcMax = 8;
 
             eventIsActive = true;
+            r = 227;
+            g = 169;
+            b = 91;
 
 
             if (EventType.HEAT_WAVES.end) {

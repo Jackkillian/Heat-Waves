@@ -88,13 +88,7 @@ public class Bullet implements Pool.Poolable {
         alive = true;
         body.setUserData(this);
 
-        if (this.origin == Origin.NPC) {
-            sprite.setTexture(bullet);
-        } else if (GameData.getInstance().getHeldItemType() == Item.ItemType.SHOTGUN) {
-            sprite.setTexture(shotgunShell);
-        } else if (GameData.getInstance().getHeldItemType() == Item.ItemType.HANDGUN) {
-            sprite.setTexture(bullet);
-        }
+        sprite.setTexture(bullet);
     }
 
     public void init(float posX, float posY, float velX, float velY, Origin origin) {
