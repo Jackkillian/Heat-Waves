@@ -183,6 +183,7 @@ public class GameScreen implements Screen, InputProcessor {
                             gameData.healHealth(100);
                             gameData.healShield(100);
                             gameData.getEventHandler().playerOnDeath();
+                            gameData.setGameOver(true);
                             gameData.getPlayer().respawn();
                         }
                     }
@@ -224,6 +225,7 @@ public class GameScreen implements Screen, InputProcessor {
         gameData.setViewport(viewport);
 
         engine = new Engine();
+        gameData.setEngine(engine);
 
         gameData.healHealth(100);
         gameData.healShield(100);
@@ -340,10 +342,14 @@ public class GameScreen implements Screen, InputProcessor {
     @Override
     public void dispose() {
         player.dispose();
-        GameData.getInstance().getAssets().getManager().dispose();
-        GameData.getInstance().getWorld().dispose();
-        GameData.getInstance().getBatch().dispose();
-        GameData.getInstance().getMapRenderSystem().dispose();
+        music.dispose();
+        shootSound.dispose();
+        batch.dispose();
+        gameData.getWorld().dispose();
+        gameData.getEngine().removeAllEntities();
+        gameData.getEngine().removeAllSystems();
+        gameData.getMapRenderSystem().dispose();
+//        GameData.getInstance().getAssets().getManager().dispose();
     }
 
     @Override

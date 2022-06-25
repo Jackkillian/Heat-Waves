@@ -31,19 +31,17 @@ public class WorldManager {
     }
 
     public void update(float delta) {
-        //spawn new NPCs
+        // spawn new NPCs
         if (activeNPCs.size < GameData.getInstance().getEventHandler().getNpcMax()) {
             //world only goes to 1.5k x axis. Box2d might crash because the npc is infinitely falling
             int x = MathUtils.random(600, 1450); // generate random number between 600 and 1450
             int y = 900; // any lower and the npcs might spawn inside buildings and cause crashes probably
 
-            activeNPCs.add(new Villager(x, y));
-            activeNPCs.add(new Henchman(x, y));
-//            if (Math.random() < 0.7) {
-//                activeNPCs.add(new Villager(x, y));
-//            } else {
-//                activeNPCs.add(new Henchman(x, y));
-//            }
+            if (Math.random() < 0.4) {
+                activeNPCs.add(new Villager(x, y));
+            } else {
+                activeNPCs.add(new Henchman(x, y));
+            }
         }
 
         // if you want to free dead bullets, returning them to the pool:

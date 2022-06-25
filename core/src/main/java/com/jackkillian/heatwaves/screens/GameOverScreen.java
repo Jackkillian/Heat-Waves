@@ -54,6 +54,7 @@ public class GameOverScreen implements Screen {
         });
         table.add(button).center().width(200).pad(10f).row();
     }
+
     //TODO: make prettier
     @Override
     public void render(float delta) {

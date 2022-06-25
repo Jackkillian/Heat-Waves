@@ -1,5 +1,6 @@
 package com.jackkillian.heatwaves;
 
+import com.badlogic.ashley.core.Engine;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
@@ -43,6 +44,8 @@ public class GameData {
     private int health;
     private int shield;
     private int score;
+    private boolean gameOver = false;
+    private Engine engine;
 
     public void setEventHandler(EventHandler eventHandler) {
         this.eventHandler = eventHandler;
@@ -236,6 +239,24 @@ public class GameData {
     }
 
     public void reset() {
+        engine.removeAllSystems();
+        engine.removeAllEntities();
         instance = null;
+    }
+
+    public boolean isGameOver() {
+        return gameOver;
+    }
+
+    public void setGameOver(boolean gameOver) {
+        this.gameOver = gameOver;
+    }
+
+    public void setEngine(Engine engine) {
+        this.engine = engine;
+    }
+
+    public Engine getEngine() {
+        return engine;
     }
 }
