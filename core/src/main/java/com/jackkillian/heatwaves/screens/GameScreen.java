@@ -87,15 +87,15 @@ public class GameScreen implements Screen, InputProcessor {
 
     @Override
     public void render(float delta) {
-        batch.setProjectionMatrix(camera.combined);
         Gdx.gl.glClearColor(eventHandler.getR() / 255f, eventHandler.getG() / 255f, eventHandler.getB() / 255f, 0.3f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
+        batch.setProjectionMatrix(camera.combined);
         gameData.getEventHandler().update(delta);
         engine.update(delta);
         camera.position.lerp(new Vector3(player.getPosition().x, player.getPosition().y, 0), 0.1f);
 
-        //hey you're clogging up the main render method
+        // hey you're clogging up the main render method
         if (gameData.isGrapplingShot()) {
             // draw a line from the player to the grappling hook
             Vector2 playerPos = player.getItemPosition();
