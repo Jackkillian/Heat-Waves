@@ -20,62 +20,53 @@ import com.jackkillian.heatwaves.GameData;
 
 
 public class HudRenderSystem extends EntitySystem {
-    private Stage stage;
-    private Table table;
-    private OrthographicCamera camera;
-    private Assets assets;
+    private final Stage stage;
+    private final Assets assets;
 
-    private Image health;
-    private Image shield;
-
-
-    private Label healthLabel;
-    private Label shieldLabel;
-
-    private Label heatWavesTimer;
-    private Label required;
-
-
-    private Image hotbar;
-    private Image activeItem;
-
-    private GameData gameData;
+    private final Label healthLabel;
+    private final Label shieldLabel;
+    private final Label scoreLabel;
+    private final Label heatWavesTimer;
+    private final Label required;
+    private final Image activeItem;
+    private final GameData gameData;
 
     public HudRenderSystem(GameData gameData) {
         this.gameData = gameData;
-        camera = new OrthographicCamera();
         this.assets = gameData.getAssets();
         stage = new Stage();
-        table = new Table();
+        Table table = new Table();
         table.setFillParent(true);
         stage.addActor(table);
 
         table.top().left();
 
-        health = new Image(assets.getManager().get("hud/health.png", Texture.class));
+        Image health = new Image(assets.getManager().get("hud/health.png", Texture.class));
         health.setScale(2.5f);
 
-
-        shield = new Image(assets.getManager().get("hud/shield.png", Texture.class));
+        Image shield = new Image(assets.getManager().get("hud/shield.png", Texture.class));
         shield.setScale(2.5f);
 
-        hotbar = new Image(assets.getManager().get("hud/inventory.png", Texture.class));
+        Image hotbar = new Image(assets.getManager().get("hud/inventory.png", Texture.class));
         hotbar.setScale(5f);
 
         activeItem = new Image();
         activeItem.setScale(5f);
 
+        scoreLabel = new Label("Score: 0", gameData.getSkin());
+        scoreLabel.setFontScale(2f);
 
         healthLabel = new Label("100", gameData.getSkin());
-        shieldLabel = new Label("100", gameData.getSkin());
-        heatWavesTimer = new Label("", gameData.getSkin());
-        required = new Label("", gameData.getSkin());
-        required.setFontScale(2f);
-        heatWavesTimer.setFontScale(2.5f);
-
         healthLabel.setFontScale(2f);
+
+        shieldLabel = new Label("100", gameData.getSkin());
         shieldLabel.setFontScale(2f);
 
+        heatWavesTimer = new Label("", gameData.getSkin());
+        heatWavesTimer.setFontScale(2.5f);
+
+        required = new Label("", gameData.getSkin());
+        required.setFontScale(2f);
 
         table.add(health).pad(30f);
         table.add(healthLabel).pad(10f);
@@ -91,9 +82,9 @@ public class HudRenderSystem extends EntitySystem {
         Table tableRight = new Table();
         tableRight.setFillParent(true);
         tableRight.top().right();
-        tableRight.add(heatWavesTimer).pad(10f);
-        tableRight.row();
-        tableRight.add(required);
+        tableRight.add(heatWavesTimer).pad(10f).row();
+        tableRight.add(required).row();
+        tableRight.add(scoreLabel);
         stage.addActor(tableRight);
 
         Table bottomRight = new Table();
@@ -113,6 +104,7 @@ public class HudRenderSystem extends EntitySystem {
         heatWavesTimer.setText(gameData.getEventHandler().getEventString() + (int) gameData.getEventHandler().getCountdown());
         healthLabel.setText(GameData.getInstance().getPlayerHealth());
         shieldLabel.setText(GameData.getInstance().getPlayerShield());
+        scoreLabel.setText("Score: " + GameData.getInstance().getScore());
         stage.act(deltaTime);
         stage.draw();
         System.out.println("debug hud end");

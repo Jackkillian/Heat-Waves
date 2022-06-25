@@ -45,21 +45,6 @@ public class NPC {
         fdef.filter.maskBits = Constants.WALL_BIT | Constants.BULLET_BIT;
         body.createFixture(fdef);
         body.setUserData(this);
-
-//        sprite = new Sprite(getTexture(type));
-//        if (type == NPCType.MCMUFFIN_HENCHMAN) {
-//            gun = new Sprite(Item.getTexture(Item.ItemType.SHOTGUN, true));
-//            gun.setPosition(body.getPosition().x - gun.getWidth() / 2, body.getPosition().y - gun.getHeight() / 2);
-//        } else {
-//            gun = new Sprite(Item.getTexture(Item.ItemType.HANDGUN, true));
-//            gun.setPosition(body.getPosition().x - gun.getWidth() / 2, body.getPosition().y - gun.getHeight() / 2);
-//        }
-//
-//        if (type == NPCType.VILLAGER) {
-//            death = new TextureRegion(new Texture("player/villagerDead.png"));
-//        } else {
-//            death =
-//        }
     }
 
     public void update(float delta) {
@@ -91,9 +76,8 @@ public class NPC {
     }
 
     public void destroy() {
-//        death.getTexture().dispose();
-//        sprite.getTexture().dispose();
-//        gun.getTexture().dispose();
+        deathTexture.getTexture().dispose();
+        sprite.getTexture().dispose();
         body.setUserData(null);
         GameData.getInstance().getItemSystem().removeBody(body);
     }

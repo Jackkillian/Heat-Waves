@@ -86,4 +86,16 @@ public class Henchman extends NPC {
 
         super.update(delta);
     }
+
+    @Override
+    public void hit(int damage) {
+        super.hit(damage);
+        GameData.getInstance().setScore(GameData.getInstance().getScore() + 10);
+    }
+
+    @Override
+    public void destroy() {
+        super.destroy();
+        gun.getTexture().dispose();
+    }
 }

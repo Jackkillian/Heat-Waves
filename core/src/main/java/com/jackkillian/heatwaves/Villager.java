@@ -12,8 +12,14 @@ public class Villager extends NPC {
 
     @Override
     public void update(float delta) {
-        if (alive) body.setLinearVelocity(new Vector2(MathUtils.random(-100, 100), body.getLinearVelocity().y));
+        if (health > 0) body.setLinearVelocity(new Vector2(MathUtils.random(-100, 100), body.getLinearVelocity().y));
         drawSprite();
         super.update(delta);
+    }
+
+    @Override
+    public void hit(int damage) {
+        super.hit(damage);
+        GameData.getInstance().setScore(GameData.getInstance().getScore() - 10);
     }
 }
