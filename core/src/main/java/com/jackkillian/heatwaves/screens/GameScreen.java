@@ -204,8 +204,6 @@ public class GameScreen implements Screen, InputProcessor {
 
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-        gameData.getWorldManager().createNPC(NPC.NPCType.MCMUFFIN_HENCHMAN, Constants.SPAWN_X, Constants.SPAWN_Y);
-
         if (gameData.getHeldItemType() == null) return false;
 
         Vector3 worldCoordinates = new Vector3(screenX, screenY, 0);

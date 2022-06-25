@@ -1,6 +1,9 @@
 package com.jackkillian.heatwaves;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -31,8 +34,7 @@ public class Player {
     private final Sprite itemSprite;
 
 
-    //mouse vectors set here to improve performance
-    private final Vector2 direction = new Vector2();
+    // Mouse vectors set here to improve performance
     private final Vector3 worldCoordinates = new Vector3();
     private final Vector2 centerPosition = new Vector2();
     private final Vector2 mouseLoc = new Vector2();
@@ -53,7 +55,7 @@ public class Player {
     private float tempTimer;
     private int damage;
     private float offset = 20f;
-    private Color color = Color.BLUE;
+    private Sound jumpSound;
 
 
     public Player(WorldManager worldManager, SpriteBatch batch) {
@@ -108,7 +110,7 @@ public class Player {
         runningAnimation = new Animation<>(0.1f, runFrames);
         runningAnimation.setPlayMode(Animation.PlayMode.LOOP);
 
-
+        jumpSound = Gdx.audio.newSound(Gdx.files.internal("jump.wav"));
     }
 
     public void update(float delta) {
@@ -164,7 +166,6 @@ public class Player {
             itemSprite.setPosition((itemBody.getPosition().x - itemSprite.getWidth() / 2), itemBody.getPosition().y - itemSprite.getHeight() / 2);
             itemSprite.setRotation(angle);
             itemSprite.setFlip(false, isFlipped);
-
             itemSprite.draw(batch);
         }
 
@@ -180,7 +181,7 @@ public class Player {
             idleSprite.setRegion(currentFrame);
             idleSprite.draw(batch);
         } else if (isJumping || isFalling) {
-            jumpSprite.setPosition(body.getPosition().x - idleSprite.getWidth() / 2, body.getPosition().y - idleSprite.getHeight() / 2 + 1);
+            setPositionToBody(jumpSprite);
             if (isFlipped && !jumpSprite.isFlipX()) {
                 jumpSprite.flip(true, false);
             } else {
@@ -189,7 +190,7 @@ public class Player {
             jumpSprite.draw(batch);
         } else {
             idleSprite.setRegion(idle);
-            idleSprite.setPosition(body.getPosition().x - idleSprite.getWidth() / 2, body.getPosition().y - idleSprite.getHeight() / 2 + 1);
+            setPositionToBody(idleSprite);
             if (isFlipped && !idleSprite.isFlipX()) {
                 idleSprite.flip(true, false);
             } else {
@@ -228,6 +229,10 @@ public class Player {
         }
     }
 
+    private void setPositionToBody(Sprite sprite) {
+        sprite.setPosition(body.getPosition().x - idleSprite.getWidth() / 2, body.getPosition().y - idleSprite.getHeight() / 2 + 1);
+    }
+
     public void onKeyDown(int key) {
         if (key == Input.Keys.A) {
             keyLeftPressed = true;
@@ -237,6 +242,7 @@ public class Player {
         }
         if (key == Input.Keys.W) {
             keyUpPressed = true;
+            jumpSound.play();
         }
         if (key == Input.Keys.S) {
             keyDownPressed = true;
@@ -253,7 +259,7 @@ public class Player {
         if (key == Input.Keys.W) {
             keyUpPressed = false;
         }
-        if (key == Input.Keys.W) {
+        if (key == Input.Keys.S) {
             keyDownPressed = false;
         }
     }
@@ -284,7 +290,7 @@ public class Player {
     }
 
     public void respawn() {
-//        shouldRespawn = true;
+        shouldRespawn = true;
     }
 
     public void hit(int damage, Color color) {

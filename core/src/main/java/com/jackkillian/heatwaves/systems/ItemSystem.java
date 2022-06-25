@@ -2,6 +2,7 @@ package com.jackkillian.heatwaves.systems;
 
 import com.badlogic.ashley.core.EntitySystem;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.jackkillian.heatwaves.GameData;
 import com.jackkillian.heatwaves.Item;
@@ -28,11 +29,11 @@ public class ItemSystem extends EntitySystem {
         if (items.size() < 15) {
             // generate random number between 100 and 1450
             //don't go over 1.5k
-            int x = (int) (Math.random() * (1450 - 100) + 100);
+            int x = MathUtils.random(100, 1450);
             int y = 900;
             // choose random item from enum Item.ItemType
             Item.ItemType itemType = Item.ItemType.values()[(int) (Math.random() * Item.ItemType.values().length)];
-            if (GameData.getInstance().getWorld().isLocked() == false) {
+            if (!GameData.getInstance().getWorld().isLocked()) {
                 Item item = new Item(itemType, x, y);
                 items.add(item);
 
