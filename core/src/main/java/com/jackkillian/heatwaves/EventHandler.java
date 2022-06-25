@@ -52,7 +52,6 @@ public class EventHandler {
 
         if (countdown <= 0 && activeEvent == EventType.HEAT_SHIMMER) {
             eventString = "Heat Shimmer ends in: ";
-            kills = 0;
             r = 227;
             g = 169;
             b = 91;
@@ -78,6 +77,7 @@ public class EventHandler {
                 eventIsActive = false;
                 return;
             }
+            kills = 0;
             countdown = EventType.HEAT_SHIMMER.duration;
             EventType.HEAT_SHIMMER.end = true;
 
@@ -88,7 +88,7 @@ public class EventHandler {
             npcMax = 8;
 
             eventIsActive = true;
-            kills = 0;
+
 
             if (EventType.HEAT_WAVES.end) {
                 if (kills < EventType.HEAT_WAVES.kills) {
@@ -107,13 +107,13 @@ public class EventHandler {
                 eventIsActive = false;
                 return;
             }
+            kills = 0;
             countdown = EventType.HEAT_WAVES.duration;
             EventType.HEAT_WAVES.end = true;
         }
         if (countdown <= 0 && activeEvent == EventType.HEAT_BLAZE) {
             eventString = "Heat Blaze ends in: ";
             npcMax = 15;
-            kills = 0;
             r = 227;
             g = 169;
             b = 91;
@@ -125,6 +125,7 @@ public class EventHandler {
                     GameData.getInstance().getGame().setScreen(new GameOverScreen(false));
                 }
             }
+            kills = 0;
             countdown = EventType.HEAT_BLAZE.duration;
             EventType.HEAT_BLAZE.end = true;
         }
