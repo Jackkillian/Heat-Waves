@@ -54,6 +54,7 @@ public class HudRenderSystem extends EntitySystem {
         activeItem.setScale(5f);
 
         scoreLabel = new Label("Score: 0", gameData.getSkin());
+        scoreLabel.setColor(Color.BLACK);
         scoreLabel.setFontScale(2f);
 
         healthLabel = new Label("100", gameData.getSkin());
@@ -63,9 +64,11 @@ public class HudRenderSystem extends EntitySystem {
         shieldLabel.setFontScale(2f);
 
         heatWavesTimer = new Label("", gameData.getSkin());
+        heatWavesTimer.setColor(Color.BLACK);
         heatWavesTimer.setFontScale(2.5f);
 
         required = new Label("", gameData.getSkin());
+        required.setColor(Color.BLACK);
         required.setFontScale(2f);
 
         table.add(health).pad(30f);
@@ -94,7 +97,6 @@ public class HudRenderSystem extends EntitySystem {
     }
 
     public void update(float deltaTime) {
-        System.out.println("debug hud start");
         if (gameData.getEventHandler().isEventActive()) {
             required.setText("Kills Required: " + gameData.getEventHandler().getRequiredKills());
         } else {
