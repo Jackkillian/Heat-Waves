@@ -16,7 +16,7 @@ public class HeatWaves extends Game {
     @Override
     public void create() {
         skin = new Skin(Gdx.files.internal("Pixeld16/Pixeld16.json"));
-//		skin.addRegions(new TextureAtlas(Gdx.files.internal("Pixeld16/Pixeld16.atlas")));
+        skin.getFont("profont").getData().markupEnabled = true;
 
         setScreen(new LoadingScreen(this));
     }

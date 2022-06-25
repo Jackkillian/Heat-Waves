@@ -13,6 +13,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
+import com.jackkillian.heatwaves.GameData;
 import com.jackkillian.heatwaves.HeatWaves;
 
 public class CreditsScreen extends InputAdapter implements Screen {
@@ -41,9 +42,9 @@ public class CreditsScreen extends InputAdapter implements Screen {
         Label label = new Label("Created by", game.skin);
         label.scaleBy(2);
         label.setAlignment(Align.center);
-        table.add(label).pad(10).row();
+        table.add(label).pad(4).row();
 
-        Label dave = new Label("DaveH355 and", game.skin);
+        Label dave = new Label("[ROYAL]DaveH355 [WHITE]and", game.skin);
         dave.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
@@ -51,9 +52,9 @@ public class CreditsScreen extends InputAdapter implements Screen {
             }
         });
         dave.setAlignment(Align.center);
-        table.add(dave).pad(10).row();
+        table.add(dave).pad(4).row();
 
-        Label jackkillian = new Label("Jackkillian", game.skin);
+        Label jackkillian = new Label("[ROYAL]Jackkillian", game.skin);
         jackkillian.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
@@ -61,7 +62,7 @@ public class CreditsScreen extends InputAdapter implements Screen {
             }
         });
         jackkillian.setAlignment(Align.center);
-        table.add(jackkillian).padTop(10).padBottom(25).row();
+        table.add(jackkillian).padTop(4).padBottom(25).row();
 
         TextButton backButton = new TextButton("Back", game.skin);
         backButton.addListener(new ClickListener() {
