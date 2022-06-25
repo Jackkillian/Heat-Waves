@@ -105,7 +105,7 @@ public class GameScreen implements Screen, InputProcessor {
 
         camera.position.lerp(new Vector3(player.getPosition().x, player.getPosition().y, 0), 0.1f);
 
-        //hey you're clogging up the main render method
+        // hey you're clogging up the main render method
         if (gameData.isGrapplingShot()) {
             // draw a line from the player to the grappling hook
             Vector2 playerPos = player.getItemPosition();

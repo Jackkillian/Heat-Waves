@@ -20,9 +20,9 @@ public class Bullet implements Pool.Poolable {
     public float bulletLifetime;
     public Origin origin;
 
-    private TextureRegion shotgunShell = new TextureRegion(new Texture("shotgunShell.png"));
-    private TextureRegion bullet = new TextureRegion(new Texture("bullet.png"));
-    private TextureRegion grapple = new TextureRegion(new Texture("items/grapplingHook.png"));
+    private Texture shotgunShell = new Texture("shotgunShell.png");
+    private Texture bullet = new Texture("bullet.png");
+    private Texture grapple = new Texture("items/grapplingHook.png");
 
     public enum Origin {
         PLAYER,
@@ -87,6 +87,14 @@ public class Bullet implements Pool.Poolable {
         body.setTransform(posX, posY, 0);
         alive = true;
         body.setUserData(this);
+
+        if (this.origin == Origin.NPC) {
+            sprite.setTexture(bullet);
+        } else if (GameData.getInstance().getHeldItemType() == Item.ItemType.SHOTGUN) {
+            sprite.setTexture(shotgunShell);
+        } else if (GameData.getInstance().getHeldItemType() == Item.ItemType.HANDGUN) {
+            sprite.setTexture(bullet);
+        }
     }
 
     public void init(float posX, float posY, float velX, float velY, Origin origin) {
@@ -102,7 +110,7 @@ public class Bullet implements Pool.Poolable {
         grapplingHook = isGrapplingHook;
         if (grapplingHook) {
             body.setUserData("grapplingHook");
-            sprite.setTexture(new Texture("items/grapplingHook.png"));
+            sprite.setTexture(grapple);
         }
     }
 
@@ -115,31 +123,21 @@ public class Bullet implements Pool.Poolable {
     public void reset() {
         float randomX = MathUtils.random(500, 800);
         float randomY = MathUtils.random(500, 800);
-        //multiple bodies at same position may cause slow performance
-        position.set(randomX,randomY );
+
+        // multiple bodies at same position may cause slow performance
+        position.set(randomX, randomY);
         alive = false;
         sprite.setRegion(bullet);
         grapplingHook = false;
         bulletLifetime = 0;
         body.setTransform(position, 0);
         body.setLinearVelocity(0, 0);
-
     }
 
     /**
      * Method called each frame, which updates the bullet.
      */
     public void update(float delta) {
-        if (this.origin == Origin.NPC) {
-            sprite.setRegion(bullet);
-        }
-        else if (GameData.getInstance().getHeldItemType() == Item.ItemType.SHOTGUN) {
-            sprite.setRegion(shotgunShell);
-        } else if (GameData.getInstance().getHeldItemType() == Item.ItemType.HANDGUN) {
-            sprite.setRegion(bullet);
-        }
-
-
         bulletLifetime += delta;
 
         position.add(velocity.cpy().scl(delta * 80f));
