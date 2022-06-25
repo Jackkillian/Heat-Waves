@@ -34,7 +34,7 @@ public class GameScreen implements Screen, InputProcessor {
     private WorldManager world;
     private Player player;
     private Sound shootSound;
-    private Music music;
+    public Music music;
     public static Sound hitSound = Gdx.audio.newSound(Gdx.files.internal("hit.wav"));
     private Sprite grapplingHookRope;
     private EventHandler eventHandler;

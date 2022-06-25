@@ -14,6 +14,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
 import com.jackkillian.heatwaves.Constants;
 import com.jackkillian.heatwaves.GameData;
+import com.jackkillian.heatwaves.HeatWaves;
 
 import javax.swing.text.TabableView;
 
@@ -49,7 +50,7 @@ public class GameOverScreen implements Screen {
                 GameData.getInstance().reset();
 
                 Game game = (Game) Gdx.app.getApplicationListener();
-                game.setScreen(new GameScreen());
+                game.setScreen(new LoadingScreen((HeatWaves) game));
             }
         });
         table.add(button).center().width(200).pad(10f).row();

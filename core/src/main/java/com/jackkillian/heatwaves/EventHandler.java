@@ -2,6 +2,7 @@ package com.jackkillian.heatwaves;
 
 
 import com.jackkillian.heatwaves.screens.GameOverScreen;
+import com.jackkillian.heatwaves.screens.GameScreen;
 
 public class EventHandler {
     private float countdown = 30;
@@ -63,6 +64,7 @@ public class EventHandler {
             if (EventType.HEAT_SHIMMER.end) {
 
                 if (kills < EventType.HEAT_SHIMMER.kills) {
+                    ((GameScreen) GameData.getInstance().getGame().getScreen()).music.stop();
                     GameData.getInstance().getGame().setScreen(new GameOverScreen(false));
                 }
 
@@ -92,6 +94,7 @@ public class EventHandler {
 
             if (EventType.HEAT_WAVES.end) {
                 if (kills < EventType.HEAT_WAVES.kills) {
+                    ((GameScreen) GameData.getInstance().getGame().getScreen()).music.stop();
                     GameData.getInstance().getGame().setScreen(new GameOverScreen(false));
                 }
                 activeEvent = EventType.HEAT_BLAZE;
@@ -122,6 +125,7 @@ public class EventHandler {
             if (EventType.HEAT_BLAZE.end) {
                 //game over either way
                 if (kills < EventType.HEAT_BLAZE.kills) {
+                    ((GameScreen) GameData.getInstance().getGame().getScreen()).music.stop();
                     GameData.getInstance().getGame().setScreen(new GameOverScreen(false));
                 }
             }
@@ -135,6 +139,7 @@ public class EventHandler {
 
     public void playerOnDeath() {
         if (activeEvent == EventType.HEAT_BLAZE && activeEvent.end) {
+            ((GameScreen) GameData.getInstance().getGame().getScreen()).music.stop();
             GameData.getInstance().getGame().setScreen(new GameOverScreen(false));
         }
     }
