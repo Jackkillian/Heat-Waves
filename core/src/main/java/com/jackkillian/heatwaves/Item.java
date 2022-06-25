@@ -126,6 +126,7 @@ public class Item {
         countDown -= delta;
         if (countDown <= 0) {
             GameData.getInstance().getItemSystem().removeItem(this, body);
+            countDown = 15f;
         }
     }
 }

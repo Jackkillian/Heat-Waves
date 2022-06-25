@@ -5,13 +5,14 @@ import com.jackkillian.heatwaves.screens.GameOverScreen;
 import com.jackkillian.heatwaves.screens.GameScreen;
 
 public class EventHandler {
-    private float countdown = 30;
+    private float countdown;
 
-    private int r = 135;
-    private int g = 206;
-    private int b = 235;
+    private int r;
+    private int g;
+    private int b;
 
-    private int npcMax = 5;
+    private int npcMax;
+    private int npcBoost;
 
     private boolean eventIsActive = false;
     private int kills;
@@ -34,9 +35,21 @@ public class EventHandler {
     }
 
 
-    private String eventString = "Heat Shimmer in: ";
+    private String eventString;
 
     private static EventType activeEvent = EventHandler.EventType.HEAT_SHIMMER;
+
+    public EventHandler() {
+        npcBoost = 0;
+        npcMax = 5;
+        kills = 0;
+        activeEvent = EventHandler.EventType.HEAT_SHIMMER;
+        countdown = 30;
+        eventString = "Heat Shimmer in: ";
+        r = 135;
+        g = 206;
+        b = 235;
+    }
 
     public float getCountdown() {
         return countdown;
@@ -87,7 +100,7 @@ public class EventHandler {
         }
         if (countdown <= 0 && activeEvent == EventType.HEAT_WAVES) {
             eventString = "Heat Waves end in: ";
-            npcMax = 8;
+            npcMax = 9;
 
             eventIsActive = true;
             r = 227;
@@ -170,9 +183,15 @@ public class EventHandler {
         if (kills >= activeEvent.kills) return;
         kills++;
     }
+    public void addNPCMax() {
+        npcBoost++;
+    }
+    public void subtractNPCMax() {
+        npcBoost--;
+    }
 
     public int getNpcMax() {
-        return npcMax;
+        return npcMax + npcBoost;
     }
 
 }
