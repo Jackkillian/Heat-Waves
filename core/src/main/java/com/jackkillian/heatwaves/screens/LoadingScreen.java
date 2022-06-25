@@ -51,7 +51,7 @@ public class LoadingScreen implements Screen {
 
         WorldManager worldManager = new WorldManager();
         worldManager.setWorld(world);
-        GameData.getInstance().setWorldManager(worldManager);
+        gameData.setWorldManager(worldManager);
 
         //this is fine - dave
         world.setContactListener(new ContactListner() {
@@ -63,7 +63,8 @@ public class LoadingScreen implements Screen {
                 Body playerBody;
                 Body otherBody;
                 if (contact.getFixtureA().getBody() == null || contact.getFixtureB().getBody() == null) return;
-                if (contact.getFixtureA().getBody().getUserData() == null || contact.getFixtureB().getBody().getUserData() == null) return;
+                if (contact.getFixtureA().getBody().getUserData() == null || contact.getFixtureB().getBody().getUserData() == null)
+                    return;
 
 
                 Body bulletBody;
@@ -89,7 +90,7 @@ public class LoadingScreen implements Screen {
                 if (contact.getFixtureA().getBody().getUserData() instanceof Player) {
                     playerBody = contact.getFixtureA().getBody();
                     otherBody = contact.getFixtureB().getBody();
-                } else if (contact.getFixtureB().getBody().getUserData() instanceof Player){
+                } else if (contact.getFixtureB().getBody().getUserData() instanceof Player) {
                     playerBody = contact.getFixtureB().getBody();
                     otherBody = contact.getFixtureA().getBody();
                 } else {
@@ -102,7 +103,7 @@ public class LoadingScreen implements Screen {
                     Body npcBody;
                     Body otherBody2;
                     //only npcs expected down here lol
-                    if (contact.getFixtureA().getBody().getUserData() instanceof NPC ) {
+                    if (contact.getFixtureA().getBody().getUserData() instanceof NPC) {
                         npcBody = contact.getFixtureA().getBody();
                         otherBody2 = contact.getFixtureB().getBody();
                     } else if (contact.getFixtureB().getBody().getUserData() instanceof NPC) {
@@ -135,11 +136,15 @@ public class LoadingScreen implements Screen {
 
                 if (otherBody.getUserData() instanceof Item) {
                     Item item = (Item) otherBody.getUserData();
-                    GameData.getInstance().getHudRenderSystem().setActiveItem(item.getSprite().getTexture());
-                    GameData.getInstance().setHeldItemType(item.getType());
-                    otherBody.setUserData(null);
-                    GameData.getInstance().getItemSystem().removeItem(item, otherBody);
 
+                    if (item.getType() == Item.ItemType.MEDKIT) {
+                        gameData.healHealth(25);
+                    } else {
+                        gameData.getHudRenderSystem().setActiveItem(item.getSprite().getTexture());
+                        gameData.setHeldItemType(item.getType());
+                    }
+                    otherBody.setUserData(null);
+                    gameData.getItemSystem().removeItem(item, otherBody);
                 }
 
 
@@ -160,7 +165,7 @@ public class LoadingScreen implements Screen {
                             gameData.damageHealth(damage);
                         }
                         GameScreen.hitSound.play();
-                        gameData.getPlayer().hit(damage, (isBlueHit? Color.CYAN: Color.GOLD));
+                        gameData.getPlayer().hit(damage, (isBlueHit ? Color.CYAN : Color.GOLD));
                         if (gameData.getPlayerHealth() <= 0) {
                             // respawn the player
                             gameData.setGrapplingPulling(false);
@@ -173,7 +178,6 @@ public class LoadingScreen implements Screen {
                         }
                     }
                 }
-
 
 
                 // Collision involves player, player can jump now! (once there are bullets, we'll need to check for bullet user data too)
