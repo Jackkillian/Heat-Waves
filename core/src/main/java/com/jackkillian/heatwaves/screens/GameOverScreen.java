@@ -21,9 +21,11 @@ import javax.swing.text.TabableView;
 public class GameOverScreen implements Screen {
     private SpriteBatch spriteBatch;
     private Stage stage;
+    private boolean won;
 
     public GameOverScreen(boolean won) {
         spriteBatch = new SpriteBatch();
+        this.won = won;
     }
 
     @Override
@@ -33,8 +35,13 @@ public class GameOverScreen implements Screen {
         table.setFillParent(true);
         stage.addActor(table);
         Gdx.input.setInputProcessor(stage);
+        Label label;
+        if (won) {
+            label = new Label("[SCARLET]You beat the game!\nIt's late night in the middle of June", GameData.getInstance().getSkin());
 
-        Label label = new Label("[SCARLET]Game over\nCouldn't beat the heat?", GameData.getInstance().getSkin());
+        } else {
+            label = new Label("[SCARLET]Game over\nCouldn't beat the heat?", GameData.getInstance().getSkin());
+        }
         label.setFontScale(2f);
         label.setAlignment(Align.center);
         table.add(label).center().pad(10f).row();

@@ -130,6 +130,9 @@ public class EventHandler {
                 if (kills < EventType.HEAT_BLAZE.kills) {
                     ((GameScreen) GameData.getInstance().getGame().getScreen()).music.stop();
                     GameData.getInstance().getGame().setScreen(new GameOverScreen(false));
+                } else {
+                    ((GameScreen) GameData.getInstance().getGame().getScreen()).music.stop();
+                    GameData.getInstance().getGame().setScreen(new GameOverScreen(true));
                 }
             }
             kills = 0;
