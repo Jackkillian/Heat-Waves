@@ -44,7 +44,6 @@ public class Player {
     private boolean keyLeftPressed = false;
     private boolean keyRightPressed = false;
     private boolean keyUpPressed = false;
-    private boolean keyDownPressed = false;
 
     boolean isFlipped = false;
 
@@ -244,9 +243,6 @@ public class Player {
             keyUpPressed = true;
             jumpSound.play();
         }
-        if (key == Input.Keys.S) {
-            keyDownPressed = true;
-        }
     }
 
     public void onKeyUp(int key) {
@@ -258,9 +254,6 @@ public class Player {
         }
         if (key == Input.Keys.W) {
             keyUpPressed = false;
-        }
-        if (key == Input.Keys.S) {
-            keyDownPressed = false;
         }
     }
 

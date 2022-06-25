@@ -1,19 +1,18 @@
 package com.jackkillian.heatwaves;
 
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.BodyDef;
-import com.badlogic.gdx.physics.box2d.FixtureDef;
-import com.badlogic.gdx.physics.box2d.PolygonShape;
-import com.badlogic.gdx.physics.box2d.World;
 
 public class Henchman extends NPC {
     private final Sprite gun;
     private float cooldownTimer;
     private final GameData gameData;
+    private final Animation<TextureRegion> animation;
+    private float stateTime;
 
     public Henchman(float x, float y) {
         super(new Sprite(new Texture("player/henchman.png")), new Texture("player/henchmanDead.png"), x, y);
@@ -25,15 +24,26 @@ public class Henchman extends NPC {
         gun = new Sprite(Item.getTexture(Item.ItemType.HANDGUN, true));
         gun.setPosition(body.getPosition().x - gun.getWidth() / 2, body.getPosition().y - gun.getHeight() / 2);
         gun.setScale(0.8f);
+
+        Texture runSheet = new Texture("player/henchmanRunning.png");
+        TextureRegion[] runFrames = TextureRegion.split(runSheet, 16, 16)[0];
+        animation = new Animation<>(0.1f, runFrames);
+        animation.setPlayMode(Animation.PlayMode.LOOP);
     }
 
     @Override
     public void update(float delta) {
         cooldownTimer += delta;
+        stateTime += delta;
+
         Vector2 legs = gameData.getPlayer().getPosition().sub(body.getPosition());
         boolean isFlipped = legs.x < 0;
 
-        drawSprite();
+        if (health > 0) {
+            sprite.setRegion(animation.getKeyFrame(stateTime, true));
+        } else {
+            sprite.setRegion(deathTexture);
+        }
 
         // use trig again :D
         float angle = (float) Math.atan2(legs.y, legs.x);
@@ -61,8 +71,9 @@ public class Henchman extends NPC {
                     if (!gun.isFlipY()) gun.setFlip(false, true);
                 }
             }
-
         }
+
+        drawSprite();
 
         if (distance < 100f && health > 0) {
             if (cooldownTimer > 0.6f) {
