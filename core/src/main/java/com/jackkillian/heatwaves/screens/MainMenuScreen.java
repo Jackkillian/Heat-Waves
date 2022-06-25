@@ -48,7 +48,7 @@ public class MainMenuScreen implements Screen {
         logo.setAlign(Align.center);
         table.add(logo).padBottom(50).row();
 
-        Label instructions = new Label("Controls\n\nMove - WAD\nAim - Move cursor\nUse item - Click", game.skin);
+        Label instructions = new Label("Objective\n\nGet as many points as you can.\nShooting henchman gives you points,\nand shooting innocent villagers loses you points.\n\n\nControls\n\nMove - WAD\nAim - Move cursor\nUse item - Click", game.skin);
         instructions.setAlignment(Align.center);
         table.add(instructions).pad(10).row();
 
