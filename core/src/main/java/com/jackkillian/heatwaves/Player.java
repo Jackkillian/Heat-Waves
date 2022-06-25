@@ -283,6 +283,9 @@ public class Player {
     public void setPosition(float v, float v1) {
         body.setTransform(v, v1, 0);
     }
+    public void setVelocity(float v, float v1) {
+        body.setLinearVelocity(v, v1);
+    }
 
     public void respawn() {
         shouldRespawn = true;

@@ -41,7 +41,7 @@ public class EventHandler {
 
     public EventHandler() {
         npcBoost = 0;
-        npcMax = 5;
+        npcMax = 6;
         kills = 0;
         activeEvent = EventHandler.EventType.HEAT_SHIMMER;
         countdown = 30;
@@ -132,7 +132,7 @@ public class EventHandler {
         }
         if (countdown <= 0 && activeEvent == EventType.HEAT_BLAZE) {
             eventString = "Heat Blaze ends in: ";
-            npcMax = 15;
+            npcMax = 16;
             r = 227;
             g = 169;
             b = 91;

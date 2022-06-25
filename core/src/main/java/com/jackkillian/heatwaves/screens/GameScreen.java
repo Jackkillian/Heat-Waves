@@ -307,9 +307,11 @@ public class GameScreen implements Screen, InputProcessor {
             player.setPosition(newPos.x, newPos.y);
 
             // if the player is close enough to the grappling hook, destroy the grappling hook
-            if (a < 10) {
+            if (a < 15) {
                 gameData.setGrapplingPulling(false);
                 gameData.setGrapplingPosition(null);
+                player.setVelocity(0, 100f);
+
             }
         }
 
