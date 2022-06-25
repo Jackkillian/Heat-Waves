@@ -182,6 +182,7 @@ public class NPC {
 //        death.getTexture().dispose();
 //        sprite.getTexture().dispose();
 //        gun.getTexture().dispose();
+        body.setUserData(null);
         GameData.getInstance().getItemSystem().removeBody(body);
     }
 

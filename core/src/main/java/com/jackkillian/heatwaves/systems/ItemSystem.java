@@ -24,6 +24,7 @@ public class ItemSystem extends EntitySystem {
     }
 
     public void update(float deltaTime) {
+        System.out.println("debug item start");
         if (items.size() < 15) {
             // generate random number between 100 and 1450
             //don't go over 1.5k
@@ -46,6 +47,7 @@ public class ItemSystem extends EntitySystem {
 
             } else {
                 GameData.getInstance().getWorld().destroyBody(body);
+
             }
 
         }
@@ -65,6 +67,8 @@ public class ItemSystem extends EntitySystem {
             item.getSprite().draw(batch);
         }
         batch.end();
+
+        System.out.println("debug item end");
     }
 
     public void removeItem(Item item, Body body) {

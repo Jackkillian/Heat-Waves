@@ -62,6 +62,7 @@ public class LoadingScreen implements Screen {
 
                 Body playerBody;
                 Body otherBody;
+                if (contact.getFixtureA().getBody() == null || contact.getFixtureB().getBody() == null) return;
                 if (contact.getFixtureA().getBody().getUserData() == null || contact.getFixtureB().getBody().getUserData() == null) return;
 
 
@@ -129,10 +130,14 @@ public class LoadingScreen implements Screen {
                 }
                 // below are all collisions involving a player
 
+                boolean hacky = otherBody.getUserData().equals("wall");
+                gameData.setTouchingPlatform(hacky);
+
                 if (otherBody.getUserData() instanceof Item) {
                     Item item = (Item) otherBody.getUserData();
                     GameData.getInstance().getHudRenderSystem().setActiveItem(item.getSprite().getTexture());
                     GameData.getInstance().setHeldItemType(item.getType());
+                    otherBody.setUserData(null);
                     GameData.getInstance().getItemSystem().removeItem(item, otherBody);
 
                 }
@@ -177,12 +182,11 @@ public class LoadingScreen implements Screen {
                 // >:D  "optimizing performance"
 
                 // game stopped freezing for me after I went back to the old method lol
-//                boolean hacky = otherBody.getUserData().equals("wall");
-//                gameData.setTouchingPlatform(hacky);
-                if (!(otherBody.getUserData() instanceof Item) && !(otherBody.getUserData() instanceof Bullet) && !otherBody.getUserData().equals("grapplingHook")) {
 
-                    gameData.setTouchingPlatform(true);
-                }
+//                if (!(otherBody.getUserData() instanceof Item) && !(otherBody.getUserData() instanceof Bullet) && !otherBody.getUserData().equals("grapplingHook")) {
+//
+//                    gameData.setTouchingPlatform(true);
+//                }
 
             }
 
