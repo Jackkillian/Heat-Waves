@@ -60,7 +60,9 @@ public class MainMenuScreen implements Screen {
 
                 "[CYAN]Move[WHITE] - [PINK]WAD\n" +
                 "[CYAN]Aim[WHITE] - [PINK]Move cursor\n" +
-                "[CYAN]Use item[WHITE] - [PINK]Click", game.skin);
+                "[CYAN]Use item[WHITE] - [PINK]Click\n\n" +
+
+                        "[GOLD]Have fun!", game.skin);
         instructions.setAlignment(Align.center);
         table.add(instructions).pad(10).row();
 

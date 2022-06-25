@@ -37,16 +37,16 @@ public class GameOverScreen implements Screen {
         Gdx.input.setInputProcessor(stage);
         Label label;
         if (won) {
-            label = new Label("[SCARLET]You beat the game!\nIt's late night in the middle of June", GameData.getInstance().getSkin());
+            label = new Label("[LIME]You beat the game!\nIt's late night in the middle of June", GameData.getInstance().getSkin());
 
         } else {
-            label = new Label("[SCARLET]Game over\nCouldn't beat the heat?", GameData.getInstance().getSkin());
+            label = new Label("[SCARLET]Game Over\nCouldn't beat the heat?", GameData.getInstance().getSkin());
         }
         label.setFontScale(2f);
         label.setAlignment(Align.center);
         table.add(label).center().pad(10f).row();
 
-        Label scoreLabel = new Label("Score: " + GameData.getInstance().getScore(), GameData.getInstance().getSkin());
+        Label scoreLabel = new Label("[GOLD]Score: " + GameData.getInstance().getScore(), GameData.getInstance().getSkin());
         scoreLabel.setFontScale(2f);
         table.add(scoreLabel).center().pad(10f).row();
 
