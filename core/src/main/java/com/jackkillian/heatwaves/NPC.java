@@ -64,7 +64,6 @@ public class NPC {
             deathTimer -= delta;
             sprite.setRegion(deathTexture);
             if (deathTimer < 0) {
-                GameData.getInstance().getEventHandler().addKill();
                 alive = false;
             }
         }

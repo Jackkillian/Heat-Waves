@@ -96,6 +96,10 @@ public class Henchman extends NPC {
         }
 
         super.update(delta);
+
+        if (health <= 0) {
+            GameData.getInstance().getEventHandler().addKill();
+        }
     }
 
     @Override

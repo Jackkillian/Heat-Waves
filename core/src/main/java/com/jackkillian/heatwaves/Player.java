@@ -241,7 +241,9 @@ public class Player {
         }
         if (key == Input.Keys.W) {
             keyUpPressed = true;
-            jumpSound.play();
+            if (GameData.getInstance().isTouchingPlatform()) {
+                jumpSound.play();
+            }
         }
     }
 

@@ -26,7 +26,7 @@ public class ItemSystem extends EntitySystem {
 
     public void update(float deltaTime) {
         System.out.println("debug item start");
-        if (items.size() < 15) {
+        if (items.size() < 7) {
             // generate random number between 100 and 1450
             //don't go over 1.5k
             int x = MathUtils.random(100, 1450);

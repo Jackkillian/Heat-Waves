@@ -11,6 +11,7 @@ import com.jackkillian.heatwaves.screens.LoadingScreen;
  */
 public class HeatWaves extends Game {
     public Skin skin;
+    public Assets assets;
 
     @Override
     public void create() {

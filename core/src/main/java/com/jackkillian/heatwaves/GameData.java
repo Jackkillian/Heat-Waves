@@ -234,4 +234,8 @@ public class GameData {
     public int getScore() {
         return score;
     }
+
+    public void reset() {
+        instance = null;
+    }
 }
