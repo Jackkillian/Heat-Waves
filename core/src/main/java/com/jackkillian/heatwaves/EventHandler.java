@@ -1,6 +1,7 @@
 package com.jackkillian.heatwaves;
 
 
+import com.badlogic.gdx.math.MathUtils;
 import com.jackkillian.heatwaves.screens.GameOverScreen;
 import com.jackkillian.heatwaves.screens.GameScreen;
 
@@ -14,7 +15,7 @@ public class EventHandler {
     private int npcMax;
     private int npcBoost;
 
-    private boolean eventIsActive = false;
+    private boolean eventIsActive;
     private int kills;
 
 
@@ -40,11 +41,16 @@ public class EventHandler {
     private static EventType activeEvent = EventHandler.EventType.HEAT_SHIMMER;
 
     public EventHandler() {
+
         npcBoost = 0;
         npcMax = 6;
         kills = 0;
         activeEvent = EventHandler.EventType.HEAT_SHIMMER;
+        EventType.HEAT_SHIMMER.end = false;
+        EventType.HEAT_WAVES.end = false;
+        EventType.HEAT_BLAZE.end = false;
         countdown = 30;
+        eventIsActive = false;
         eventString = "Heat Shimmer in: ";
         r = 135;
         g = 206;
@@ -84,11 +90,10 @@ public class EventHandler {
                 activeEvent = EventType.HEAT_WAVES;
                 eventString = "Heat Waves in: ";
                 // this is countdown to next event
-                //random number between 60 and 100
                 r = 135;
                 g = 206;
                 b = 235;
-                countdown = (int) (Math.random() * (100 - 60) + 60);
+                countdown = MathUtils.random(30, 45);
                 eventIsActive = false;
                 return;
             }
@@ -116,12 +121,11 @@ public class EventHandler {
                 activeEvent = EventType.HEAT_BLAZE;
                 eventString = "Heat Blaze in: ";
                 // this is countdown to next event
-                //random number between 60 and 100
 
                 r = 135;
                 g = 206;
                 b = 235;
-                countdown = (int) (Math.random() * (100 - 60) + 60);
+                countdown = MathUtils.random(30, 45);
 
                 eventIsActive = false;
                 return;
