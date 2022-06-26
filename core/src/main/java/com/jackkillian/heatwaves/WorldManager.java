@@ -37,7 +37,7 @@ public class WorldManager {
             int x = MathUtils.random(600, 2850); // generate random number between 600 and 1450
             int y = 900; // any lower and the npcs might spawn inside buildings and cause crashes probably
 
-            if (Math.random() < 0.4) {
+            if (Math.random() < 0.2) {
                 activeNPCs.add(new Villager(x, y));
                 GameData.getInstance().getEventHandler().addNPCMax();
             } else {

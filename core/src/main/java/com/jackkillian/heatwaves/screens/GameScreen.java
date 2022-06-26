@@ -228,7 +228,7 @@ public class GameScreen implements Screen, InputProcessor {
         batch = new SpriteBatch();
         player = new Player(gameData.getWorldManager(), batch);
         camera = new OrthographicCamera();
-        camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        camera.setToOrtho(false, 1280, 720);
         camera.zoom = 0.5f;
         viewport = new FitViewport(1280 / Constants.PPM, 720 / Constants.PPM, camera);
         gameData.setViewport(viewport);
