@@ -89,7 +89,7 @@ public class WorldManager {
 
     public void createGrapplingHook(float shooterX, float shooterY, float velx, float vely) {
         Bullet item = bulletPool.obtain();
-        var yay = velx; // wow so cool
+//        var yay = velx; // wow so cool // ... but it's not working
         item.init(shooterX, shooterY, velx, vely, true);
         activeBullets.add(item);
     }
