@@ -2,7 +2,6 @@ package com.jackkillian.heatwaves;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -15,7 +14,6 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.*;
-import com.jackkillian.heatwaves.screens.GameScreen;
 
 import static com.jackkillian.heatwaves.Constants.*;
 
@@ -280,8 +278,12 @@ public class Player {
         angle = direction.angleDeg();
     }
 
-    public void setPosition(float v, float v1) {
+    public void setTransform(float v, float v1) {
         body.setTransform(v, v1, 0);
+    }
+
+    public void applyForce(Vector2 force) {
+        body.applyForce(force, body.getPosition(), true);
     }
     public void setVelocity(float v, float v1) {
         body.setLinearVelocity(v, v1);

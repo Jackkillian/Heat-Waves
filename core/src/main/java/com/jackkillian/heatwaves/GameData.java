@@ -47,6 +47,15 @@ public class GameData {
     private boolean gameOver = false;
     private Engine engine;
     private int ammo;
+    private float grapplerTimer = 0;
+
+    public void setGrapplerTimer(float timer) {
+    	this.grapplerTimer = timer;
+    }
+
+    public float getGrapplerTimer() {
+    	return this.grapplerTimer;
+    }
 
     public void setEventHandler(EventHandler eventHandler) {
         this.eventHandler = eventHandler;
@@ -184,7 +193,6 @@ public class GameData {
     public Player getPlayer() {
         return player;
     }
-
     public void setPlayer(Player player) {
         this.player = player;
     }

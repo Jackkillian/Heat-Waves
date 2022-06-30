@@ -88,9 +88,10 @@ public class WorldManager {
 
     }
 
-    public void createGrapplingHook(float shooterX, float shooterY, float v, float v1) {
+    public void createGrapplingHook(float shooterX, float shooterY, float velx, float vely) {
         Bullet item = bulletPool.obtain();
-        item.init(shooterX, shooterY, v, v1, true);
+        var yay = velx; // wow so cool
+        item.init(shooterX, shooterY, velx, vely, true);
         activeBullets.add(item);
     }
 }

@@ -9,7 +9,6 @@ import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.MathUtils;
@@ -307,6 +306,16 @@ public class GameScreen implements Screen, InputProcessor {
         }
 
         if (gameData.isGrapplingPulling()) {
+            //if pull for more than x seconds, release the hook
+            GameData.getInstance().setGrapplerTimer(GameData.getInstance().getGrapplerTimer() + delta);
+            if (GameData.getInstance().getGrapplerTimer() > 5f) {
+                gameData.setGrapplingPulling(false);
+                gameData.setGrapplingShot(false);
+                gameData.setGrapplingHit(false);
+                gameData.setGrapplerTimer(0);
+                return;
+            }
+
             Vector2 playerPos = player.getPosition();
             Vector2 hookPos = gameData.getGrapplingPosition();
 
@@ -315,13 +324,27 @@ public class GameScreen implements Screen, InputProcessor {
             float c = playerPos.x - hookPos.x;
             float a = (float) Math.sqrt(Math.pow(c, 2) + Math.pow(b, 2));
 
+            //calculate velocity
+            float speed = 750f;
+            float shooterX = player.getItemPosition().x; // get player location
+            float shooterY = player.getItemPosition().y; // get player location
+            float velx = hookPos.x - shooterX; // get distance from shooter to target on x plain
+            float vely = hookPos.y - shooterY; // get distance from shooter to target on y plain
+            float length = (float) Math.sqrt(velx * velx + vely * vely); // get distance to target direct
+            if (length != 0) {
+                velx = velx / length * 1.5f;  // get required x velocity to aim at target
+                vely = vely / length * 1.5f;  // get required y velocity to aim at target
+            }
+            Vector2 velocity = new Vector2(velx * speed, vely * speed);
+
             // move the player closer to the grappling hook
 //            player.setPosition(playerPos.x + (hookPos.x - playerPos.x) / 5, playerPos.y + (hookPos.y - playerPos.y) / 5);
-            Vector2 newPos = player.getPosition().cpy().lerp(new Vector2(hookPos.x, hookPos.y), 0.1f);
-            player.setPosition(newPos.x, newPos.y);
+//            Vector2 newPos = player.getPosition().cpy().lerp(new Vector2(hookPos.x, hookPos.y), 0.1f);
+
+            player.applyForce(velocity.cpy().scl(delta * 120f));
 
             // if the player is close enough to the grappling hook, destroy the grappling hook
-            if (a < 15) {
+            if (a < 25) {
                 gameData.setGrapplingPulling(false);
                 gameData.setGrapplingPosition(null);
                 player.setVelocity(0, 100f);
