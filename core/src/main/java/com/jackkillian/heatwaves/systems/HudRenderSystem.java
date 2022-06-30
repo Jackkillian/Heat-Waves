@@ -109,7 +109,6 @@ public class HudRenderSystem extends EntitySystem {
         scoreLabel.setText("Score: " + GameData.getInstance().getScore());
         stage.act(deltaTime);
         stage.draw();
-        System.out.println("debug hud end");
     }
 
     public void setActiveItem(Texture texture) {

@@ -260,21 +260,14 @@ public class GameScreen implements Screen, InputProcessor {
 
     @Override
     public void render(float delta) {
-        System.out.println("debug world start");
         GameData.getInstance().getWorld().step(delta * 1.2f, 6, 2);
-        System.out.println("debug world end");
         batch.setProjectionMatrix(camera.combined);
         Gdx.gl.glClearColor(eventHandler.getR() / 255f, eventHandler.getG() / 255f, eventHandler.getB() / 255f, 0.3f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        System.out.println("event handler start");
         gameData.getEventHandler().update(delta);
-        System.out.println("event handler end");
 
         engine.update(delta);
-        System.out.println("debug world manger start");
         gameData.getWorldManager().update(delta);
-        System.out.println("debug world manger end");
-
 
         camera.position.lerp(new Vector3(player.getPosition().x, player.getPosition().y, 0), 0.1f);
 

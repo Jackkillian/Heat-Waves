@@ -82,7 +82,6 @@ public class WorldManager {
         if (!GameData.getInstance().getWorld().isLocked()) {
             Bullet item = bulletPool.obtain();
             item.init(x, y, xVel, yVel, origin);
-//            System.out.println(x + "/" +  y + "/" +  xVel + "/" + yVel);
             activeBullets.add(item);
         }
 
