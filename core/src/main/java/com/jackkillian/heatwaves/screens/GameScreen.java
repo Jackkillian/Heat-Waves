@@ -40,6 +40,8 @@ public class GameScreen implements Screen, InputProcessor {
     private Sprite grapplingHookRope;
     private EventHandler eventHandler;
 
+    private Vector2 grapplerVeloctiy = new Vector2();
+
     @Override
     public void show() {
         Gdx.input.setInputProcessor(this);
@@ -126,8 +128,7 @@ public class GameScreen implements Screen, InputProcessor {
                         if (bullet.origin != Bullet.Origin.NPC) {
                             int damage = 10;
                             if (GameData.getInstance().getHeldItemType() == Item.ItemType.SHOTGUN) {
-                                //random number between 40 and 65
-                                damage = (int) (Math.random() * (65 - 40 + 1)) + 40;
+                                damage = MathUtils.random(50, 70);
                             } else if (GameData.getInstance().getHeldItemType() == Item.ItemType.HANDGUN) {
                                 //random number between 15 and 25
                                 damage = (int) (Math.random() * (25 - 15 + 1)) + 15;
@@ -168,6 +169,10 @@ public class GameScreen implements Screen, InputProcessor {
                 if (otherBody.getUserData() instanceof Bullet) {
                     Bullet bullet = (Bullet) otherBody.getUserData();
                     if (bullet.origin != Bullet.Origin.PLAYER) {
+                        //stop grapple if shot
+                        if (GameData.getInstance().isGrapplingPulling()) {
+                            gameData.resetGrappler();
+                        }
                         //random number between 20 and 30
                         int damage = (int) (Math.random() * (50 - 20 + 1)) + 20;
 
@@ -185,13 +190,10 @@ public class GameScreen implements Screen, InputProcessor {
                         gameData.getPlayer().hit(damage, (isBlueHit ? Color.CYAN : Color.GOLD));
                         if (gameData.getPlayerHealth() <= 0) {
                             // respawn the player
-                            gameData.setGrapplingPulling(false);
-                            gameData.setGrapplingShot(false);
-                            gameData.setGrapplingHit(false);
+                            gameData.resetGrappler();
                             gameData.healHealth(100);
                             gameData.healShield(100);
                             gameData.getEventHandler().playerOnDeath();
-                            gameData.setGameOver(true);
                             gameData.getPlayer().respawn();
                         }
                     }
@@ -229,7 +231,7 @@ public class GameScreen implements Screen, InputProcessor {
         camera = new OrthographicCamera();
         camera.setToOrtho(false, 1280, 720);
         camera.zoom = 0.5f;
-        viewport = new FitViewport(1280 / Constants.PPM, 720 / Constants.PPM, camera);
+        viewport = new FitViewport(1280 / Constants.PPM, 720/ Constants.PPM, camera);
         gameData.setViewport(viewport);
 
         engine = new Engine();
@@ -302,10 +304,7 @@ public class GameScreen implements Screen, InputProcessor {
             //if pull for more than x seconds, release the hook
             GameData.getInstance().setGrapplerTimer(GameData.getInstance().getGrapplerTimer() + delta);
             if (GameData.getInstance().getGrapplerTimer() > 5f) {
-                gameData.setGrapplingPulling(false);
-                gameData.setGrapplingShot(false);
-                gameData.setGrapplingHit(false);
-                gameData.setGrapplerTimer(0);
+                gameData.resetGrappler();
                 return;
             }
 
@@ -318,30 +317,30 @@ public class GameScreen implements Screen, InputProcessor {
             float a = (float) Math.sqrt(Math.pow(c, 2) + Math.pow(b, 2));
 
             //calculate velocity
-            float speed = 750f;
-            float shooterX = player.getItemPosition().x; // get player location
-            float shooterY = player.getItemPosition().y; // get player location
-            float velx = hookPos.x - shooterX; // get distance from shooter to target on x plain
-            float vely = hookPos.y - shooterY; // get distance from shooter to target on y plain
-            float length = (float) Math.sqrt(velx * velx + vely * vely); // get distance to target direct
-            if (length != 0) {
-                velx = velx / length * 1.5f;  // get required x velocity to aim at target
-                vely = vely / length * 1.5f;  // get required y velocity to aim at target
+            if (!gameData.isGrappleCalculated()) {
+                float speed = 450f;
+                float shooterX = player.getItemPosition().x; // get player location
+                float shooterY = player.getItemPosition().y; // get player location
+                float velx = hookPos.x - shooterX; // get distance from shooter to target on x plain
+                float vely = hookPos.y - shooterY; // get distance from shooter to target on y plain
+                float length = (float) Math.sqrt(velx * velx + vely * vely); // get distance to target direct
+                if (length != 0) {
+                    velx = velx / length * 1.5f;  // get required x velocity to aim at target
+                    vely = vely / length * 1.5f;  // get required y velocity to aim at target
+                }
+                grapplerVeloctiy.set(velx * speed, vely * speed);
+                gameData.setGrappleCalculated(true);
             }
-            Vector2 velocity = new Vector2(velx * speed, vely * speed);
 
             // move the player closer to the grappling hook
 //            player.setPosition(playerPos.x + (hookPos.x - playerPos.x) / 5, playerPos.y + (hookPos.y - playerPos.y) / 5);
 //            Vector2 newPos = player.getPosition().cpy().lerp(new Vector2(hookPos.x, hookPos.y), 0.1f);
-
-            player.applyForce(velocity.cpy().scl(delta * 120f));
+            player.applyForce(grapplerVeloctiy.cpy().scl(delta * 100f));
 
             // if the player is close enough to the grappling hook, destroy the grappling hook
             if (a < 25) {
-                gameData.setGrapplingPulling(false);
-                gameData.setGrapplingPosition(null);
+                gameData.resetGrappler();
                 player.setVelocity(0, 100f);
-
             }
         }
 
@@ -427,12 +426,14 @@ public class GameScreen implements Screen, InputProcessor {
             }
             gameData.setAmmo(gameData.getAmmo() - 1);
             shootSound.play();
+            gameData.addShot();
             gameData.getWorldManager().createBullet(shooterX, shooterY, velx * speed, vely * speed, Bullet.Origin.PLAYER);
         } else if (gameData.getHeldItemType() == Item.ItemType.SHOTGUN) {
             if (gameData.getAmmo() <= 0) {
                 dryFireSound.play();
                 return false;
             }
+            gameData.addShot();
             gameData.setAmmo(gameData.getAmmo() - 1);
             shotgunSound.play();
             gameData.getWorldManager().createBullet(shooterX, shooterY, velx * speed, vely * speed, Bullet.Origin.PLAYER);

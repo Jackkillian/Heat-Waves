@@ -218,6 +218,7 @@ public class Player {
             GameData.getInstance().getHudRenderSystem().setActiveItem(null);
         }
         if (shouldRespawn) {
+            GameData.getInstance().resetGrappler();
             body.setTransform(SPAWN_X / Constants.PPM, SPAWN_Y / Constants.PPM, 0);
             GameData.getInstance().setHeldItemType(null);
             GameData.getInstance().getHudRenderSystem().setActiveItem(null);
@@ -233,11 +234,14 @@ public class Player {
     public void onKeyDown(int key) {
         if (key == Input.Keys.A) {
             keyLeftPressed = true;
+            GameData.getInstance().resetGrappler();
         }
         if (key == Input.Keys.D) {
             keyRightPressed = true;
+            GameData.getInstance().resetGrappler();
         }
         if (key == Input.Keys.W) {
+            GameData.getInstance().resetGrappler();
             keyUpPressed = true;
             if (GameData.getInstance().isTouchingPlatform()) {
                 jumpSound.play();

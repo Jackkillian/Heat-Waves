@@ -34,10 +34,10 @@ public class WorldManager {
         // spawn new NPCs
         if (activeNPCs.size < GameData.getInstance().getEventHandler().getNpcMax()) {
             //world only goes to 1.5k x axis. Box2d might crash because the npc is infinitely falling
-            int x = MathUtils.random(600, 2850); // generate random number between 600 and 1450
+            int x = MathUtils.random(800, 2950); // generate random number between 600 and 1450
             int y = 900; // any lower and the npcs might spawn inside buildings and cause crashes probably
 
-            if (Math.random() < 0.3) {
+            if (Math.random() < 0.4) {
                 activeNPCs.add(new Villager(x, y));
                 GameData.getInstance().getEventHandler().addNPCMax();
             } else {

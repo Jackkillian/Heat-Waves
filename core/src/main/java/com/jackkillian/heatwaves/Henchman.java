@@ -101,8 +101,10 @@ public class Henchman extends NPC {
     @Override
     public void hit(int damage) {
         super.hit(damage);
+        GameData.getInstance().addShotHit();
         if (health <= 0) {
             GameData.getInstance().getEventHandler().addKill();
+            GameData.getInstance().addKill();
         }
         GameData.getInstance().setScore(GameData.getInstance().getScore() + 10);
     }

@@ -48,6 +48,45 @@ public class GameData {
     private Engine engine;
     private int ammo;
     private float grapplerTimer = 0;
+    private boolean grappleCalculated = false;
+    private Bullet grapplingBullet;
+    private int totalKills;
+
+    private int totalShotsMade;
+    private int totalShotsHit;
+
+    public void addShot() {
+        totalShotsMade++;
+    }
+    public void addShotHit() {
+        totalShotsHit++;
+    }
+    public float getAccuracy() {
+        float accuracy = (float) totalShotsHit / (float) totalShotsMade;
+        accuracy *= 100;
+        return (float) (Math.round(accuracy * 100.0) / 100.0);
+    }
+
+    public void addKill() {
+        totalKills++;
+    }
+    public int getTotalKills() {
+        return totalKills;
+    }
+
+    public void setGrapplingBullet(Bullet grapplingBullet) {
+        this.grapplingBullet = grapplingBullet;
+    }
+    public Bullet getGrapplingBullet() {
+        return grapplingBullet;
+    }
+
+    public void setGrappleCalculated(boolean grappleCalculated) {
+        this.grappleCalculated = grappleCalculated;
+    }
+    public boolean isGrappleCalculated() {
+        return grappleCalculated;
+    }
 
     public void setGrapplerTimer(float timer) {
     	this.grapplerTimer = timer;
@@ -55,6 +94,17 @@ public class GameData {
 
     public float getGrapplerTimer() {
     	return this.grapplerTimer;
+    }
+
+    public void resetGrappler() {
+        GameData gameData = GameData.getInstance();
+        gameData.setGrapplingPulling(false);
+        gameData.setGrapplingShot(false);
+        gameData.setGrapplingHit(false);
+        gameData.setGrapplerTimer(0);
+        if (gameData.getGrapplingBullet() != null) {gameData.getGrapplingBullet().alive = false;}
+        gameData.setGrappleCalculated(false);
+
     }
 
     public void setEventHandler(EventHandler eventHandler) {

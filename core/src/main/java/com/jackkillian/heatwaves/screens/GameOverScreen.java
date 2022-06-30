@@ -46,7 +46,7 @@ public class GameOverScreen implements Screen {
         label.setAlignment(Align.center);
         table.add(label).center().pad(10f).row();
 
-        Label scoreLabel = new Label("[GOLD]Score: " + GameData.getInstance().getScore(), GameData.getInstance().getSkin());
+        Label scoreLabel = new Label("[WHITE]Score:[GOLD] " + GameData.getInstance().getScore() + " [RED]| [WHITE]Kills:[GOLD] " + GameData.getInstance().getTotalKills() + " [RED]| [WHITE]Accuracy:[GOLD] " + GameData.getInstance().getAccuracy() + "%" , GameData.getInstance().getSkin());
         scoreLabel.setFontScale(2f);
         table.add(scoreLabel).center().pad(10f).row();
 

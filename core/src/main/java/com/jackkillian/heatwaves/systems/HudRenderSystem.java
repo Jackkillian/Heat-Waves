@@ -20,7 +20,7 @@ import com.jackkillian.heatwaves.GameData;
 
 
 public class HudRenderSystem extends EntitySystem {
-    private final Stage stage;
+    public final Stage stage;
     private final Assets assets;
 
     private final Label healthLabel;
@@ -97,6 +97,7 @@ public class HudRenderSystem extends EntitySystem {
     }
 
     public void update(float deltaTime) {
+
         if (gameData.getEventHandler().isEventActive()) {
             required.setText("Kills Required: " + gameData.getEventHandler().getRequiredKills());
         } else {
@@ -109,6 +110,7 @@ public class HudRenderSystem extends EntitySystem {
         scoreLabel.setText("Score: " + GameData.getInstance().getScore());
         stage.act(deltaTime);
         stage.draw();
+
     }
 
     public void setActiveItem(Texture texture) {

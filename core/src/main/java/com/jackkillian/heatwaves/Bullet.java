@@ -1,14 +1,11 @@
 package com.jackkillian.heatwaves;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.Pool;
-import org.w3c.dom.Text;
 
 public class Bullet implements Pool.Poolable {
     public Sprite sprite;
@@ -106,6 +103,7 @@ public class Bullet implements Pool.Poolable {
             body.setUserData("grapplingHook");
             sprite.setTexture(grapple);
         }
+        GameData.getInstance().setGrapplingBullet(this);
     }
 
 
@@ -162,8 +160,6 @@ public class Bullet implements Pool.Poolable {
             }
         }
 
-//        // if bullet is out of screen, set it to dead
-//        if (isOutOfScreen()) alive = false;
 
         // render sprite
         if (alive) {
@@ -176,9 +172,4 @@ public class Bullet implements Pool.Poolable {
         }
     }
 
-    private boolean isOutOfScreen() {
-        float WIDTH = GameData.getInstance().getViewport().getWorldWidth();
-        float HEIGHT = GameData.getInstance().getViewport().getWorldHeight();
-        return position.x > WIDTH || position.x < 0 || position.y > HEIGHT || position.y < 0;
-    }
 }
