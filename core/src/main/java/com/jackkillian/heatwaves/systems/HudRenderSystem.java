@@ -14,6 +14,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
+import com.badlogic.gdx.utils.viewport.FillViewport;
+import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.jackkillian.heatwaves.Assets;
 import com.jackkillian.heatwaves.EventHandler;
 import com.jackkillian.heatwaves.GameData;
@@ -34,7 +36,7 @@ public class HudRenderSystem extends EntitySystem {
     public HudRenderSystem(GameData gameData) {
         this.gameData = gameData;
         this.assets = gameData.getAssets();
-        stage = new Stage();
+        stage = new Stage(new FitViewport(1280, 720));
         Table table = new Table();
         table.setFillParent(true);
         stage.addActor(table);
@@ -94,10 +96,10 @@ public class HudRenderSystem extends EntitySystem {
         bottomRight.setFillParent(true);
         bottomRight.bottom().right();
         stage.addActor(bottomRight);
+
     }
 
     public void update(float deltaTime) {
-
         if (gameData.getEventHandler().isEventActive()) {
             required.setText("Kills Required: " + gameData.getEventHandler().getRequiredKills());
         } else {

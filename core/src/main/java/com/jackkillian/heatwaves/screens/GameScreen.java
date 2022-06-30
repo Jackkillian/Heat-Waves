@@ -15,6 +15,7 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.*;
+import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.jackkillian.heatwaves.*;
 import com.jackkillian.heatwaves.systems.HudRenderSystem;
@@ -229,9 +230,10 @@ public class GameScreen implements Screen, InputProcessor {
         batch = new SpriteBatch();
         player = new Player(gameData.getWorldManager(), batch);
         camera = new OrthographicCamera();
-        camera.setToOrtho(false, 1280, 720);
+//        camera.setToOrtho(false, 1280, 720);
         camera.zoom = 0.5f;
         viewport = new FitViewport(1280 / Constants.PPM, 720/ Constants.PPM, camera);
+        viewport.apply();
         gameData.setViewport(viewport);
 
         engine = new Engine();
@@ -349,6 +351,7 @@ public class GameScreen implements Screen, InputProcessor {
 
     @Override
     public void resize(int width, int height) {
+
         viewport.update(width, height);
     }
 
